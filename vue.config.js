@@ -3,7 +3,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 module.exports = {
     publicPath: './',
-    outputDir: './dist/',
+    outputDir: './docs/',
     lintOnSave: false,
     productionSourceMap: false,
     transpileDependencies: [/monaco-editor-textmate/],
