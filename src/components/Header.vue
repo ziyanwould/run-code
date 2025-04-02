@@ -2,7 +2,7 @@
   <div class="header">
     <!-- logo -->
     <div class="left">
-      <h1>CodeRun</h1>
+      <h1>CodeRuner</h1>
     </div>
     <!-- 标题输入栏 -->
     <div class="center">

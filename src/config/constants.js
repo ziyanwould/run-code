@@ -8,6 +8,7 @@ import editOnly2Img from '../assets/layoutImgs/editOnly2.jpg'
 import previewOnlyImg from '../assets/layoutImgs/previewOnly.jpg'
 import previewOnly2Img from '../assets/layoutImgs/previewOnly2.jpg'
 import jsImg from '../assets/layoutImgs/js.jpg'
+import tabsImg from '../assets/layoutImgs/tabs.jpg'
 // 布局组件
 import Default from '../pages/edit/layouts/Default.vue'
 import Default2 from '../pages/edit/layouts/Default2.vue'
@@ -21,6 +22,7 @@ import Js from '../pages/edit/layouts/Js.vue'
 import NewWindowPreview from '../pages/edit/layouts/NewWindowPreview.vue'
 import VueSFC from '../pages/edit/layouts/VueSFC.vue'
 import Embed from '../pages/edit/layouts/Embed.vue'
+import Tabs from '../pages/edit/layouts/Tabs.vue'
 
 // Monaco Editor支持的语言
 export const supportLanguage = {
@@ -284,6 +286,10 @@ export const layoutList = [
     value: 'default'
   },
   {
+    name: '标签页模式',
+    value: 'tabs'
+  },
+  {
     name: '编辑视图',
     value: 'edit'
   },
@@ -335,7 +341,8 @@ export const previewImgMap = {
   editOnly2: editOnly2Img,
   previewOnly: previewOnlyImg,
   previewOnly2: previewOnly2Img,
-  js: jsImg
+  js: jsImg,
+  tabs: tabsImg
 }
 
 // 布局组件映射
@@ -351,7 +358,8 @@ export const layoutMap = {
   js: Js,
   newWindowPreview: NewWindowPreview,
   vue: VueSFC,
-  embed: Embed
+  embed: Embed,
+  tabs: Tabs
 }
 
 // 编辑器字号

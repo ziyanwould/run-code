@@ -1,6 +1,60 @@
 <template>
   <div class="editorBox" :class="{ hide: hide }">
-    <Drag v-if="show" :number="editorItemList.length" :dir="dir">
+    <!-- 标签页模式 -->
+    <div v-if="show && isTabsMode" class="tabs-mode">
+      <el-tabs v-model="activeTab" type="card" @tab-click="handleTabClick">
+        <el-tab-pane 
+          v-for="(item, index) in editorItemList" 
+          :key="item.title" 
+          :label="item.title" 
+          :name="item.title"
+        >
+          <EditorItem
+            ref="editorItemRefs"
+            :title="item.title"
+            :language="item.language"
+            :codeTheme="codeTheme"
+            :codeFontSize="codeFontSize"
+            :content="item.content"
+            :preprocessorList="preprocessorListMap[item.title]"
+            :showAddBtn="item.showAddBtn"
+            :dir="dir"
+            :showAllAddResourcesBtn="['vue2', 'vue3'].includes(item.language)"
+            :showHeader="showHeader"
+            :readOnly="readOnly"
+            @code-change="
+              code => {
+                codeChange(item, code)
+              }
+            "
+            @preprocessor-change="
+              p => {
+                preprocessorChange(item, p)
+              }
+            "
+            @add-resource="
+              languageType => {
+                addResource(languageType || item.title)
+              }
+            "
+            @add-importmap="addImportmap(item)"
+            @space-change="
+              noSpace => {
+                item.showTitle = noSpace
+              }
+            "
+            @create-code-img="
+              editor => {
+                showCreateCodeImg(editor, item)
+              }
+            "
+          ></EditorItem>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    
+    <!-- 原有的拖拽模式 -->
+    <Drag v-if="show && !isTabsMode" :number="editorItemList.length" :dir="dir">
       <DragItem
         v-for="(item, index) in editorItemList"
         :key="item.title"
@@ -50,6 +104,7 @@
         ></EditorItem>
       </DragItem>
     </Drag>
+    
     <!-- 资源管理弹窗 -->
     <EditAssets ref="EditAssetsComp"></EditAssets>
     <!-- 生成代码图片 -->
@@ -75,14 +130,15 @@ import {
   computed,
   getCurrentInstance,
   watch,
-  onUnmounted
+  onUnmounted,
+  nextTick
 } from 'vue'
 import { useStore } from 'vuex'
 import EditorItem from '@/components/EditorItem.vue'
 import Drag from './Drag.vue'
 import DragItem from './DragItem.vue'
 import { defaultEditorMap, preprocessorListMap } from '@/config/constants'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElTabs, ElTabPane } from 'element-plus'
 import { codeThemeList } from '@/config/codeThemeList'
 import { base } from '@/config'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
@@ -194,6 +250,51 @@ const useInitEditorList = ({ props, editData }) => {
     show,
     editorItemList,
     setInitData
+  }
+}
+
+// 标签页模式相关
+const useTabsMode = ({ store }) => {
+  // 当前激活的标签
+  const activeTab = ref('HTML')
+  
+  // 编辑器实例引用
+  const editorItemRefs = ref([])
+  
+  // 判断是否是标签页模式
+  const isTabsMode = computed(() => {
+    return store.state.editData.config.layout === 'tabs'
+  })
+  
+  // 处理标签点击事件
+  const handleTabClick = (tab) => {
+    nextTick(() => {
+      // 触发自定义事件通知编辑器重新布局
+      window.dispatchEvent(new CustomEvent('tab-change', { detail: tab.props.name }))
+      
+      // 获取当前激活的编辑器实例并调用其重新布局方法
+      if (editorItemRefs.value && editorItemRefs.value.length > 0) {
+        // 找到当前激活的编辑器
+        const activeEditor = editorItemRefs.value.find(editor => {
+          return editor && editor.title === tab.props.name
+        })
+        
+        if (activeEditor && activeEditor.relayoutEditor) {
+          // 延迟一点执行，确保DOM已完全更新
+          setTimeout(() => {
+            activeEditor.relayoutEditor()
+            activeEditor.resize && activeEditor.resize()
+          }, 50)
+        }
+      }
+    })
+  }
+  
+  return {
+    activeTab,
+    isTabsMode,
+    handleTabClick,
+    editorItemRefs
   }
 }
 
@@ -397,6 +498,7 @@ const { show, editorItemList, setInitData } = useInitEditorList({
   props,
   editData
 })
+const { activeTab, isTabsMode, handleTabClick, editorItemRefs } = useTabsMode({ store })
 const { loadTheme, getThemeData } = useTheme({ codeTheme, proxy })
 const { runCode } = useRunCode({ store, proxy })
 const { autoRun } = useAutoRun({ store, runCode })
@@ -427,6 +529,51 @@ onMounted(async () => {
 
   &.hide {
     display: none;
+  }
+  
+  .tabs-mode {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    :deep(.el-tabs) {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      
+      .el-tabs__header {
+        margin-bottom: 5px; /* 添加与内容区域的间距 */
+        background-color: var(--editor-header-background);
+      }
+      
+      .el-tabs__content {
+        flex: 1;
+        overflow: hidden;
+        height: calc(100% - 45px); /* 调整高度以适应新增的间距 */
+      }
+      
+      .el-tab-pane {
+        height: 100%;
+      }
+      
+      .el-tabs__item {
+        color: var(--editor-header-color);
+        transition: all 0.3s;
+        
+        &:hover {
+          color: var(--editor-header-title-color);
+          background-color: rgba(255, 255, 255, 0.1); /* 添加hover效果 */
+        }
+        
+        &.is-active {
+          color: var(--editor-header-title-color);
+          background-color: var(--editor-header-active-background, rgba(255, 255, 255, 0.2)); /* 高亮当前选中的tab */
+          font-weight: bold;
+          border-bottom: 2px solid var(--editor-header-title-color, #409eff); /* 添加底部边框强调 */
+        }
+      }
+    }
   }
 }
 

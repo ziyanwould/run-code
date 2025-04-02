@@ -245,9 +245,19 @@ const useCreateEditor = ({ props, emit, updateDoc }) => {
       }
     )
   }
+  
+  // 添加一个方法来强制重新布局编辑器
+  const relayoutEditor = () => {
+    if (editor) {
+      nextTick(() => {
+        editor.layout()
+      })
+    }
+  }
 
   return {
-    createEditor
+    createEditor,
+    relayoutEditor
   }
 }
 
@@ -279,7 +289,7 @@ const usePreprocessor = ({ props, emit, updateDoc }) => {
 
 // 处理尺寸调整
 const editorItem = ref(null)
-const useSizeChange = ({ props }) => {
+const useSizeChange = ({ props, relayoutEditor }) => {
   const noSpace = ref(false)
   // 更新尺寸
   let timer = null
@@ -306,7 +316,7 @@ const useSizeChange = ({ props }) => {
   // 监听dom大小变化
   const ro = new ResizeObserver(entries => {
     for (const entry of entries) {
-      if (entry.target.classList.contains('dragItem')) {
+      if (entry.target.classList.contains('dragItem') || entry.target.classList.contains('editorItem')) {
         resize()
       }
     }
@@ -315,15 +325,26 @@ const useSizeChange = ({ props }) => {
   // 挂载完成
   onMounted(() => {
     ro.observe(editorItem.value.parentNode)
+    ro.observe(editorItem.value) // 同时监听editorItem本身
+    
+    // 监听窗口resize事件
+    window.addEventListener('resize', resize)
+    
+    // 监听自定义的tab-change事件
+    window.addEventListener('tab-change', relayoutEditor)
   })
 
   // 即将解除挂载
   onBeforeUnmount(() => {
     ro.unobserve(editorItem.value.parentNode)
+    ro.unobserve(editorItem.value)
+    window.removeEventListener('resize', resize)
+    window.removeEventListener('tab-change', relayoutEditor)
   })
 
   return {
-    noSpace
+    noSpace,
+    resize
   }
 }
 
@@ -488,7 +509,7 @@ const useDropdown = ({ createCodeImg, openLocalFile }) => {
 
 // created部分
 const { updateDoc, getValue } = useDoc({ props })
-const { createEditor } = useCreateEditor({
+const { createEditor, relayoutEditor } = useCreateEditor({
   props,
   emit,
   updateDoc
@@ -498,15 +519,21 @@ const { preprocessor, preprocessorChange } = usePreprocessor({
   emit,
   updateDoc
 })
-const { noSpace } = useSizeChange({ props })
+const { noSpace, resize } = useSizeChange({ props, relayoutEditor })
 const { addResource, addImportMap } = useResource({ emit })
 const { codeFormatter } = useCodeFormat({ getValue, updateDoc, emit })
 useInit({ createEditor })
-const { createCodeImg } = useCreateCodeImg({ props })
+const { createCodeImg } = useCreateCodeImg()
 const { openLocalFile } = useOpenLocalFile({ props, updateDoc, emit })
 const { dropdownList, onDropdownClick } = useDropdown({
   createCodeImg,
   openLocalFile
+})
+
+// 暴露方法给父组件
+defineExpose({
+  relayoutEditor,
+  resize
 })
 </script>
 
