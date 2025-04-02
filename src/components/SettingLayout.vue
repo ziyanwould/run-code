@@ -4,7 +4,7 @@
       <div class="content">
         <span class="name">布局</span>
         <div class="control">
-          <el-select v-model="layout">
+          <el-select v-model="layout" @change="layoutChange">
             <el-option
               v-for="item in layoutList"
               :key="item.value"
@@ -14,7 +14,7 @@
             </el-option>
           </el-select>
         </div>
-        <el-button type="primary" class="btn" @click="confirm">确定</el-button>
+        <!-- <el-button type="primary" class="btn" @click="confirm">确定</el-button> -->
       </div>
     </div>
     <div class="previewImg" v-if="previewImg">
@@ -53,16 +53,22 @@ const useLayout = ({ store }) => {
     store.commit('setLayout', layout.value)
   }
 
+  // 切换布局时直接应用修改
+  const layoutChange = (value) => {
+    store.commit('setLayout', value)
+  }
+
   return {
     previewImg,
     layout,
-    confirm
+    confirm,
+    layoutChange
   }
 }
 
 // created部分
 const { store } = useInit()
-const { previewImg, layout, confirm } = useLayout({ store })
+const { previewImg, layout, confirm, layoutChange } = useLayout({ store })
 </script>
 
 <style scoped lang="less">
