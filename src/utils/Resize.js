@@ -25,10 +25,14 @@ class Resize {
     // 缓存
     this._minSizeCache = {}
     this._maxSizeCache = {}
+    // 收起前的尺寸缓存
+    this._collapsedSizeCache = {}
 
     this.init = this.init.bind(this)
     this.onDrag = this.onDrag.bind(this)
     this.onDragStart = this.onDragStart.bind(this)
+    this.collapseItem = this.collapseItem.bind(this)
+    this.expandItem = this.expandItem.bind(this)
   }
 
   /**
@@ -231,6 +235,119 @@ class Resize {
         }
       }
     }
+  }
+
+  /**
+   * @Author: 添加的新方法
+   * @Date: 当前日期
+   * @Desc: 收起某个区域
+   */
+  collapseItem(index, touchBarSize, containerSize) {
+    // 如果已经收起，则不处理
+    if (this._collapsedSizeCache[index] !== undefined) {
+      return false
+    }
+    
+    // 保存当前尺寸到缓存
+    this._collapsedSizeCache[index] = this._dragItemList.value[index][this._prop]
+    
+    // 计算收起后的尺寸（只保留touchBar的尺寸）
+    const collapsedSize = (touchBarSize / containerSize) * 100
+    
+    // 需要释放的空间
+    const releaseSize = this._dragItemList.value[index][this._prop] - collapsedSize
+    
+    // 找到可以扩展的相邻项
+    let expandIndex = -1
+    
+    if (this._dir === 'v') {
+      // 垂直方向，优先考虑上方项
+      if (index > 0 && this._collapsedSizeCache[index - 1] === undefined) {
+        expandIndex = index - 1
+      } else if (index < this._dragItemList.value.length - 1 && this._collapsedSizeCache[index + 1] === undefined) {
+        expandIndex = index + 1
+      }
+    } else {
+      // 水平方向，优先考虑左侧项
+      if (index > 0 && this._collapsedSizeCache[index - 1] === undefined) {
+        expandIndex = index - 1
+      } else if (index < this._dragItemList.value.length - 1 && this._collapsedSizeCache[index + 1] === undefined) {
+        expandIndex = index + 1
+      }
+    }
+    
+    // 如果找到可扩展的项，则分配空间
+    if (expandIndex !== -1) {
+      this._dragItemList.value[expandIndex][this._prop] += releaseSize
+      this._dragItemList.value[index][this._prop] = collapsedSize
+      return true
+    }
+    
+    // 如果没有找到可扩展的相邻项，则取消操作
+    delete this._collapsedSizeCache[index]
+    return false
+  }
+
+  /**
+   * @Author: 添加的新方法
+   * @Date: 当前日期
+   * @Desc: 展开某个区域
+   */
+  expandItem(index) {
+    // 如果没有收起，则不处理
+    if (this._collapsedSizeCache[index] === undefined) {
+      return false
+    }
+    
+    // 获取收起前的尺寸
+    const originalSize = this._collapsedSizeCache[index]
+    
+    // 当前尺寸
+    const currentSize = this._dragItemList.value[index][this._prop]
+    
+    // 需要恢复的空间
+    const recoverSize = originalSize - currentSize
+    
+    // 找到需要缩小的相邻项
+    let narrowIndex = -1
+    
+    if (this._dir === 'v') {
+      // 垂直方向，优先考虑上方项
+      if (index > 0 && this._collapsedSizeCache[index - 1] === undefined) {
+        narrowIndex = index - 1
+      } else if (index < this._dragItemList.value.length - 1 && this._collapsedSizeCache[index + 1] === undefined) {
+        narrowIndex = index + 1
+      }
+    } else {
+      // 水平方向，优先考虑左侧项
+      if (index > 0 && this._collapsedSizeCache[index - 1] === undefined) {
+        narrowIndex = index - 1
+      } else if (index < this._dragItemList.value.length - 1 && this._collapsedSizeCache[index + 1] === undefined) {
+        narrowIndex = index + 1
+      }
+    }
+    
+    // 如果找到可缩小的项，检查是否有足够空间
+    if (narrowIndex !== -1) {
+      const minSize = this.getMinSize(narrowIndex)
+      const currentPanelSize = this._dragItemList.value[narrowIndex][this._prop]
+      const availableSpace = currentPanelSize - minSize
+      
+      // 如果可用空间不足，则无法展开
+      if (availableSpace < recoverSize) {
+        return false
+      }
+      
+      // 恢复空间
+      this._dragItemList.value[narrowIndex][this._prop] -= recoverSize
+      this._dragItemList.value[index][this._prop] = originalSize
+      
+      // 清除缓存
+      delete this._collapsedSizeCache[index]
+      return true
+    }
+    
+    return false
   }
 }
 

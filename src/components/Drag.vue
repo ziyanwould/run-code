@@ -136,7 +136,9 @@ const useResizeInit = ({ setInitSize, resize, props, sizeList }) => {
   }
 
   return {
-    resizeInit
+    resizeInit,
+    containerWidth,
+    containerHeight
   }
 }
 
@@ -160,16 +162,46 @@ const useSizeChange = ({ resizeInit }) => {
   })
 }
 
+// 添加收起/展开功能
+const useCollapseExpand = ({ resize, props, containerWidth, containerHeight }) => {
+  // 收起项目
+  const collapseItem = (index, touchBarSize) => {
+    const containerSize = props.dir === 'h' ? containerWidth.value : containerHeight.value
+    return resize.collapseItem(index, touchBarSize, containerSize)
+  }
+  
+  // 展开项目
+  const expandItem = (index) => {
+    return resize.expandItem(index)
+  }
+  
+  // 提供方法给子组件
+  provide('collapseItem', collapseItem)
+  provide('expandItem', expandItem)
+  
+  return {
+    collapseItem,
+    expandItem
+  }
+}
+
 //  created部分
 const dragBox = ref(null)
 const { resize } = useInitResize({ props })
 const { sizeList } = useInitSizeList({ props })
 const { setInitSize } = useInitSize({ sizeList, props })
-const { resizeInit } = useResizeInit({
+const { resizeInit, containerWidth, containerHeight } = useResizeInit({
   setInitSize,
   resize,
   props,
   sizeList
+})
+// 添加收起/展开功能
+const { collapseItem, expandItem } = useCollapseExpand({
+  resize,
+  props,
+  containerWidth,
+  containerHeight
 })
 useSizeChange({ resizeInit })
 </script>

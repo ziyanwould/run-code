@@ -16,6 +16,7 @@
       }"
       :class="[{ canDrag: !disabled }, dir]"
       @mousedown="onMousedown"
+      @dblclick="onTouchBarDblClick"
     >
       <span class="title" v-html="titleStr"></span>
     </div>
@@ -31,7 +32,8 @@ import {
   inject,
   getCurrentInstance,
   defineEmits,
-  computed
+  computed,
+  ref
 } from 'vue'
 import Drag from '@/utils/Drag.js'
 
@@ -149,10 +151,40 @@ const useDrag = ({ props }) => {
   }
 }
 
+// 添加收起/展开功能
+const useCollapseExpand = ({ props }) => {
+  const collapseItem = inject('collapseItem')
+  const expandItem = inject('expandItem')
+  const isCollapsed = ref(false)
+  
+  // TouchBar双击事件处理
+  const onTouchBarDblClick = () => {
+    if (isCollapsed.value) {
+      // 如果已收起，则展开
+      const result = expandItem(props.index)
+      if (result) {
+        isCollapsed.value = false
+      }
+    } else {
+      // 如果未收起，则收起
+      const result = collapseItem(props.index, props.touchBarSize)
+      if (result) {
+        isCollapsed.value = true
+      }
+    }
+  }
+  
+  return {
+    onTouchBarDblClick,
+    isCollapsed
+  }
+}
+
 // created部分
 const { dir, titleStr } = useInit({ props })
 const { sizeList } = useSizeList({ emit })
 const { onMousedown } = useDrag({ props })
+const { onTouchBarDblClick } = useCollapseExpand({ props })
 </script>
 
 <style scoped lang="less">
