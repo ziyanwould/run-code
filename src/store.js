@@ -12,7 +12,7 @@ const createDefaultData = () => {
       codeTheme: 'OneDarkPro',
       pageThemeSyncCodeTheme: true,
       openAlmightyConsole: false,
-      autoRun: false,
+      autoRun: true,
       layout: 'default',
       keepPreviousLogs: true,
       codeFontSize: 16

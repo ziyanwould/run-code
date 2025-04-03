@@ -152,12 +152,13 @@ const { openAlmightyConsole, openAlmightyConsoleChange } = useAlmightyConsole({
 
     .name {
       margin-right: 10px;
+      color: var(--dropdown-color);
     }
   }
 
   .desc {
     font-size: 12px;
-    color: #999;
+    color: var(--editor-header-color);
   }
 }
 </style>

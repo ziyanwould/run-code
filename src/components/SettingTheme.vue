@@ -246,6 +246,7 @@ const {
 
   .name {
     margin-right: 10px;
+    color: var(--dropdown-color);
   }
 
   &.uploadThemeBox {
@@ -261,9 +262,10 @@ const {
 
     .left {
       position: relative;
-      background-color: #f5f5f5;
+      background-color: var(--editor-background);
       cursor: pointer;
       margin-right: 5px;
+      border: 1px solid var(--dropdown-box-border-color);
 
       .tip {
         position: absolute;
@@ -276,6 +278,7 @@ const {
         align-items: center;
         padding: 10px;
         text-align: center;
+        color: var(--dropdown-color);
       }
 
       .fileInput {
@@ -290,6 +293,9 @@ const {
         /deep/ .el-textarea__inner {
           height: 100%;
           resize: none;
+          background-color: var(--editor-background);
+          color: var(--dropdown-color);
+          border-color: var(--dropdown-box-border-color);
         }
       }
     }

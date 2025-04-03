@@ -131,7 +131,7 @@
       v-model="drawer"
       title="我的gists"
       direction="rtl"
-      size="50%"
+      size="30%"
       @open="onDrawerOpen"
       @closed="onDrawerClosed"
     >
@@ -144,22 +144,22 @@
           height="100%"
         >
           <el-table-column label="名称" prop="description" />
-          <el-table-column label="是否公开" prop="public">
+          <el-table-column label="是否公开" prop="public" width="80" align="center">
             <template #default="scope">
               {{ scope.row.public ? '是' : '否' }}
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" prop="created_at">
+          <el-table-column label="创建时间" prop="created_at" width="110" align="center">
             <template #default="scope">
-              {{ dayjs(scope.row.created_at).format('YYYY/MM/DD HH:mm:ss') }}
+              {{ dayjs(scope.row.created_at).format('YYYY/MM/DD') }}
             </template>
           </el-table-column>
-          <el-table-column label="更新时间" prop="updated_at">
+          <el-table-column label="更新时间" prop="updated_at" width="150" align="center">
             <template #default="scope">
-              {{ dayjs(scope.row.updated_at).format('YYYY/MM/DD HH:mm:ss') }}
+              {{ dayjs(scope.row.updated_at).format('YYYY/MM/DD HH:mm') }}
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="120">
+          <el-table-column fixed="right" label="操作" width="120" align="center">
             <template #default="scope">
               <el-button
                 type="primary"
@@ -813,13 +813,15 @@ const { createShareUrl, createEmbedUrl, createEmbedCode } = useShare(hasQueryDat
   width: 100%;
   height: 400px;
   overflow: auto;
+  background-color: var(--editor-background);
+  color: var(--dropdown-color);
 
   .templateItem {
-    width: 230px;
+    width: 228px;
     height: 70px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid rgb(36 36 36);
+    border-bottom: 1px solid var(--dropdown-box-border-color);
     float: left;
     margin-right: 10px;
     margin-bottom: 20px;
@@ -827,7 +829,7 @@ const { createShareUrl, createEmbedUrl, createEmbedCode } = useShare(hasQueryDat
     transition: all 0.3s;
 
     &:hover {
-      background-color: rgba(36, 36, 36, 0.1);
+      background-color: var(--dropdown-hover-background);
     }
 
     .icon {
@@ -848,29 +850,59 @@ const { createShareUrl, createEmbedUrl, createEmbedCode } = useShare(hasQueryDat
 }
 
 /deep/ .settingDialog {
+  .el-dialog__header {
+    background-color: var(--header-background);
+    color: var(--header-logo-color);
+  }
+  
+  .el-dialog__title {
+    color: var(--header-logo-color);
+  }
+  
   .el-dialog__body {
     padding: 0px;
+    background-color: var(--editor-background);
   }
 
   .settingBox {
     display: flex;
 
+    padding: 28px 10px;
+
     .el-tabs {
       flex-grow: 0;
       flex-shrink: 0;
+      
+      .el-tabs__item {
+        color: var(--dropdown-color);
+        
+        &.is-active {
+          color: var(--header-btn-color);
+        }
+        
+        &:hover {
+          color: var(--dropdown-hover-color);
+        }
+      }
+      
+      .el-tabs__nav-wrap::after {
+        background-color: var(--editor-header-border-bottom-color);
+      }
     }
 
     .settingContent {
       width: 100%;
       height: 300px;
       overflow: auto;
-      padding: 10px;
+      padding: 0 15px;
+      color: var(--dropdown-color);
     }
   }
 }
 
 .tip {
   margin-top: 10px;
+  color: var(--dropdown-color);
 }
 
 /deep/ .el-drawer__body {

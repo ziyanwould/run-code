@@ -282,4 +282,256 @@ init(() => {
   border-top-color: var(--header-btn-color) !important;
   border-left-color: var(--header-btn-color) !important;
 }
+
+// 设置弹窗相关的全局样式
+.el-dialog {
+  background-color: var(--editor-background);
+  border: 1px solid var(--dropdown-box-border-color);
+  
+  .el-dialog__header {
+    background-color: var(--header-background);
+  }
+  
+  .el-dialog__title {
+    color: var(--header-logo-color);
+  }
+  
+  .el-dialog__headerbtn .el-dialog__close {
+    color: var(--header-logo-color);
+  }
+  
+  .el-dialog__footer {
+    background-color: var(--editor-background);
+  }
+}
+
+// 下拉菜单样式
+.el-select-dropdown {
+  background-color: var(--dropdown-background) !important;
+  border-color: var(--dropdown-box-border-color) !important;
+  
+  .el-select-dropdown__item {
+    color: var(--dropdown-color) !important;
+    
+    &.hover, &:hover {
+      background-color: var(--dropdown-hover-background) !important;
+      color: var(--dropdown-hover-color) !important;
+    }
+    
+    &.selected {
+      color: var(--dropdown-hover-color) !important;
+    }
+  }
+}
+
+// 输入框样式
+.el-input__inner {
+  background-color: var(--editor-background) !important;
+  color: var(--dropdown-color) !important;
+  border-color: var(--dropdown-box-border-color) !important;
+}
+
+// 开关样式
+.el-switch__core {
+  border-color: var(--dropdown-box-border-color) !important;
+}
+
+// 按钮样式
+.el-button {
+  background-color: var(--header-btn-background) !important;
+  border-color: var(--header-btn-border-color) !important;
+  color: var(--header-btn-color) !important;
+  
+  &:hover, &:focus {
+    color: var(--dropdown-hover-color) !important;
+    border-color: var(--dropdown-hover-color) !important;
+  }
+  
+  &--primary {
+    background-color: var(--header-btn-color) !important;
+    border-color: var(--header-btn-color) !important;
+    color: var(--editor-background) !important;
+    
+    &:hover, &:focus {
+      background-color: var(--dropdown-hover-color) !important;
+      border-color: var(--dropdown-hover-color) !important;
+    }
+  }
+}
+
+// 增强弹窗边界效果
+.el-dialog {
+  background-color: var(--editor-background) !important;
+  border: 2px solid var(--editor-header-title-color) !important;
+  box-shadow: 0 0 4px var(--editor-header-title-color) !important; // 添加阴影
+
+  .el-dialog__body {
+    background-color: var(--editor-background) !important;
+  }
+  
+  .el-dialog__header {
+    background-color: var(--header-background) !important;
+    border-bottom: 2px solid var(--editor-header-title-color) !important; // 增加标题栏底部边框
+  }
+  
+  .el-dialog__title {
+    color: var(--header-logo-color) !important;
+  }
+  
+  .el-dialog__headerbtn .el-dialog__close {
+    color: var(--header-logo-color) !important;
+  }
+  
+  .el-dialog__footer {
+    background-color: var(--editor-background) !important;
+    border-top: 1px solid var(--editor-header-title-color) !important; // 添加底部边框
+  }
+}
+
+// 弹窗蒙层样式增强
+.v-modal {
+  opacity: 0.6 !important; // 增加蒙层不透明度
+  background-color: #000 !important; // 确保蒙层颜色为黑色
+}
+
+.el-table {
+  background-color: var(--editor-background) !important;
+  color: var(--dropdown-color) !important;
+  
+  &::before {
+    background-color: var(--dropdown-box-border-color) !important;
+  }
+  
+  th.el-table__cell {
+    background-color: var(--header-background) !important;
+    color: var(--header-logo-color) !important;
+    border-bottom: 1px solid var(--dropdown-box-border-color) !important;
+  }
+  
+  td.el-table__cell {
+    background-color: var(--editor-background) !important;
+    color: var(--dropdown-color) !important;
+    border-bottom: 1px solid var(--dropdown-box-border-color) !important;
+  }
+  
+  tr:hover > td.el-table__cell {
+    background-color: var(--dropdown-hover-background) !important;
+  }
+  
+  .el-table__empty-text {
+    color: var(--dropdown-color) !important;
+  }
+
+  .el-table__empty-block {
+    background-color: var(--editor-background) !important;
+    border: 1px dashed var(--dropdown-box-border-color) !important;
+  }
+
+  .el-table__fixed-right::before, .el-table__fixed::before {
+    background-color: var(--editor-background)!important;
+  }
+}
+
+// 加载状态样式
+.el-loading-mask {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  
+  .el-loading-spinner {
+    .path {
+      stroke: var(--header-btn-color) !important;
+    }
+    
+    .el-loading-text {
+      color: var(--header-btn-color) !important;
+    }
+  }
+}
+
+// 表格加载中的文字提示
+.el-table__body-wrapper .el-loading-text {
+  color: var(--header-btn-color) !important;
+}
+
+.el-pagination {
+  color: var(--dropdown-color) !important;
+  
+  .btn-prev, .btn-next {
+    background-color: var(--editor-background) !important;
+    color: var(--dropdown-color) !important;
+    
+    &:disabled {
+      color: var(--editor-header-color) !important;
+    }
+    
+    &:hover:not(:disabled) {
+      color: var(--dropdown-hover-color) !important;
+    }
+  }
+  
+  .el-pager li {
+    background-color: var(--editor-background) !important;
+    color: var(--dropdown-color) !important;
+    
+    &.active {
+      color: var(--header-btn-color) !important;
+    }
+    
+    &:hover:not(.active) {
+      color: var(--dropdown-hover-color) !important;
+    }
+  }
+}
+
+.el-drawer {
+  background-color: var(--editor-background) !important;
+  border-left: 2px solid var(--editor-header-title-color) !important;
+  // box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 0 4px var(--editor-header-title-color) !important; // 添加阴影
+  
+  .el-drawer__header {
+    background-color: var(--header-background) !important;
+    color: var(--header-logo-color) !important;
+    border-bottom: 2px solid var(--editor-header-title-color) !important;
+    box-shadow: 0 0 4px var(--editor-header-title-color) !important; // 添加阴影
+    margin-bottom: 0 !important;
+    padding: 15px 20px !important;
+    font-weight: bold !important;
+  }
+  
+  .el-drawer__close-btn {
+    color: var(--header-logo-color) !important;
+    
+    &:hover {
+      color: var(--dropdown-hover-color) !important;
+    }
+  }
+  
+  .el-drawer__body {
+    background-color: var(--editor-background) !important;
+    color: var(--dropdown-color) !important;
+    padding: 0 !important;
+  }
+}
+
+.el-drawer__body {
+  overflow: hidden !important;
+
+  .gistBox {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--editor-background);
+
+    .paginationBox {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--editor-background);
+      border-top: 1px solid var(--dropdown-box-border-color);
+    }
+  }
+}
+
 </style>

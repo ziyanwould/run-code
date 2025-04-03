@@ -557,6 +557,22 @@ onMounted(async () => {
         height: 100%;
       }
       
+      .el-tabs__header {
+        border-bottom:1px solid var(--editor-header-title-color);
+
+        .el-tabs__nav {
+          border:1px solid var(--editor-header-title-color);
+        }
+
+        .el-tabs__item {
+          border-left:1px solid var(--editor-header-title-color);
+        }
+
+        .el-tabs__item:first-child {
+          border-left: none;
+        }
+      }
+      
       .el-tabs__item {
         color: var(--editor-header-color);
         transition: all 0.3s;
@@ -570,7 +586,7 @@ onMounted(async () => {
           color: var(--editor-header-title-color);
           background-color: var(--editor-header-active-background, rgba(255, 255, 255, 0.2)); /* 高亮当前选中的tab */
           font-weight: bold;
-          border-bottom: 2px solid var(--editor-header-title-color, #409eff); /* 添加底部边框强调 */
+          border-bottom: 0px solid var(--editor-header-title-color, #409eff); /* 添加底部边框强调 */
         }
       }
     }

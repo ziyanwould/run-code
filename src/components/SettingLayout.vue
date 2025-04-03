@@ -81,6 +81,7 @@ const { previewImg, layout, confirm, layoutChange } = useLayout({ store })
 
     .name {
       margin-right: 10px;
+      color: var(--dropdown-color);
     }
 
     .btn {
@@ -90,14 +91,15 @@ const { previewImg, layout, confirm, layoutChange } = useLayout({ store })
 
   .desc {
     font-size: 12px;
-    color: #999;
+    color: var(--editor-header-color);
   }
 }
 
 .previewImg {
   width: 400px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--dropdown-box-border-color);
   padding: 5px;
+  background-color: var(--editor-background);
 
   img {
     width: 100%;
