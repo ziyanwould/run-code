@@ -237,4 +237,8 @@ defineExpose({
 })
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+.btnGroup {
+  margin-bottom: 16px;
+}
+</style>

@@ -2,7 +2,7 @@
   <div class="header">
     <!-- logo -->
     <div class="left">
-      <h1>CodeRuner</h1>
+      <h1>CodeFlux</h1>
     </div>
     <!-- 标题输入栏 -->
     <div class="center">
@@ -81,6 +81,7 @@
           <el-tab-pane label="布局设置" name="layout"></el-tab-pane>
           <el-tab-pane label="主题设置" name="theme"></el-tab-pane>
           <el-tab-pane label="其他设置" name="setting"></el-tab-pane>
+          <el-tab-pane label="关于" name="about"></el-tab-pane>
         </el-tabs>
         <div class="settingContent">
           <component :is="componentsMap[settingType]"></component>
@@ -209,6 +210,7 @@ import { useStore } from 'vuex'
 import Setting from './Setting.vue'
 import SettingLayout from './SettingLayout.vue'
 import SettingTheme from './SettingTheme.vue'
+import SettingAbout from './SettingAbout.vue'
 import exportZip from '@/utils/exportZip'
 import {
   ElMessage,
@@ -342,7 +344,8 @@ const useSettingDialog = () => {
   const componentsMap = shallowRef({
     theme: SettingTheme,
     layout: SettingLayout,
-    setting: Setting
+    setting: Setting,
+    about: SettingAbout
   })
 
   // 打开设置弹窗

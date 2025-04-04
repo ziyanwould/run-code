@@ -1,18 +1,8 @@
-# code-run
+# CodeFlux
 
-一个代码在线编辑预览工具，类似`codepen`。
+> 前端代码在线运行平台，AI生成前端代码的预览/运行辅助利器，codepen、jsbin、jsfiddle等的开源替代品
 
-在线示例：[https://wanglin2.github.io/code-run-online/](https://wanglin2.github.io/code-run-online/)。
-
-# 相关文章
-
-[使用Skypack在浏览器上直接导入ES模块](https://juejin.cn/post/7094508128401621005)
-
-[快速搭建一个代码在线编辑预览工具](https://juejin.cn/post/6965467528600485919)
-
-[如何手动解析vue单文件并预览？](https://juejin.cn/post/7007725841689870366)
-
-[手把手教你实现在Monaco Editor中使用VSCode主题](https://juejin.cn/post/7012514944579502116)
+在线体验：[https://code-flux.anzz.top](https://code-flux.anzz.top)
 
 # 特性
 
@@ -47,9 +37,9 @@
 # 本地构建
 
 ```bash
-git clone https://github.com/wanglin2/code-run.git
+git clone https://github.com/xxxily/code-flux.git
 
-cd code-run
+cd code-flux
 
 npm i
 
@@ -60,7 +50,7 @@ npm run serve
 
 ## 修改应用基路径
 
-请先确认打包后应用的基路径，项目默认的基路径为`/code-run/`，如果你想换一个，可以按如下步骤修改：
+请先确认打包后应用的基路径，项目默认的基路径为`./`，如果你想换一个，可以按如下步骤修改：
 
 1.修改`vue.config.js`文件里的`publicPath`字段。
 
@@ -330,7 +320,7 @@ const showList = reactive([
 
 # 致谢
 
-本项目中预处理/扩展语言的编译部分、其他一些细节有参考了项目[codepan](https://github.com/egoist/codepan)的实现。
+本项目基于：[code-run](https://github.com/wanglin2/code-run)
 
 # License
 
