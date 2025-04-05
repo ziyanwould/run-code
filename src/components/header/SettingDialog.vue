@@ -47,9 +47,18 @@ const componentsMap = shallowRef({
 })
 </script>
 
+<style lang="less">
+.settingDialog {
+  .el-dialog__body {
+    padding: 0px;
+  }
+}
+</style>
+
 <style scoped lang="less">
 .settingBox {
   display: flex;
+  padding: 28px 10px;
 
   :deep(.el-tabs) {
     flex-grow: 0;
@@ -78,7 +87,6 @@ const componentsMap = shallowRef({
     overflow: auto;
     padding: 0 15px;
     color: var(--dropdown-color);
-    margin-left: 0px;
   }
 }
 </style>
