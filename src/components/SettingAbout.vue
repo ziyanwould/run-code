@@ -33,7 +33,7 @@ import packageInfo from '../../package.json'
 
 <style scoped lang="less">
 .about-container {
-  padding: 0px 20px 20px 20px;
+  // padding: 0px 20px 20px 20px;
 
   h2 {
     margin-top: 0;
