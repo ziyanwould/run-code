@@ -2,9 +2,6 @@ import { load } from '@/utils/load'
 import { handleEsModuleCdnUrl } from '@/config/constants'
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-04-29 09:36:44
  * @Desc: 修改import语句
  */
 const transformJsImport = (jsStr, importMap) => {
@@ -52,9 +49,6 @@ const parseJsImportPlugin = (importMap = {}) => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-04-29 11:10:11
  * @Desc: 检测是否存在import语句
  */
 const checkIsHasImport = jsStr => {
@@ -77,9 +71,6 @@ const checkIsHasImport = jsStr => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-05-13 11:35:24
  * @Desc: 编译html
  */
 const html = (preprocessor, code) => {
@@ -103,9 +94,6 @@ const html = (preprocessor, code) => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-05-13 11:35:30
  * @Desc: 编译js
  */
 const js = (preprocessor, code, importMap) => {
@@ -168,8 +156,6 @@ const js = (preprocessor, code, importMap) => {
 }
 
 /**
- * @Author: 王林
- * @Date: 2022-05-04 11:05:20
  * @Desc: 转换css导入
  */
 const transformCssImport = (cssStr = '') => {
@@ -185,9 +171,6 @@ const transformCssImport = (cssStr = '') => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-05-13 11:35:34
  * @Desc: 编译css
  */
 let sass = null
@@ -251,9 +234,6 @@ const css = (preprocessor, code) => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-13 16:06:15
  * @Desc: vue2，遍历匹配节点，添加el、template属性
  */
 const traverseVue2AddProperty = (path, t, data) => {
@@ -280,9 +260,6 @@ const traverseVue2AddProperty = (path, t, data) => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-10 16:03:32
  * @Desc: 解析vue2 script语法
  */
 const parseVue2ScriptPlugin = data => {
@@ -330,9 +307,6 @@ const parseVue2ScriptPlugin = data => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-13 16:06:15
  * @Desc: vue3，遍历匹配节点，添加el、template属性
  */
 const traverseVue3AddProperty = (path, t, data) => {
@@ -357,9 +331,6 @@ const traverseVue3AddProperty = (path, t, data) => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-10 16:05:31
  * @Desc: 解析vue3 script语法
  */
 const parseVue3ScriptPlugin = data => {
@@ -390,9 +361,6 @@ const parseVue3ScriptPlugin = data => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-09 13:54:12
  * @Desc: 解析出html、js、css
  */
 const parseVueComponentData = async (
@@ -451,9 +419,6 @@ const parseVueComponentData = async (
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-08 20:07:46
  * @Desc: 编译vue单文件
  */
 const vue = (preprocessor, code, importMap) => {

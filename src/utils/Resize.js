@@ -1,7 +1,4 @@
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-29 15:50:26
  * @Desc: 尺寸拖动调整类
  */
 class Resize {
@@ -36,8 +33,6 @@ class Resize {
   }
 
   /**
-   * @Author: 王林25
-   * @Date: 2021-04-28 14:47:12
    * @Desc: 初始化
    */
   init({
@@ -52,9 +47,6 @@ class Resize {
   }
 
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-29 14:39:33
    * @Desc: 获取某个区域允许的最小尺寸
    */
   getMinSize(index) {
@@ -70,9 +62,6 @@ class Resize {
   }
 
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-29 14:48:32
    * @Desc: 获取某个区域允许的最大尺寸
    */
   getMaxSize(index) {
@@ -91,8 +80,6 @@ class Resize {
   }
 
   /**
-   * @Author: 王林25
-   * @Date: 2021-04-28 14:47:09
    * @Desc: 获取第一个可以调整的元素索引
    */
   getFirstNarrowItemIndex(dir, index) {
@@ -120,8 +107,6 @@ class Resize {
   }
 
   /**
-   * @Author: 王林25
-   * @Date: 2021-04-28 14:47:03
    * @Desc: 判断是否允许拖动
    */
   isCanDrag(dir, index) {
@@ -147,8 +132,6 @@ class Resize {
   }
 
   /**
-   * @Author: 王林25
-   * @Date: 2021-04-28 14:46:55
    * @Desc: 拖动开始
    */
   onDragStart(e) {
@@ -156,8 +139,6 @@ class Resize {
   }
 
   /**
-   * @Author: 王林25
-   * @Date: 2021-04-28 14:47:17
    * @Desc: 拖动
    */
   onDrag(index, ox, oy, e) {
@@ -238,8 +219,6 @@ class Resize {
   }
 
   /**
-   * @Author: 添加的新方法
-   * @Date: 当前日期
    * @Desc: 收起某个区域
    */
   collapseItem(index, touchBarSize, containerSize) {
@@ -289,8 +268,6 @@ class Resize {
   }
 
   /**
-   * @Author: 添加的新方法
-   * @Date: 当前日期
    * @Desc: 展开某个区域
    */
   expandItem(index) {

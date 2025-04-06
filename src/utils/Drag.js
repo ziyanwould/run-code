@@ -1,14 +1,8 @@
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-27 20:24:59
  * @Desc: 鼠标拖动
  */
 class Drag {
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-05-13 18:40:16
    * @Desc: 构造函数
    */
   constructor(downCallback, moveCallback, upCallback) {
@@ -24,9 +18,6 @@ class Drag {
   }
 
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-05-13 18:49:51
    * @Desc: 绑定事件
    */
   bind() {
@@ -38,9 +29,6 @@ class Drag {
   }
 
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-05-13 18:41:19
    * @Desc: 解绑事件
    */
   off() {
@@ -49,9 +37,6 @@ class Drag {
   }
 
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-05-13 18:40:47
    * @Desc: 鼠标按下
    */
   onMousedown(e) {
@@ -63,9 +48,6 @@ class Drag {
   }
 
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-05-13 18:40:55
    * @Desc: 鼠标移动
    */
   onMousemove(e) {
@@ -79,9 +61,6 @@ class Drag {
   }
 
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-05-13 18:41:04
    * @Desc: 鼠标松开
    */
   onMouseup(e) {

@@ -63,9 +63,6 @@ const handleVue = async data => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-05-20 10:00:40
  * @Desc: 导出zip
  */
 const exportZip = async (data, fileName) => {

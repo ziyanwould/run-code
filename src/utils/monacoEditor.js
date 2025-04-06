@@ -37,9 +37,6 @@ export const initMonacoEditor = async () => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-23 11:20:31
  * @Desc: 创建语法关联
  */
 export const wire = async (languageId, editor) => {

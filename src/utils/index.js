@@ -5,9 +5,6 @@ import { defaultViewThemeConfig } from '@/config/constants'
 import { zlibSync, strToU8, strFromU8, unzlibSync } from 'fflate'
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-05-07 10:32:20
  * @Desc: 拼接html
  */
 export const assembleHtml = (head, body) => {
@@ -24,9 +21,6 @@ export const assembleHtml = (head, body) => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-05-07 18:51:15
  * @Desc: 判断类型
  */
 export const type = obj => {
@@ -37,9 +31,6 @@ export const type = obj => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-05-19 16:10:59
  * @Desc: 生成uuid
  */
 export const generateUUID = () => {
@@ -56,9 +47,6 @@ export const generateUUID = () => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-05-20 14:14:01
  * @Desc: 编译
  */
 export const compile = async (
@@ -90,9 +78,6 @@ export const compile = async (
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-08 16:12:36
  * @Desc: 编译vue单文件
  */
 export const compileVue = async (vueLanguage, vueContent, importMap) => {
@@ -116,9 +101,6 @@ export const compileVue = async (vueLanguage, vueContent, importMap) => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-09-28 11:16:28
  * @Desc: 分割驼峰式字符串
  */
 export const splitHumpStr = (str, char = ' ') => {
@@ -132,9 +114,6 @@ export const splitHumpStr = (str, char = ' ') => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-06-23 18:41:17
  * @Desc: 在新窗口打开url
  */
 export const newWindowOpenUrl = url => {
@@ -145,9 +124,6 @@ export const newWindowOpenUrl = url => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-06-23 18:42:01
  * @Desc: 生成分享url
  */
 export const createShareUrl = (id, queryData) => {
@@ -162,9 +138,6 @@ export const createShareUrl = (id, queryData) => {
 }
 
 /**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-06-23 18:49:05
  * @Desc: 生成嵌入url
  */
 export const createEmbedUrl = (id, queryData) => {
