@@ -60,7 +60,7 @@
         :key="item.title"
         :index="index"
         :disabled="item.disableDrag"
-        :showTouchBar="item.showTouchBar"
+        :showTouchBar="item.showTouchBar && !item.disableDrag"
         :title="item.showTitle ? item.title : ''"
       >
         <EditorItem
@@ -564,12 +564,14 @@ onBeforeUnmount(() => {
       .el-tabs__header {
         margin-bottom: 5px; /* 添加与内容区域的间距 */
         background-color: var(--editor-header-background);
+        order: 0; /* 确保标签头部在顶部 */
       }
       
       .el-tabs__content {
         flex: 1;
         overflow: hidden;
         height: calc(100% - 45px); /* 调整高度以适应新增的间距 */
+        order: 1; /* 确保内容在标签头部下方 */
       }
       
       .el-tab-pane {
@@ -579,8 +581,19 @@ onBeforeUnmount(() => {
       .el-tabs__header {
         border-bottom:1px solid var(--editor-header-title-color);
 
+        margin: 0;
+
+        .el-tabs__nav-wrap {
+          &::after {
+            /* 移除底部线条 */
+            display: none;
+          }
+        }
+
         .el-tabs__nav {
           border:1px solid var(--editor-header-title-color);
+
+          border-bottom: none;  /* 移除底部边框，与header的底部边框重叠 */
         }
 
         .el-tabs__item {

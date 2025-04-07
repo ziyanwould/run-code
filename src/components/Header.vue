@@ -123,5 +123,7 @@ const createEmbedCode = () => {
   flex-grow: 0;
   flex-shrink: 0;
   padding: 0 20px;
+  border-bottom: 1px solid var(--touch-bar-background);
+  box-shadow: 0px 0 4px var(--touch-bar-background);
 }
 </style>

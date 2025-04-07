@@ -115,8 +115,8 @@ const { onDropdownItemClick } = useClick({ emit, showDropdownList })
     top: 100%;
     z-index: 1;
     width: 150px;
-    background: var(--el-color-white);
-    border: 1px solid var(--el-border-color-light);
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color);
     box-shadow: var(--el-box-shadow-light);
     border-radius: var(--el-border-radius-base);
     padding: 6px 0;
@@ -139,14 +139,15 @@ const { onDropdownItemClick } = useClick({ emit, showDropdownList })
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: var(--el-text-color-regular);
+      color: var(--dropdown-color);
       height: 34px;
       line-height: 34px;
       box-sizing: border-box;
       cursor: pointer;
 
       &:hover {
-        background-color: var(--el-background-color-base);
+        background-color: var(--dropdown-hover-background);
+        color: var(--dropdown-hover-color);
       }
     }
   }

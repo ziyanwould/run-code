@@ -400,7 +400,14 @@ export const defaultViewThemeConfig = {
     '#1e1f26'
   ],
   // 标题栏的下拉菜单的边框颜色
-  '--dropdown-box-border-color': ['menu.border', 'dropdown.border', 'none'],
+  '--dropdown-box-border-color': [
+    'menu.border', 
+    'dropdown.border', 
+    'scrollbarSlider.background',
+    'scrollbarSlider.activeBackground',
+    'scrollbarSlider.hoverBackground',
+    '#333642'
+  ],
   // 标题栏的下拉菜单的颜色
   '--dropdown-color': ['menu.foreground', 'dropdown.foreground', '#fff'],
   // 标题栏的下拉菜单hover时的背景颜色
@@ -462,7 +469,108 @@ export const defaultViewThemeConfig = {
   // 命令输入栏背景颜色
   '--command-background': ['terminal.background', 'rgba(255, 255, 255, 0.1)'],
   // 命令输入栏颜色
-  '--command-color': ['terminal.foreground', '#fff']
+  '--command-color': ['terminal.foreground', '#fff'],
+  
+  // Element Plus 主题变量映射
+  // 主色
+  // '--el-color-primary': ['tab.activeBorder', '#ffd866'],
+  // '--el-color-primary-light-1': ['tab.hoverBorder', '#ffe07f'],
+  // '--el-color-primary-light-2': ['tab.hoverBorder', '#ffe699'],
+  // '--el-color-primary-light-3': ['tab.hoverBorder', '#ffecb2'],
+  // '--el-color-primary-light-4': ['tab.hoverBorder', '#fff2cc'],
+  // '--el-color-primary-light-5': ['tab.hoverBorder', '#fff8e5'],
+  // '--el-color-primary-light-6': ['tab.hoverBorder', '#fffdf2'],
+  // '--el-color-primary-light-7': ['tab.hoverBorder', '#fffef9'],
+  // '--el-color-primary-light-8': ['tab.hoverBorder', '#fffffe'],
+  // '--el-color-primary-light-9': ['tab.hoverBorder', '#ffffff'],
+  // '--el-color-primary-dark-2': ['tab.activeBorder', '#e6c25c'],
+  
+  // 成功色
+  // '--el-color-success': ['symbolIcon.functionForeground', '#a9dc76'],
+  // '--el-color-success-light-1': ['symbolIcon.functionForeground', '#b7e28a'],
+  // '--el-color-success-light-2': ['symbolIcon.functionForeground', '#c4e79f'],
+  // '--el-color-success-light-3': ['symbolIcon.functionForeground', '#d2edb3'],
+  // '--el-color-success-light-4': ['symbolIcon.functionForeground', '#e0f3c8'],
+  // '--el-color-success-light-5': ['symbolIcon.functionForeground', '#edf8dc'],
+  // '--el-color-success-light-6': ['symbolIcon.functionForeground', '#f6fcef'],
+  // '--el-color-success-light-7': ['symbolIcon.functionForeground', '#fbfef7'],
+  // '--el-color-success-light-8': ['symbolIcon.functionForeground', '#fdfefb'],
+  // '--el-color-success-light-9': ['symbolIcon.functionForeground', '#fefffe'],
+  // '--el-color-success-dark-2': ['symbolIcon.functionForeground', '#88b05e'],
+  
+  // 警告色
+  // '--el-color-warning': ['editorWarning.foreground', '#fc9867'],
+  // '--el-color-warning-light-1': ['editorWarning.foreground', '#fca87c'],
+  // '--el-color-warning-light-2': ['editorWarning.foreground', '#fdb791'],
+  // '--el-color-warning-light-3': ['editorWarning.foreground', '#fdc7a6'],
+  // '--el-color-warning-light-4': ['editorWarning.foreground', '#fed6bb'],
+  // '--el-color-warning-light-5': ['editorWarning.foreground', '#fee6d0'],
+  // '--el-color-warning-light-6': ['editorWarning.foreground', '#fff5e5'],
+  // '--el-color-warning-light-7': ['editorWarning.foreground', '#fffaf2'],
+  // '--el-color-warning-light-8': ['editorWarning.foreground', '#fffdf9'],
+  // '--el-color-warning-light-9': ['editorWarning.foreground', '#fffffe'],
+  // '--el-color-warning-dark-2': ['editorWarning.foreground', '#ca7a52'],
+  
+  // 危险色
+  // '--el-color-danger': ['editorError.foreground', '#ff6188'],
+  // '--el-color-danger-light-1': ['editorError.foreground', '#ff779a'],
+  // '--el-color-danger-light-2': ['editorError.foreground', '#ff8dab'],
+  // '--el-color-danger-light-3': ['editorError.foreground', '#ffa3bd'],
+  // '--el-color-danger-light-4': ['editorError.foreground', '#ffb9ce'],
+  // '--el-color-danger-light-5': ['editorError.foreground', '#ffcfe0'],
+  // '--el-color-danger-light-6': ['editorError.foreground', '#ffe5f1'],
+  // '--el-color-danger-light-7': ['editorError.foreground', '#fff2f8'],
+  // '--el-color-danger-light-8': ['editorError.foreground', '#fff9fc'],
+  // '--el-color-danger-light-9': ['editorError.foreground', '#fffdfe'],
+  // '--el-color-danger-dark-2': ['editorError.foreground', '#cc4e6d'],
+  
+  // 信息色
+  // '--el-color-info': ['editorInfo.foreground', '#78dce8'],
+  // '--el-color-info-light-1': ['editorInfo.foreground', '#8ce2eb'],
+  // '--el-color-info-light-2': ['editorInfo.foreground', '#a0e7ef'],
+  // '--el-color-info-light-3': ['editorInfo.foreground', '#b4edf2'],
+  // '--el-color-info-light-4': ['editorInfo.foreground', '#c8f2f6'],
+  // '--el-color-info-light-5': ['editorInfo.foreground', '#dcf8f9'],
+  // '--el-color-info-light-6': ['editorInfo.foreground', '#f0fdfd'],
+  // '--el-color-info-light-7': ['editorInfo.foreground', '#f7fefe'],
+  // '--el-color-info-light-8': ['editorInfo.foreground', '#fbfffe'],
+  // '--el-color-info-light-9': ['editorInfo.foreground', '#feffff'],
+  // '--el-color-info-dark-2': ['editorInfo.foreground', '#60b0ba'],
+  
+  // 文本色
+  // '--el-text-color-primary': ['editor.foreground', '#fcfcfa'],
+  // '--el-text-color-regular': ['foreground', '#c1c0c0'],
+  // '--el-text-color-secondary': ['tab.inactiveForeground', '#939293'],
+  // '--el-text-color-placeholder': ['input.placeholderForeground', '#727072'],
+  // '--el-text-color-disabled': ['disabledForeground', '#5b595c'],
+  
+  // 边框色
+  // '--el-border-color': ['dropdown.border', '#403e41'],
+  // '--el-border-color-light': ['editorGroup.border', '#5b595c'],
+  // '--el-border-color-lighter': ['editorGroup.border', '#727072'],
+  // '--el-border-color-extra-light': ['editorGroup.border', '#939293'],
+  // '--el-border-color-dark': ['dropdown.border', '#2d2a2e'],
+  
+  // 背景色
+  // '--el-bg-color': ['editor.background', '#2d2a2e'],
+  // '--el-bg-color-page': ['editor.background', '#221f22'],
+  // '--el-bg-color-overlay': ['dropdown.background', '#403e41'],
+  
+  // 禁用状态
+  // '--el-disabled-bg-color': ['button.disabledBackground', '#403e41'],
+  // '--el-disabled-text-color': ['disabledForeground', '#5b595c'],
+  // '--el-disabled-border-color': ['button.disabledBorder', '#2d2a2e'],
+  
+  // 遮罩层
+  // '--el-overlay-color': ['widget.shadow', 'rgba(25, 24, 26, 0.8)'],
+  // '--el-overlay-color-light': ['widget.shadow', 'rgba(25, 24, 26, 0.7)'],
+  // '--el-overlay-color-lighter': ['widget.shadow', 'rgba(25, 24, 26, 0.5)'],
+  
+  // 阴影
+  // '--el-box-shadow': ['widget.shadow', '0 2px 12px 0 rgba(25, 24, 26, 0.1)'],
+  // '--el-box-shadow-light': ['widget.shadow', '0 2px 8px 0 rgba(25, 24, 26, 0.1)'],
+  // '--el-box-shadow-lighter': ['widget.shadow', '0 2px 4px 0 rgba(25, 24, 26, 0.1)'],
+  // '--el-box-shadow-dark': ['widget.shadow', '0 2px 16px 0 rgba(25, 24, 26, 0.2)']
 }
 
 // ES模块CDN

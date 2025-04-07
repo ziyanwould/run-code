@@ -4,7 +4,7 @@
       <div class="content">
         <span class="name">布局</span>
         <div class="control">
-          <el-select v-model="layout" @change="layoutChange">
+          <el-select v-model="layout" @change="layoutChange" style="min-width: 120px">
             <el-option
               v-for="item in layoutList"
               :key="item.value"

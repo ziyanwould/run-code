@@ -4,7 +4,7 @@
     <div class="settingRow">
       <span class="name">代码主题</span>
       <div class="control">
-        <el-select v-model="codeTheme" size="small" @change="codeThemeChange">
+        <el-select v-model="codeTheme" @change="codeThemeChange"  style="min-width: 160px">
           <el-option
             v-for="item in codeThemeList"
             :key="item.value"
@@ -53,6 +53,7 @@
           v-model="codeFontSize"
           size="small"
           @change="codeFontSizeChange"
+          style="min-width: 66px"
         >
           <el-option
             v-for="item in codeFontSizeList"

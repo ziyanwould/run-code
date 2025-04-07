@@ -89,6 +89,7 @@
           <!-- 选择语言 -->
           <el-select
             size="mini"
+            style="min-width: 78px"
             v-model="preprocessor"
             @change="preprocessorChange"
           >
@@ -582,7 +583,7 @@ defineExpose({
       }
 
       /deep/ .el-input__inner {
-        width: 120px;
+        // width: 120px;
         background-color: transparent;
         border-color: var(--editor-header-color);
         color: var(--editor-header-color);

@@ -1,6 +1,6 @@
 # CodeFlux
 
-> 前端代码在线运行平台，AI生成前端代码的预览/运行辅助利器，codepen、jsbin、jsfiddle等的开源替代品
+> AI生成式前端代码预览/运行辅助平台，前端代码在线运行平台，codepen、jsbin、jsfiddle等的开源替代品
 
 在线体验：[https://code-flux.anzz.top](https://code-flux.anzz.top)
 
