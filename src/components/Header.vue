@@ -38,6 +38,9 @@
     
     <!-- 分享弹窗 -->
     <Share ref="ShareComp" :isEdit="isEdit"></Share>
+    
+    <!-- 剪贴板检测器 -->
+    <ClipboardDetector />
   </div>
 </template>
 
@@ -56,6 +59,7 @@ import ExportDialog from './header/ExportDialog.vue'
 import GithubTokenDialog from './header/GithubTokenDialog.vue'
 import GistDrawer from './header/GistDrawer.vue'
 import Share from './Share.vue'
+import ClipboardDetector from './ClipboardDetector.vue'
 
 const store = useStore()
 const router = useRouter()

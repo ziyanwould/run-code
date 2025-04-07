@@ -21,6 +21,7 @@
         <li class="toolItem" @click="createEmbedCode" v-if="isEdit">
           生成嵌入代码
         </li>
+        <li class="toolItem" @click="clearAllCode">清空代码</li>
       </ul>
     </div>
     <div class="btn" @click="run">
@@ -45,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { ref, computed, onBeforeUnmount, getCurrentInstance, defineProps, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -184,6 +185,20 @@ const createNew = () => {
 const createShareUrl = () => emit('create-share-url')
 const createEmbedUrl = () => emit('create-embed-url')
 const createEmbedCode = () => emit('create-embed-code')
+
+// 清空所有代码
+const clearAllCode = async () => {
+  try {
+    await store.dispatch('clearAllCode')
+    // 通过事件总线通知编辑器组件重新加载内容
+    proxy.$eventEmitter.emit('clear_all_code')
+    ElMessage.success('已清空所有代码')
+    toggleToolsList(false)
+  } catch (error) {
+    console.error('清空代码失败:', error)
+    ElMessage.error('清空代码失败')
+  }
+}
 </script>
 
 <style scoped lang="less">

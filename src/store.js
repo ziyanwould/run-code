@@ -188,6 +188,18 @@ const store = createStore({
     getGithubToken(ctx) {
       let githubToken = localStorage.getItem(githubTokenSaveKey)
       ctx.commit('setGithubToken', githubToken)
+    },
+    
+    clearAllCode(ctx) {
+      const currentData = JSON.parse(JSON.stringify(ctx.state.editData))
+      
+      Object.keys(currentData.code).forEach(key => {
+        currentData.code[key].content = ''
+      })
+      
+      ctx.commit('setEditData', currentData)
+      
+      return Promise.resolve()
     }
   }
 })

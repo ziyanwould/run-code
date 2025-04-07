@@ -127,6 +127,7 @@ import {
   ref,
   defineProps,
   onMounted,
+  onBeforeUnmount,
   computed,
   getCurrentInstance,
   watch,
@@ -241,8 +242,11 @@ const useInitEditorList = ({ props, editData }) => {
       if (index === -1) {
         return
       }
-      editorItemList.value[index].content = code[type].content
-      editorItemList.value[index].language = code[type].language
+      // Add null check to prevent TypeError
+      if (code[type] && editorItemList.value[index]) {
+        editorItemList.value[index].content = code[type].content || ''
+        editorItemList.value[index].language = code[type].language || defaultEditorMap[type].language
+      }
     })
   }
 
@@ -407,6 +411,12 @@ const useEditorChange = ({
     proxy.$eventEmitter.off('reset_code', resetCode)
   })
 
+  // 清空所有代码
+  const clearAllCode = async () => {
+    await store.dispatch('clearAllCode')
+    resetCode() // 重置编辑器内容
+  }
+
   // 代码修改事件
   const codeChange = (item, code) => {
     store.commit('setCodeContent', {
@@ -439,7 +449,9 @@ const useEditorChange = ({
   return {
     codeChange,
     getIndexByType,
-    preprocessorChange
+    preprocessorChange,
+    clearAllCode,
+    resetCode
   }
 }
 
@@ -502,7 +514,7 @@ const { activeTab, isTabsMode, handleTabClick, editorItemRefs } = useTabsMode({ 
 const { loadTheme, getThemeData } = useTheme({ codeTheme, proxy })
 const { runCode } = useRunCode({ store, proxy })
 const { autoRun } = useAutoRun({ store, runCode })
-const { getIndexByType, preprocessorChange, codeChange } = useEditorChange({
+const { getIndexByType, preprocessorChange, codeChange, clearAllCode, resetCode } = useEditorChange({
   setInitData,
   store,
   editorItemList,
@@ -513,11 +525,18 @@ const { getIndexByType, preprocessorChange, codeChange } = useEditorChange({
 })
 const { showCreateCodeImg } = useCodeToImg()
 const { addResource, addImportmap } = useAssets()
+
 onMounted(async () => {
   await loadTheme()
   setInitData()
   show.value = true
   runCode()
+  
+  proxy.$eventEmitter.on('clear_all_code', clearAllCode)
+})
+
+onBeforeUnmount(() => {
+  proxy.$eventEmitter.off('clear_all_code', clearAllCode)
 })
 </script>
 
