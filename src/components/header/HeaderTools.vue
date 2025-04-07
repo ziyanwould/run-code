@@ -49,7 +49,7 @@
 import { ref, computed, onBeforeUnmount, getCurrentInstance, defineProps, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { request } from '@/utils/octokit'
 
 const props = defineProps({
@@ -189,14 +189,27 @@ const createEmbedCode = () => emit('create-embed-code')
 // 清空所有代码
 const clearAllCode = async () => {
   try {
+    // 添加确认对话框
+    await ElMessageBox.confirm(
+      '清空代码操作不可恢复，确定要清空所有代码吗？',
+      '警告',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    )
+    
     await store.dispatch('clearAllCode')
     // 通过事件总线通知编辑器组件重新加载内容
     proxy.$eventEmitter.emit('clear_all_code')
     ElMessage.success('已清空所有代码')
     toggleToolsList(false)
   } catch (error) {
-    console.error('清空代码失败:', error)
-    ElMessage.error('清空代码失败')
+    if (error !== 'cancel') {
+      console.error('清空代码失败:', error)
+      ElMessage.error('清空代码失败')
+    }
   }
 }
 </script>

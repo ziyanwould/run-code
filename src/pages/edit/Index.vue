@@ -394,6 +394,68 @@ init(() => {
   background-color: #000 !important; // 确保蒙层颜色为黑色
 }
 
+// 消息弹窗样式适配
+.el-message-box {
+  background-color: var(--editor-background) !important;
+  border: 2px solid var(--editor-header-title-color) !important;
+  box-shadow: 0 0 4px var(--editor-header-title-color) !important;
+  
+  .el-message-box__header {
+    background-color: var(--header-background) !important;
+    border-bottom: 2px solid var(--editor-header-title-color) !important;
+    padding: 15px 20px !important;
+  }
+  
+  .el-message-box__title {
+    color: var(--header-logo-color) !important;
+    font-weight: bold !important;
+  }
+  
+  .el-message-box__headerbtn .el-message-box__close {
+    color: var(--header-logo-color) !important;
+    
+    &:hover {
+      color: var(--dropdown-hover-color) !important;
+    }
+  }
+  
+  .el-message-box__content {
+    background-color: var(--editor-background) !important;
+    color: var(--dropdown-color) !important;
+    padding: 20px !important;
+  }
+  
+  .el-message-box__message p {
+    color: var(--dropdown-color) !important;
+  }
+  
+  .el-message-box__btns {
+    background-color: var(--editor-background) !important;
+    border-top: 1px solid var(--editor-header-title-color) !important;
+    padding: 12px 20px !important;
+  }
+  
+  .el-message-box__status {
+    color: var(--header-btn-color) !important;
+    
+    &.el-icon-warning {
+      color: #E6A23C !important;
+    }
+    
+    &.el-icon-success {
+      color: #67C23A !important;
+    }
+    
+    &.el-icon-error {
+      color: #F56C6C !important;
+    }
+    
+    &.el-icon-info {
+      color: var(--header-btn-color) !important;
+    }
+  }
+}
+
 .el-table {
   background-color: var(--editor-background) !important;
   color: var(--dropdown-color) !important;
