@@ -9,6 +9,13 @@ import previewOnlyImg from '../assets/layoutImgs/previewOnly.jpg'
 import previewOnly2Img from '../assets/layoutImgs/previewOnly2.jpg'
 import jsImg from '../assets/layoutImgs/js.jpg'
 import tabsImg from '../assets/layoutImgs/tabs.jpg'
+
+import edit3Img from '../assets/layoutImgs/default.jpg'
+import edit4Img from '../assets/layoutImgs/default.jpg'
+import tabs2Img from '../assets/layoutImgs/default.jpg'
+import tabs3Img from '../assets/layoutImgs/default.jpg'
+import tabs4Img from '../assets/layoutImgs/default.jpg'
+
 // 布局组件
 import Default from '../pages/edit/layouts/Default.vue'
 import Default2 from '../pages/edit/layouts/Default2.vue'
@@ -23,6 +30,11 @@ import NewWindowPreview from '../pages/edit/layouts/NewWindowPreview.vue'
 import VueSFC from '../pages/edit/layouts/VueSFC.vue'
 import Embed from '../pages/edit/layouts/Embed.vue'
 import Tabs from '../pages/edit/layouts/Tabs.vue'
+import Edit3 from '../pages/edit/layouts/Edit3.vue'
+import Edit4 from '../pages/edit/layouts/Edit4.vue'
+import Tabs2 from '../pages/edit/layouts/Tabs2.vue'
+import Tabs3 from '../pages/edit/layouts/Tabs3.vue'
+import Tabs4 from '../pages/edit/layouts/Tabs4.vue'
 
 // Monaco Editor支持的语言
 export const supportLanguage = {
@@ -282,16 +294,53 @@ export const cdnSiteList = [
 // 布局列表
 export const layoutList = [
   {
-    name: '默认',
+    name: '编辑·竖排·上 & 预览下',
     value: 'default'
   },
   {
-    name: '标签页模式',
+    name: '编辑·竖排·下 & 预览上',
+    value: 'default2'
+  },
+  {
+    name: '编辑·竖排·左 & 预览右',
+    value: 'edit2'
+  },
+  {
+    name: '编辑·竖排·右 & 预览左',
+    value: 'edit3'
+  },
+  {
+    type: 'divider'
+  },
+  {
+    name: '编辑·横排·左 & 预览右',
+    value: 'edit'
+  },
+  {
+    name: '编辑·横排·右 & 预览左',
+    value: 'edit4'
+  },
+  {
+    type: 'divider'
+  },
+  {
+    name: '编辑·标签·上 & 预览下',
     value: 'tabs'
   },
   {
-    name: '编辑视图',
-    value: 'edit'
+    name: '编辑·标签·下 & 预览上',
+    value: 'tabs2'
+  },
+  {
+    name: '编辑·标签·左 & 预览右',
+    value: 'tabs3'
+  },
+  {
+    name: '编辑·标签·右 & 预览左',
+    value: 'tabs4'
+  },
+  {
+    type: 'divider'
   },
   {
     name: '新开窗口预览',
@@ -302,32 +351,33 @@ export const layoutList = [
     value: 'vue'
   },
   {
-    name: '纯编辑',
+    type: 'divider'
+  },
+  {
+    name: '纯编辑竖排(无控制台)',
     value: 'editOnly'
   },
   {
-    name: '纯预览',
-    value: 'previewOnly'
+    name: '纯编辑竖排(带控制台)',
+    value: 'editOnly2'
   },
   {
-    name: '纯js',
+    type: 'divider'
+  },
+  {
+    name: '纯JS编辑面板(带控制台)',
     value: 'js'
   },
   {
-    name: '默认(对调)',
-    value: 'default2'
-  },
-  {
-    name: '编辑视图2',
-    value: 'edit2'
-  },
-  {
-    name: '纯编辑(带控制台)',
-    value: 'editOnly2'
+    type: 'divider'
   },
   {
     name: '纯预览(带控制台)',
     value: 'previewOnly2'
+  },
+  {
+    name: '纯预览(无控制台)',
+    value: 'previewOnly'
   }
 ]
 
@@ -342,7 +392,12 @@ export const previewImgMap = {
   previewOnly: previewOnlyImg,
   previewOnly2: previewOnly2Img,
   js: jsImg,
-  tabs: tabsImg
+  tabs: tabsImg,
+  edit3: edit3Img,
+  edit4: edit4Img,
+  tabs2: tabs2Img,
+  tabs3: tabs3Img,
+  tabs4: tabs4Img,
 }
 
 // 布局组件映射
@@ -351,6 +406,12 @@ export const layoutMap = {
   default2: Default2,
   edit: Edit,
   edit2: Edit2,
+  edit3: Edit3,
+  edit4: Edit4,
+  tabs: Tabs,
+  tabs2: Tabs2,
+  tabs3: Tabs3,
+  tabs4: Tabs4,
   editOnly: EditOnly,
   editOnly2: EditOnly2,
   previewOnly: PreviewOnly,
@@ -358,8 +419,7 @@ export const layoutMap = {
   js: Js,
   newWindowPreview: NewWindowPreview,
   vue: VueSFC,
-  embed: Embed,
-  tabs: Tabs
+  embed: Embed
 }
 
 // 编辑器字号

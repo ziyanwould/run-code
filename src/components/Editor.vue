@@ -267,7 +267,7 @@ const useTabsMode = ({ store }) => {
   
   // 判断是否是标签页模式
   const isTabsMode = computed(() => {
-    return store.state.editData.config.layout === 'tabs'
+    return ['tabs', 'tabs2', 'tabs3', 'tabs4'].includes(store.state.editData.config.layout)
   })
   
   // 处理标签点击事件
@@ -533,10 +533,22 @@ onMounted(async () => {
   runCode()
   
   proxy.$eventEmitter.on('clear_all_code', clearAllCode)
+  
+  // 添加窗口resize事件监听，确保编辑器正确布局
+  window.addEventListener('resize', () => {
+    if (isTabsMode.value && editorItemRefs.value && editorItemRefs.value.length > 0) {
+      editorItemRefs.value.forEach(editor => {
+        if (editor && editor.relayoutEditor) {
+          editor.relayoutEditor()
+        }
+      })
+    }
+  })
 })
 
 onBeforeUnmount(() => {
   proxy.$eventEmitter.off('clear_all_code', clearAllCode)
+  // window.removeEventListener('resize', handleResize)
 })
 </script>
 

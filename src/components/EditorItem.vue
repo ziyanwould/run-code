@@ -233,6 +233,11 @@ const useCreateEditor = ({ props, emit, updateDoc }) => {
       editor.onDidBlurEditorText(() => {
         emit('blur', editor.getValue())
       })
+      
+      // 确保编辑器正确布局
+      setTimeout(() => {
+        editor.layout()
+      }, 50)
     }
     // 更新字号
     watch(

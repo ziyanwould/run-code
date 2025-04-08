@@ -4,14 +4,15 @@
       <div class="content">
         <span class="name">布局</span>
         <div class="control">
-          <el-select v-model="layout" @change="layoutChange" style="min-width: 120px">
-            <el-option
-              v-for="item in layoutList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            >
-            </el-option>
+          <el-select
+            v-model="layout"
+            @change="layoutChange"
+            style="min-width: 200px"
+          >
+            <template v-for="(item, index) in layoutList" :key="index">
+              <el-divider v-if="item.type === 'divider'" />
+              <el-option v-else :label="item.name" :value="item.value" />
+            </template>
           </el-select>
         </div>
         <!-- <el-button type="primary" class="btn" @click="confirm">确定</el-button> -->
@@ -27,7 +28,7 @@
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { layoutList, previewImgMap } from '@/config/constants'
-import { ElSelect, ElButton, ElOption } from 'element-plus'
+import { ElSelect, ElButton, ElOption, ElDivider } from 'element-plus'
 
 // 初始化
 const useInit = () => {
@@ -54,7 +55,7 @@ const useLayout = ({ store }) => {
   }
 
   // 切换布局时直接应用修改
-  const layoutChange = (value) => {
+  const layoutChange = value => {
     store.commit('setLayout', value)
   }
 
@@ -70,6 +71,12 @@ const useLayout = ({ store }) => {
 const { store } = useInit()
 const { previewImg, layout, confirm, layoutChange } = useLayout({ store })
 </script>
+
+<style lang="less">
+.el-divider--horizontal {
+  margin: 4px 0 !important;
+}
+</style>
 
 <style scoped lang="less">
 .settingRow {

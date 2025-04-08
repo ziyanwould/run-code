@@ -1,15 +1,11 @@
 <template>
-  <Drag :number="2" dir="h" :config="[{ min: 0, default: 480 }, { min: 20 }]">
-    <!-- 编辑器 -->
-    <DragItem :index="0" :disabled="true" :showTouchBar="false">
-      <Editor dir="v"></Editor>
-    </DragItem>
+  <Drag :number="2" dir="h" :config="[{ min: 0 }, { min: 20, default: 480 }]">
     <!-- 预览&控制台 -->
-    <DragItem :index="1" :disabled="false">
+    <DragItem :index="0" :disabled="true" title="预览" :showTouchBar="false">
       <Drag
         :number="2"
         dir="v"
-        :config="[{ min: 0 }, { min: 48, default: 48 }]"
+        :config="[{ min: 0 }, { min: 24, default: 24 }]"
       >
         <DragItem
           :index="0"
@@ -23,6 +19,10 @@
           <Console></Console>
         </DragItem>
       </Drag>
+    </DragItem>
+    <!-- 编辑器 -->
+    <DragItem :index="1" :disabled="false" :showTouchBar="true">
+      <Editor dir="v"></Editor>
     </DragItem>
   </Drag>
 </template>
