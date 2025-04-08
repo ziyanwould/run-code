@@ -6,6 +6,8 @@
 
 # 特性
 
+- [x] 支持一键运行AI生成的前端代码
+
 - [x] 支持多种预处理语言
 
 - [x] 支持多种布局随意切换
@@ -33,6 +35,27 @@
 - [x] 内置使用[unpkg](https://unpkg.com/)及[importmap](https://github.com/WICG/import-maps)支持在浏览器上使用ES模块语法
 
 - [x] 支持嵌入模式，方便在文档网站中使用，让文档示例更轻松
+
+# 运行/预览AI生成的前端代码
+
+在任意支持生成前端代码的AI平台上，使用提示词让AI生成你期望的前端网页，然后将生成的内容一键复制到 [CodeFlux](https://code-flux.anzz.top) 平台上，即可对其进行运行/预览。
+
+- 注意：无需单独复制`html`、`css`、`js`等代码，直接复制AI生成的内容，然后粘贴到 [CodeFlux](https://code-flux.anzz.top) 平台上， [CodeFlux](https://code-flux.anzz.top) 平台会自动识别并分解成对应的前端代码。
+
+以在DeepSeek网站上生成的内容为例：  
+
+一键复制： 
+![](./assets/course01.jpg)  
+
+将复制到的内容直接粘贴到 [CodeFlux](https://code-flux.anzz.top) 平台  
+
+![](./assets/course02.jpg)  
+
+点击确定，即可自动分解代码并进行运行/预览
+
+![](./assets/course03.jpg)  
+
+备注：后续考虑做成浏览器插件，直接在AI平台上点击运行
 
 # 本地构建
 
