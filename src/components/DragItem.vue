@@ -16,7 +16,9 @@
       }"
       :class="[{ canDrag: !disabled }, dir]"
       @mousedown="onMousedown"
+      @touchstart="onTouchstart"
       @dblclick="onTouchBarDblClick"
+      @tap="handleTouchDoubleTap"
     >
       <span class="title" v-html="titleStr"></span>
     </div>
@@ -141,13 +143,20 @@ const useDrag = ({ props }) => {
     drag && drag.onMousedown(e)
   }
 
+  // 拖动条触摸开始事件
+  const onTouchstart = e => {
+    proxy.$eventEmitter.emit('dragStart')
+    drag && drag.onTouchstart(e)
+  }
+
   // 即将解除挂载
   onBeforeUnmount(() => {
     drag && drag.off()
   })
 
   return {
-    onMousedown
+    onMousedown,
+    onTouchstart
   }
 }
 
@@ -156,6 +165,10 @@ const useCollapseExpand = ({ props }) => {
   const collapseItem = inject('collapseItem')
   const expandItem = inject('expandItem')
   const isCollapsed = ref(false)
+  
+  // 用于检测双击的变量
+  const lastTapTime = ref(0)
+  const doubleTapDelay = 300 // 双击间隔时间（毫秒）
   
   // TouchBar双击事件处理
   const onTouchBarDblClick = () => {
@@ -174,8 +187,23 @@ const useCollapseExpand = ({ props }) => {
     }
   }
   
+  // 处理移动端的双击
+  const handleTouchDoubleTap = (e) => {
+    const currentTime = new Date().getTime()
+    const tapLength = currentTime - lastTapTime.value
+    
+    if (tapLength < doubleTapDelay && tapLength > 0) {
+      // 检测到双击
+      e.preventDefault()
+      onTouchBarDblClick()
+    }
+    
+    lastTapTime.value = currentTime
+  }
+  
   return {
     onTouchBarDblClick,
+    handleTouchDoubleTap,
     isCollapsed
   }
 }
@@ -183,8 +211,8 @@ const useCollapseExpand = ({ props }) => {
 // created部分
 const { dir, titleStr } = useInit({ props })
 const { sizeList } = useSizeList({ emit })
-const { onMousedown } = useDrag({ props })
-const { onTouchBarDblClick } = useCollapseExpand({ props })
+const { onMousedown, onTouchstart } = useDrag({ props })
+const { onTouchBarDblClick, handleTouchDoubleTap } = useCollapseExpand({ props })
 </script>
 
 <style scoped lang="less">
@@ -204,6 +232,7 @@ const { onTouchBarDblClick } = useCollapseExpand({ props })
     flex-grow: 0;
     flex-shrink: 0;
     background-color: var(--touch-bar-background);
+    touch-action: none; /* 防止浏览器默认的触摸行为 */
 
     &.canDrag {
       &.v {

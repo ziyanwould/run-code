@@ -35,14 +35,14 @@
           <template #default="scope">
             <el-button
               type="primary"
-              icon="el-icon-edit"
+              :icon="Edit"
               circle
               size="small"
               @click="updateGist(scope.row.id)"
             ></el-button>
             <el-button
               type="danger"
-              icon="el-icon-delete"
+              :icon="Delete"
               circle
               size="small"
               @click="deleteGist(scope.row.id)"
@@ -65,9 +65,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps, defineEmits } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElDrawer, ElTable, ElTableColumn, ElButton, ElPagination, ElMessage } from 'element-plus'
+import { Delete, Edit } from '@element-plus/icons-vue'
 import { request } from '@/utils/octokit'
 import dayjs from 'dayjs'
 

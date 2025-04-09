@@ -30,6 +30,8 @@ const detectedCode = ref({
   CSS: { content: '' },
   JS: { content: '' }
 });
+// 添加剪贴板文本缓存
+const clipboardTextCache = ref('');
 
 // 处理Enter键按下事件
 const handleEnterKey = (event) => {
@@ -110,6 +112,9 @@ const checkClipboard = async () => {
     
     if (!text || text.trim() === '') return;
     
+    // 缓存剪贴板文本
+    clipboardTextCache.value = text;
+    
     // 检测是否包含代码块
     const hasHtmlCode = htmlRegex.test(text);
     htmlRegex.lastIndex = 0; // 重置正则表达式索引
@@ -128,7 +133,7 @@ const checkClipboard = async () => {
         // 如果有多个HTML代码块，不进行提示
         return;
       }
-      htmlContent = htmlMatch[1].trim();
+      htmlContent = htmlMatch[1] ? htmlMatch[1].trim() : '';
     }
     
     // 提取CSS代码
@@ -137,7 +142,7 @@ const checkClipboard = async () => {
     cssRegex.lastIndex = 0; // 重置正则表达式索引
     
     while ((cssMatch = cssRegex.exec(text)) !== null) {
-      cssContent += cssMatch[1].trim() + '\n\n';
+      cssContent += (cssMatch[1] ? cssMatch[1].trim() : '') + '\n\n';
     }
     
     // 提取JavaScript代码
@@ -146,7 +151,7 @@ const checkClipboard = async () => {
     jsRegex.lastIndex = 0; // 重置正则表达式索引
     
     while ((jsMatch = jsRegex.exec(text)) !== null) {
-      jsContent += (jsMatch[1] || jsMatch[2]).trim() + '\n\n';
+      jsContent += ((jsMatch[1] || jsMatch[2]) ? (jsMatch[1] || jsMatch[2]).trim() : '') + '\n\n';
     }
     
     // 如果有HTML代码，则显示对话框
@@ -186,6 +191,9 @@ const handlePaste = (event) => {
 const processClipboardText = (text) => {
   if (!text || text.trim() === '') return;
   
+  // 缓存剪贴板文本
+  clipboardTextCache.value = text;
+  
   // 重置正则表达式索引
   htmlRegex.lastIndex = 0;
   cssRegex.lastIndex = 0;
@@ -205,21 +213,21 @@ const processClipboardText = (text) => {
   while ((htmlMatch = htmlRegex.exec(text)) !== null) {
     htmlCount++;
     if (htmlCount > 1) return;
-    htmlContent = htmlMatch[1].trim();
+    htmlContent = htmlMatch[1] ? htmlMatch[1].trim() : '';
   }
   
   let cssMatch;
   let cssContent = '';
   
   while ((cssMatch = cssRegex.exec(text)) !== null) {
-    cssContent += cssMatch[1].trim() + '\n\n';
+    cssContent += (cssMatch[1] ? cssMatch[1].trim() : '') + '\n\n';
   }
   
   let jsMatch;
   let jsContent = '';
   
   while ((jsMatch = jsRegex.exec(text)) !== null) {
-    jsContent += (jsMatch[1] || jsMatch[2]).trim() + '\n\n';
+    jsContent += ((jsMatch[1] || jsMatch[2]) ? (jsMatch[1] || jsMatch[2]).trim() : '') + '\n\n';
   }
   
   if (htmlContent) {
@@ -241,7 +249,7 @@ onMounted(() => {
 });
 
 // 提取HTML中的标题作为名称
-const extractTitleFromHTML = (htmlContent) => {
+const extractTitleFromHTML = async (htmlContent) => {
   // 尝试匹配title标签
   const titleMatch = htmlContent.match(/<title[^>]*>(.*?)<\/title>/i);
   if (titleMatch && titleMatch[1]) {
@@ -254,10 +262,13 @@ const extractTitleFromHTML = (htmlContent) => {
     return h1Match[1].trim();
   }
   
-  // 尝试匹配h2标签
-  const h2Match = htmlContent.match(/<h2[^>]*>(.*?)<\/h2>/i);
-  if (h2Match && h2Match[1]) {
-    return h2Match[1].trim();
+  // 尝试从缓存的剪贴板文本中匹配Markdown格式的标题
+  if (clipboardTextCache.value) {
+    // 匹配Markdown的一级标题 (# 标题)
+    const mdH1Match = clipboardTextCache.value.match(/^#\s+(.+)$/m);
+    if (mdH1Match && mdH1Match[1]) {
+      return mdH1Match[1].trim();
+    }
   }
   
   // 如果都没有找到，返回默认名称
@@ -265,9 +276,9 @@ const extractTitleFromHTML = (htmlContent) => {
 };
 
 // 插入检测到的代码
-const insertCode = () => {
+const insertCode = async () => {
   // 从HTML内容中提取标题作为名称
-  const title = extractTitleFromHTML(detectedCode.value.HTML.content || '');
+  const title = await extractTitleFromHTML(detectedCode.value.HTML.content || '');
   
   // 检查当前布局
   const layout = store.state.editData.config.layout;
