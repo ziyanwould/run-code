@@ -11,9 +11,9 @@ class Drag {
       x: 0,
       y: 0
     }
-    this.downCallback = downCallback || function() {}
-    this.moveCallback = moveCallback || function() {}
-    this.upCallback = upCallback || function() {}
+    this.downCallback = downCallback || function () { }
+    this.moveCallback = moveCallback || function () { }
+    this.upCallback = upCallback || function () { }
     this.bind()
   }
 
@@ -27,7 +27,7 @@ class Drag {
     this.onTouchstart = this.onTouchstart.bind(this)
     this.onTouchmove = this.onTouchmove.bind(this)
     this.onTouchend = this.onTouchend.bind(this)
-    
+
     window.addEventListener('mousemove', this.onMousemove)
     window.addEventListener('mouseup', this.onMouseup)
     window.addEventListener('touchmove', this.onTouchmove, { passive: false })
@@ -93,7 +93,10 @@ class Drag {
     const touch = e.touches[0]
     let ox = touch.clientX - this.startPos.x
     let oy = touch.clientY - this.startPos.y
-    this.moveCallback && this.moveCallback(ox, oy, e)
+    this.moveCallback && this.moveCallback(ox, oy, {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    })
   }
 
   /**

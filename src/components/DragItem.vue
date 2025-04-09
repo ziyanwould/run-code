@@ -16,7 +16,7 @@
       }"
       :class="[{ canDrag: !disabled }, dir]"
       @mousedown="onMousedown"
-      @touchstart="onTouchstart"
+      @touchstart.prevent="onTouchstart"
       @dblclick="onTouchBarDblClick"
       @tap="handleTouchDoubleTap"
     >

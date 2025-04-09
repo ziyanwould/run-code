@@ -142,6 +142,11 @@ class Resize {
    * @Desc: 拖动
    */
   onDrag(index, ox, oy, e) {
+    // 确保e对象存在且包含必要属性
+    if (!e || (typeof e.clientX === 'undefined' && typeof e.clientY === 'undefined')) {
+      return
+    }
+    
     let client = this._dir === 'v' ? e.clientY : e.clientX
     // 本次移动的距离
     let dx = client - this._last
