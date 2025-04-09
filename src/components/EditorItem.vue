@@ -122,7 +122,8 @@ import {
   onMounted,
   watch,
   nextTick,
-  defineEmits
+  defineEmits,
+  getCurrentInstance
 } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import {
@@ -373,6 +374,15 @@ const useDoc = ({ props }) => {
   const getValue = () => {
     return editor.getValue()
   }
+  
+  // 直接更新编辑器内容的方法
+  const updateContent = (content) => {
+    if (editor) {
+      updateDoc(content, props.language)
+      // 触发内容变更事件
+      emit('code-change', content)
+    }
+  }
 
   // 更新文档内容
   watch(
@@ -386,7 +396,8 @@ const useDoc = ({ props }) => {
 
   return {
     updateDoc,
-    getValue
+    getValue,
+    updateContent
   }
 }
 
@@ -430,9 +441,27 @@ const useCodeFormat = ({ getValue, updateDoc, emit }) => {
 }
 
 // 初始化
-const useInit = ({ createEditor }) => {
+// 在 useInit 函数中添加事件监听
+const useInit = ({ createEditor, updateContent }) => {
+  const instance = getCurrentInstance()
+  const proxy = instance ? instance.proxy : null
+  
   onMounted(() => {
     createEditor()
+    
+    // 监听清空编辑器内容事件
+    if (proxy && proxy.$eventEmitter) {
+      proxy.$eventEmitter.on('clear_editor_content', () => {
+        updateContent('')
+      })
+    }
+  })
+  
+  onBeforeUnmount(() => {
+    // 移除事件监听
+    if (proxy && proxy.$eventEmitter) {
+      proxy.$eventEmitter.off('clear_editor_content')
+    }
   })
 }
 
@@ -514,7 +543,7 @@ const useDropdown = ({ createCodeImg, openLocalFile }) => {
 }
 
 // created部分
-const { updateDoc, getValue } = useDoc({ props })
+const { updateDoc, getValue, updateContent } = useDoc({ props })
 const { createEditor, relayoutEditor } = useCreateEditor({
   props,
   emit,
@@ -539,7 +568,9 @@ const { dropdownList, onDropdownClick } = useDropdown({
 // 暴露方法给父组件
 defineExpose({
   relayoutEditor,
-  resize
+  resize,
+  updateContent,
+  title: props.title
 })
 </script>
 

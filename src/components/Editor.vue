@@ -64,6 +64,7 @@
         :title="item.showTitle ? item.title : ''"
       >
         <EditorItem
+          ref="editorItemRefs"
           :title="item.title"
           :language="item.language"
           :codeTheme="codeTheme"
@@ -399,7 +400,8 @@ const useEditorChange = ({
   autoRun,
   runCode,
   editData,
-  proxy
+  proxy,
+  editorItemRefs
 }) => {
   // 重新设置代码数据
   const resetCode = () => {
@@ -414,6 +416,28 @@ const useEditorChange = ({
   // 清空所有代码
   const clearAllCode = async () => {
     await store.dispatch('clearAllCode')
+    
+    // 直接更新编辑器列表中的内容为空字符串
+    editorItemList.value.forEach(item => {
+      item.content = ''
+    })
+    
+    // 通知所有编辑器实例更新内容
+    nextTick(() => {
+      // 确保在两种模式下都能获取到编辑器实例
+      if (editorItemRefs.value && editorItemRefs.value.length > 0) {
+        editorItemRefs.value.forEach(editor => {
+          if (editor && editor.updateContent) {
+            editor.updateContent('')
+          }
+        })
+      } else {
+        console.warn('未找到编辑器实例，尝试使用其他方式清空')
+        // 如果无法通过引用获取编辑器实例，则尝试通过事件通知所有编辑器清空内容
+        proxy.$eventEmitter.emit('clear_editor_content')
+      }
+    })
+    
     resetCode() // 重置编辑器内容
   }
 
@@ -521,7 +545,8 @@ const { getIndexByType, preprocessorChange, codeChange, clearAllCode, resetCode 
   autoRun,
   runCode,
   editData,
-  proxy
+  proxy,
+  editorItemRefs  // 添加这一行
 })
 const { showCreateCodeImg } = useCodeToImg()
 const { addResource, addImportmap } = useAssets()
