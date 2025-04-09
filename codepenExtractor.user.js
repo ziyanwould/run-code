@@ -2,7 +2,7 @@
 // @name         codepen 代码提取器
 // @namespace    https://github.com/xxxily
 // @version      0.1
-// @description  从页面上的 CodeMirror 实例提取代码并复制为 Markdown 格式
+// @description  提取 codepen 上的代码并转换成 Markdown 格式的格式
 // @author       You
 // @match        *://*.codepen.io/*
 // @match        *://*.jsbin.com/*
