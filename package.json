@@ -36,7 +36,11 @@
     "createThemeList": "node ./scripts/createThemeList.js",
     "buildLiveScript": "node ./scripts/buildLiveScript.js",
     "buildVueSFCCompiler": "node ./scripts/buildVueCompilerSfc.js",
-    "format": "prettier --write src/**"
+    "format": "prettier --write src/**",
+    "docker:build": "docker build -t code-flux .",
+    "docker:run": "docker run -p 8080:80 code-flux",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
