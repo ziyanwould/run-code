@@ -40,7 +40,8 @@
     "docker:build": "docker build -t code-flux .",
     "docker:run": "docker run -p 8080:80 code-flux",
     "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down"
+    "docker:down": "docker-compose down",
+    "build:extension": "npm run build && cp extension/manifest.json extension/background.js extension/dist/ && cp -r extension/icons extension/dist/"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -61,6 +62,7 @@
     "nprogress": "^0.2.0",
     "onigasm": "^2.2.5",
     "resize-observer-polyfill": "^1.5.1",
+    "sharp": "^0.34.1",
     "vscode-theme-to-monaco-theme-web": "^1.0.0",
     "vue": "^3.3.4",
     "vue-router": "^4.0.6",
@@ -84,7 +86,8 @@
     "less-loader": "^6.2.0",
     "monaco-editor-webpack-plugin": "^5.0.0",
     "prettier": "^1.19.1",
-    "vscode-theme-to-monaco-theme-node": "^1.0.0"
+    "vscode-theme-to-monaco-theme-node": "^1.0.0",
+    "workbox-webpack-plugin": "^7.3.0"
   },
   "eslintConfig": {
     "root": true,
