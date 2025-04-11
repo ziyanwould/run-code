@@ -37,6 +37,7 @@
       <ul class="toolList" :class="{ show: showMoreList }">
         <li class="toolItem" @click="createNew">创建新项目</li>
         <li class="toolItem" @click="showMyGists">我的gist</li>
+        <li class="toolItem" @click="showLocalGists">本地项目</li>
         <li class="toolItem" @click="githubToken ? logout() : login()">
           {{ githubToken ? '退出' : '登录' }}
         </li>
@@ -58,6 +59,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { request } from '@/utils/octokit'
+import { localDb } from '@/utils/localDb'
 
 const props = defineProps({
   isEdit: Boolean,
@@ -71,6 +73,7 @@ const emit = defineEmits([
   'login',
   'logout',
   'show-gists',
+  'show-local-gists',
   'create-share-url',
   'create-embed-url',
   'create-embed-code'
@@ -125,10 +128,30 @@ const run = () => {
 // 保存
 const save = async () => {
   if (githubToken.value === '') {
-    emit('login')
+    // 未登录时保存到本地
+    try {
+      store.commit('setLoading', true)
+      let fileData = createData()
+      if (route.name === 'LocalEdit' && route.params.id) {
+        await localDb.updateGist(Number(route.params.id), fileData)
+      } else {
+        const id = await localDb.saveGist(fileData)
+        router.replace({
+          name: 'LocalEdit',
+          params: { id }
+        })
+      }
+      store.commit('setLoading', false)
+      ElMessage.success('保存成功')
+    } catch (error) {
+      console.log(error)
+      store.commit('setLoading', false)
+      ElMessage.error('保存失败')
+    }
     return
   }
 
+  // 已登录时保存到 Gist
   try {
     store.commit('setLoading', true)
     let fileData = createData()
@@ -186,6 +209,8 @@ const showMyGists = () => {
 }
 const createNew = async () => {
   try {
+    console.log('等待清空操作的结果')
+
     // 等待清空操作的结果
     const cleared = await new Promise((resolve) => {
       proxy.$eventEmitter.emit('clear_all_code', resolve)
@@ -193,11 +218,19 @@ const createNew = async () => {
     
     // 只有在成功清空后才继续执行
     if (cleared) {
+      console.log('清空代码成功，开始创建新项目')
+
       router.replace({
         name: 'Editor',
         query: {}
       })
       toggleMoreList(false)
+
+      console.log('创建新项目成功')
+      ElMessage.success('创建新项目成功')
+    } else {
+      console.error('清空代码失败')
+      ElMessage.error('清空代码失败，请重试')
     }
   } catch (error) {
     console.error('创建新项目失败:', error)
@@ -212,6 +245,12 @@ const createEmbedCode = () => emit('create-embed-code')
 const clearAllCode = () => {
   proxy.$eventEmitter.emit('clear_all_code')
   toggleToolsList(false)
+}
+
+// 添加显示本地项目方法
+const showLocalGists = () => {
+  emit('show-local-gists')
+  toggleMoreList(false)
 }
 </script>
 

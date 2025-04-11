@@ -24,6 +24,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { initMonacoEditor } from '@/utils/monacoEditor'
 import nprogress from 'nprogress'
 import { getThemeValue, utoa } from '@/utils'
+import { ElMessage } from 'element-plus'
+import { localDb } from '@/utils/localDb'
 
 const props = defineProps({
   // 是否是嵌入模式
@@ -49,27 +51,42 @@ const useInit = () => {
   const getData = async () => {
     try {
       nprogress.start()
+      // 增加对本地存储路由的处理
+      if (route.name === 'LocalEdit') {
+        const localData = await localDb.getGist(Number(route.params.id))
+        if (localData) {
+          // 解析本地存储的数据
+          const parseData = JSON.parse(localData.files['coderun.json'].content)
+          store.commit('setEditData', parseData)
+          nprogress.done()
+          return
+        }
+      }
+      
+      // 原有的 Gist 和 query 数据处理逻辑
       await store.dispatch('getData', {
-        id: route.params.id, 
+        id: route.params.id,
         data: route.query.data
       })
       proxy.$eventEmitter.emit('reset_code')
       nprogress.done()
     } catch (error) {
+      console.error(error)
       nprogress.done()
+      ElMessage.error('获取数据失败')
     }
   }
+  
   // 监听路由变化
   watch(
-    () => {
-      return route.params
-    },
+    () => route.params,
     (newVal, oldVal) => {
       if (newVal.id !== oldVal.id) {
         getData()
       }
     }
   )
+  
   getData()
   return {
     store,
@@ -85,7 +102,8 @@ const useQueryStore = (store, router) => {
   watch(() => {
     return store.state.editData
   },() => {
-    if (store.state.githubToken) {
+    // 已登录或者是本地编辑模式时不处理
+    if (store.state.githubToken || router.currentRoute.value.name === 'LocalEdit') {
       return
     }
     let data = utoa(JSON.stringify(store.state.editData))

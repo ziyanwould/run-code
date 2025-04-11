@@ -38,6 +38,12 @@ const routes = [
     path: '/embed/',
     name: 'QueryEmbed',
     component: Embed
+  },
+  // 添加本地编辑路由
+  {
+    path: '/local/:id',
+    name: 'LocalEdit',
+    component: Edit
   }
 ]
 

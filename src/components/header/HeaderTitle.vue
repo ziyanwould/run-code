@@ -1,19 +1,31 @@
 <template>
   <div class="center">
-    <input type="text" :value="codeTitle" @input="onCodeTitleInput" />
+    <input 
+      type="text" 
+      :value="codeTitle" 
+      @input="handleInput"
+      @change="handleChange"
+    />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, nextTick } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
-const codeTitle = computed(() => {
-  return store.state.editData.title
-})
-const onCodeTitleInput = e => {
-  store.commit('setCodeTitle', e.target.value)
+const codeTitle = computed(() => store.state.editData.title)
+
+const handleInput = (e) => {
+  const value = e.target.value
+  store.commit('setCodeTitle', value)
+}
+
+const handleChange = (e) => {
+  const value = e.target.value
+  nextTick(() => {
+    store.commit('setCodeTitle', value)
+  })
 }
 </script>
 

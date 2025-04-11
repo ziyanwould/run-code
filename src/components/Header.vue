@@ -16,6 +16,7 @@
       @login="githubTokenInputDialogVisible = true"
       @logout="logout"
       @show-gists="drawer = true"
+      @show-local-gists="localDrawer = true"
       @create-share-url="createShareUrl"
       @create-embed-url="createEmbedUrl"
       @create-embed-code="createEmbedCode"
@@ -41,6 +42,9 @@
     
     <!-- 剪贴板检测器 -->
     <ClipboardDetector />
+    
+    <!-- 添加本地项目抽屉 -->
+    <LocalGistDrawer v-model="localDrawer" />
   </div>
 </template>
 
@@ -60,6 +64,7 @@ import GithubTokenDialog from './header/GithubTokenDialog.vue'
 import GistDrawer from './header/GistDrawer.vue'
 import Share from './Share.vue'
 import ClipboardDetector from './ClipboardDetector.vue'
+import LocalGistDrawer from './header/LocalGistDrawer.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -72,6 +77,7 @@ const settingDialogVisible = ref(false)
 const exportNameInputDialogVisible = ref(false)
 const githubTokenInputDialogVisible = ref(false)
 const drawer = ref(false)
+const localDrawer = ref(false)
 
 // 引用
 const ShareComp = ref(null)
