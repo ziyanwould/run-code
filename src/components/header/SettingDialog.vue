@@ -9,6 +9,7 @@
       <el-tabs tab-position="left" v-model="settingType">
         <el-tab-pane label="布局设置" name="layout"></el-tab-pane>
         <el-tab-pane label="主题设置" name="theme"></el-tab-pane>
+        <el-tab-pane label="初始代码" name="initial-code"></el-tab-pane>
         <el-tab-pane label="其他设置" name="setting"></el-tab-pane>
         <el-tab-pane label="关于" name="about"></el-tab-pane>
       </el-tabs>
@@ -20,12 +21,13 @@
 </template>
 
 <script setup>
-import { ref, computed, shallowRef } from 'vue'
+import { ref, computed, shallowRef, defineProps, defineEmits } from 'vue'
 import { ElDialog, ElTabs, ElTabPane } from 'element-plus'
 import Setting from '../Setting.vue'
 import SettingLayout from '../SettingLayout.vue'
 import SettingTheme from '../SettingTheme.vue'
 import SettingAbout from '../SettingAbout.vue'
+import SettingInitialCode from '../SettingInitialCode.vue'
 
 const props = defineProps({
   modelValue: Boolean
@@ -42,6 +44,7 @@ const settingType = ref('layout')
 const componentsMap = shallowRef({
   theme: SettingTheme,
   layout: SettingLayout,
+  'initial-code': SettingInitialCode,
   setting: Setting,
   about: SettingAbout
 })

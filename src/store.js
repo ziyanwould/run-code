@@ -2,10 +2,14 @@ import { createStore } from 'vuex'
 import { generateUUID, atou } from '@/utils'
 import { create, request } from '@/utils/octokit'
 import { ElMessage } from 'element-plus'
+import defaltCode from '@/config/defaltCode'
+
 // 存储github token的本地存储的key
 const githubTokenSaveKey = 'codeRun:githubToken'
 // 添加配置存储key
 const configSaveKey = 'codeRun:config'
+// 存储初始代码配置的key
+const initialCodeSaveKey = 'codeRun:initialCode'
 
 // 默认配置常量
 const DEFAULT_CONFIG = {
@@ -29,35 +33,26 @@ const getSavedConfig = () => {
   }
 }
 
+// 从localStorage获取保存的初始代码配置
+const getSavedInitialCode = () => {
+  try {
+    const savedInitialCode = localStorage.getItem(initialCodeSaveKey)
+    return savedInitialCode ? JSON.parse(savedInitialCode) : null
+  } catch (e) {
+    console.error('读取初始代码配置失败:', e)
+    return null
+  }
+}
+
 // 生成默认编辑数据
 const createDefaultData = () => {
-  // 获取保存的配置
   const savedConfig = getSavedConfig()
+  const savedInitialCode = getSavedInitialCode()
   
   return {
     config: savedConfig || { ...DEFAULT_CONFIG },
     title: '未命名',
-    code: {
-      HTML: {
-        language: 'html',
-        content: ``
-      },
-      CSS: {
-        language: 'css',
-        content: ``,
-        resources: []
-      },
-      JS: {
-        language: 'javascript',
-        content: ``,
-        resources: []
-      },
-      VUE: {
-        language: 'vue2',
-        content: ``,
-        resources: []
-      }
-    }
+    code: savedInitialCode || { ...defaltCode }  // 使用保存的初始代码或默认代码
   }
 }
 
@@ -192,6 +187,26 @@ const store = createStore({
     resetToDefaultSettings(state) {
       state.editData.config = { ...DEFAULT_CONFIG }
       this.commit('saveConfig')
+    },
+
+    setInitialCode(state, { type, content }) {
+      try {
+        const currentInitialCode = localStorage.getItem(initialCodeSaveKey)
+        const initialCode = currentInitialCode ? JSON.parse(currentInitialCode) : { ...defaltCode }
+        initialCode[type].content = content
+        localStorage.setItem(initialCodeSaveKey, JSON.stringify(initialCode))
+      } catch (e) {
+        console.error('保存初始代码失败:', e)
+      }
+    },
+
+    resetInitialCode(state) {
+      try {
+        localStorage.removeItem(initialCodeSaveKey)
+        state.editData.code = { ...defaltCode }
+      } catch (e) {
+        console.error('重置初始代码失败:', e)
+      }
     }
   },
   actions: {
