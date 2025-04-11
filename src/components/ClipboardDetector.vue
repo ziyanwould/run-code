@@ -20,6 +20,7 @@
 import { ref, onMounted, onUnmounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import { ElDialog, ElButton, ElMessage } from 'element-plus';
+import { getClipboardText } from '@/utils/clipboard';
 
 const { proxy } = getCurrentInstance();
 const store = useStore();
@@ -57,52 +58,6 @@ const handleKeyDown = (event) => {
 const htmlRegex = /```(?:html|HTML)\s*([\s\S]*?)```/g;
 const cssRegex = /```(?:css|CSS)\s*([\s\S]*?)```/g;
 const jsRegex = /```(?:javascript|js|JavaScript|JS)\s*([\s\S]*?)```/g;
-
-// 尝试从剪贴板获取文本的多种方法
-const getClipboardText = async () => {
-  // 方法1: 使用现代Clipboard API
-  if (navigator.clipboard && navigator.clipboard.readText) {
-    try {
-      return await navigator.clipboard.readText();
-    } catch (err) {
-      console.warn('Clipboard API读取失败，尝试其他方法:', err);
-    }
-  }
-  
-  // 方法2: 使用document.execCommand('paste')
-  return new Promise((resolve) => {
-    const textArea = document.createElement('textarea');
-    textArea.style.position = 'fixed';
-    textArea.style.top = '-999px';
-    textArea.style.left = '-999px';
-    textArea.style.width = '2em';
-    textArea.style.height = '2em';
-    textArea.style.padding = '0';
-    textArea.style.border = 'none';
-    textArea.style.outline = 'none';
-    textArea.style.boxShadow = 'none';
-    textArea.style.background = 'transparent';
-    document.body.appendChild(textArea);
-    
-    textArea.focus();
-    
-    let success = false;
-    try {
-      success = document.execCommand('paste');
-    } catch (err) {
-      console.warn('execCommand paste 失败:', err);
-    }
-    
-    const text = textArea.value;
-    document.body.removeChild(textArea);
-    
-    if (success) {
-      resolve(text);
-    } else {
-      resolve('');
-    }
-  });
-};
 
 // 检测剪贴板内容
 const checkClipboard = async () => {
@@ -277,19 +232,26 @@ const extractTitleFromHTML = async (htmlContent) => {
 
 // 插入检测到的代码
 const insertCode = async () => {
-  // 从HTML内容中提取标题作为名称
-  const title = await extractTitleFromHTML(detectedCode.value.HTML.content || '');
-  
-  // 检查当前布局
-  const layout = store.state.editData.config.layout;
-  if (layout === 'vue') {
-    store.commit('setLayout', 'default');
-  }
-  
-  // 先清空所有代码
-  store.dispatch('clearAllCode').then(() => {
-    // 先触发清空代码事件，确保编辑器已清空
-    proxy.$eventEmitter.emit('clear_all_code');
+  try {
+    // 从HTML内容中提取标题作为名称
+    const title = await extractTitleFromHTML(detectedCode.value.HTML.content || '');
+    
+    // 检查当前布局
+    const layout = store.state.editData.config.layout;
+    if (layout === 'vue') {
+      store.commit('setLayout', 'default');
+    }
+    
+    // 使用Promise等待清空操作完成，注意参数顺序的调整
+    await new Promise((resolve, reject) => {
+      proxy.$eventEmitter.emit('clear_all_code', (success) => {
+        if (success) {
+          resolve();
+        } else {
+          reject(new Error('清空代码失败'));
+        }
+      }, true);
+    });
     
     // 等待DOM更新
     setTimeout(() => {
@@ -333,11 +295,11 @@ const insertCode = async () => {
       ElMessage.success(`代码"${title}"已成功插入`);
       dialogVisible.value = false;
     }, 100); // 给予足够的时间让清空操作完成
-  }).catch(error => {
+  } catch (error) {
     console.error('插入代码失败:', error);
     ElMessage.error('插入代码失败');
     dialogVisible.value = false;
-  });
+  }
 };
 
 onUnmounted(() => {

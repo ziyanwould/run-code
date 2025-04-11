@@ -414,7 +414,7 @@ const useEditorChange = ({
   })
 
   // 清空所有代码
-  const clearAllCode = async () => {
+  const clearAllCode = async (skipConfirm = false) => {
     // 返回一个Promise，用于通知调用方清空操作的结果
     return new Promise(async (resolve, reject) => {
       try {
@@ -422,8 +422,8 @@ const useEditorChange = ({
         const hasContent = editorItemList.value.some(item => item.content && item.content.trim() !== '') ||
           Object.values(store.state.editData.code).some(editor => editor.content && editor.content.trim() !== '')
 
-        // 有内容时显示确认对话框
-        if (hasContent) {
+        // 有内容且需要确认时显示确认对话框
+        if (hasContent && !skipConfirm) {
           try {
             await ElMessageBox.confirm(
               '清空代码操作不可恢复，确定要清空所有代码吗？',
@@ -470,7 +470,7 @@ const useEditorChange = ({
           })
         }
 
-        if (hasContent) {
+        if (hasContent &&!skipConfirm) {
           ElMessage.success('已清空所有代码')
         }
         
@@ -599,11 +599,10 @@ onMounted(async () => {
   show.value = true
   runCode()
   
-  // 修改事件监听，接收回调函数
-  proxy.$eventEmitter.on('clear_all_code', async (callback) => {
+  // 修改事件监听，将callback放在前面，skipConfirm默认值放在后面
+  proxy.$eventEmitter.on('clear_all_code', async (callback, skipConfirm = false) => {
     try {
-      const result = await clearAllCode()
-      // 确保回调函数存在
+      const result = await clearAllCode(skipConfirm)
       if (typeof callback === 'function') {
         callback(result)
       }

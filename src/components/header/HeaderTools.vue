@@ -12,15 +12,11 @@
       </div>
       <ul class="toolList" :class="{ show: showToolsList }">
         <li class="toolItem" @click="exportZipFile">导出zip</li>
-        <li class="toolItem" @click="createShareUrl" v-if="isEdit">
-          生成分享链接
-        </li>
-        <li class="toolItem" @click="createEmbedUrl" v-if="isEdit">
-          生成嵌入链接
-        </li>
-        <li class="toolItem" @click="createEmbedCode" v-if="isEdit">
-          生成嵌入代码
-        </li>
+        <li class="toolItem" @click="exportMarkdown">导出 Markdown</li>
+        <li class="toolItem" @click="copyMarkdown">复制 Markdown</li>
+        <li class="toolItem" @click="createShareUrl" v-if="isEdit">生成分享链接</li>
+        <li class="toolItem" @click="createEmbedUrl" v-if="isEdit">生成嵌入链接</li>
+        <li class="toolItem" @click="createEmbedCode" v-if="isEdit">生成嵌入代码</li>
         <li class="toolItem" @click="clearAllCode">清空代码</li>
       </ul>
     </div>
@@ -60,6 +56,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { request } from '@/utils/octokit'
 import { localDb } from '@/utils/localDb'
+import saveAs from '@/utils/FileSaver'
+import { writeToClipboard } from '@/utils/clipboard'
 
 const props = defineProps({
   isEdit: Boolean,
@@ -245,6 +243,95 @@ const clearAllCode = () => {
 const showLocalGists = () => {
   emit('show-local-gists')
   toggleMoreList(false)
+}
+
+// 提取生成 Markdown 内容的逻辑到单独的函数
+const generateMarkdown = () => {
+  const { title, code } = store.state.editData || {}
+  
+  // 如果没有数据，返回空字符串
+  if (!code) {
+    return ''
+  }
+  
+  let markdown = `# ${title || '未命名代码'}\n\n`
+  
+  // 添加 HTML 代码块
+  if (code.HTML?.content) {
+    markdown += '## HTML\n\n```html\n'
+    markdown += code.HTML.content
+    markdown += '\n```\n\n'
+  }
+  
+  // 添加 CSS 代码块
+  if (code.CSS?.content) {
+    markdown += '## CSS\n\n```css\n'
+    markdown += code.CSS.content
+    markdown += '\n```\n\n'
+  }
+  
+  // 添加 JavaScript 代码块
+  if (code.JS?.content) {
+    markdown += '## JavaScript\n\n```javascript\n'
+    markdown += code.JS.content
+    markdown += '\n```\n\n'
+  }
+  
+  // 如果是 Vue 布局，添加 Vue 代码块
+  if (code.VUE?.content) {
+    markdown += '## Vue\n\n```vue\n'
+    markdown += code.VUE.content
+    markdown += '\n```\n\n'
+  }
+  
+  return markdown
+}
+
+// 导出 Markdown 文件
+const exportMarkdown = () => {
+  const markdown = generateMarkdown()
+  
+  // 如果没有任何代码内容，提示错误并返回
+  if (!markdown || markdown === `# ${store.state.editData?.title || '未命名代码'}\n\n`) {
+    ElMessage.error('没有可导出的代码内容')
+    return
+  }
+  
+  // 创建 Blob 对象
+  const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' })
+  
+  // 下载文件
+  saveAs(blob, `${store.state.editData?.title || 'code'}.md`)
+  
+  // 关闭工具菜单
+  toggleToolsList(false)
+  
+  // 提示成功
+  ElMessage.success('Markdown 文件导出成功')
+}
+
+// 复制 Markdown 内容
+const copyMarkdown = async () => {
+  const markdown = generateMarkdown()
+  
+  // 如果没有任何代码内容，提示错误并返回
+  if (!markdown || markdown === `# ${store.state.editData?.title || '未命名代码'}\n\n`) {
+    ElMessage.error('没有可复制的代码内容')
+    return
+  }
+  
+  try {
+    const success = await writeToClipboard(markdown)
+    if (success) {
+      toggleToolsList(false)
+      ElMessage.success('Markdown 内容已复制到剪贴板')
+    } else {
+      throw new Error('所有复制方法都失败了')
+    }
+  } catch (err) {
+    console.error('复制失败:', err)
+    ElMessage.error('复制失败')
+  }
 }
 </script>
 
