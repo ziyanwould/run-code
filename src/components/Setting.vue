@@ -35,13 +35,19 @@
         预览页面右下角会出现一个按钮，点击即可打开全能调试控制台
       </div>
     </div>
+    
+    <!-- 添加恢复默认设置按钮 -->
+    <div class="settingRow resetSection">
+      <el-button type="danger" @click="handleResetSettings">恢复默认设置</el-button>
+      <div class="desc">将所有设置恢复到默认状态</div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
 import { useStore } from 'vuex'
-import { ElSwitch } from 'element-plus'
+import { ElSwitch, ElButton, ElMessageBox } from 'element-plus'
 
 // hooks定义部分
 
@@ -129,6 +135,31 @@ const useAlmightyConsole = ({ store, config }) => {
   }
 }
 
+const useResetSettings = ({ store }) => {
+  const handleResetSettings = async () => {
+    try {
+      await ElMessageBox.confirm(
+        '确定要将所有设置恢复到默认状态吗？此操作不可撤销。',
+        '警告',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      )
+      
+      store.commit('resetToDefaultSettings')
+      ElMessage.success('已恢复默认设置')
+    } catch {
+      // 用户取消操作，不做任何处理
+    }
+  }
+
+  return {
+    handleResetSettings
+  }
+}
+
 // created部分
 const { store, config } = useInit()
 const { keepPreviousLogs, keepPreviousLogsChange } = usePreviousLogs({
@@ -140,6 +171,7 @@ const { openAlmightyConsole, openAlmightyConsoleChange } = useAlmightyConsole({
   store,
   config
 })
+const { handleResetSettings } = useResetSettings({ store })
 </script>
 
 <style scoped lang="less">
@@ -159,6 +191,13 @@ const { openAlmightyConsole, openAlmightyConsoleChange } = useAlmightyConsole({
   .desc {
     font-size: 12px;
     color: var(--editor-header-color);
+    margin-top: 5px;
   }
+}
+
+.resetSection {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--editor-header-border-bottom-color);
 }
 </style>

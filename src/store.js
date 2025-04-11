@@ -4,19 +4,38 @@ import { create, request } from '@/utils/octokit'
 import { ElMessage } from 'element-plus'
 // 存储github token的本地存储的key
 const githubTokenSaveKey = 'codeRun:githubToken'
+// 添加配置存储key
+const configSaveKey = 'codeRun:config'
+
+// 默认配置常量
+const DEFAULT_CONFIG = {
+  codeTheme: 'OneDarkPro',
+  pageThemeSyncCodeTheme: false,
+  openAlmightyConsole: false,
+  autoRun: true,
+  layout: 'default',
+  keepPreviousLogs: true,
+  codeFontSize: 16
+}
+
+// 从localStorage获取保存的配置
+const getSavedConfig = () => {
+  try {
+    const savedConfig = localStorage.getItem(configSaveKey)
+    return savedConfig ? JSON.parse(savedConfig) : null
+  } catch (e) {
+    console.error('读取配置失败:', e)
+    return null
+  }
+}
 
 // 生成默认编辑数据
 const createDefaultData = () => {
+  // 获取保存的配置
+  const savedConfig = getSavedConfig()
+  
   return {
-    config: {
-      codeTheme: 'OneDarkPro',
-      pageThemeSyncCodeTheme: true,
-      openAlmightyConsole: false,
-      autoRun: true,
-      layout: 'default',
-      keepPreviousLogs: true,
-      codeFontSize: 16
-    },
+    config: savedConfig || { ...DEFAULT_CONFIG },
     title: '未命名',
     code: {
       HTML: {
@@ -99,6 +118,7 @@ const store = createStore({
      */
     setCodeTheme(state, theme) {
       state.editData.config.codeTheme = theme
+      this.commit('saveConfig')
     },
 
     /**
@@ -106,6 +126,7 @@ const store = createStore({
      */
     setAutoRun(state, autoRun) {
       state.editData.config.autoRun = autoRun
+      this.commit('saveConfig')
     },
 
     /**
@@ -113,6 +134,7 @@ const store = createStore({
      */
     setOpenAlmightyConsole(state, openAlmightyConsole) {
       state.editData.config.openAlmightyConsole = openAlmightyConsole
+      this.commit('saveConfig')
     },
 
     /**
@@ -120,6 +142,7 @@ const store = createStore({
      */
     setLayout(state, layout) {
       state.editData.config.layout = layout
+      this.commit('saveConfig')
     },
 
     /**
@@ -127,6 +150,7 @@ const store = createStore({
      */
     setKeepPreviousLogs(state, keepPreviousLogs) {
       state.editData.config.keepPreviousLogs = keepPreviousLogs
+      this.commit('saveConfig')
     },
 
     /**
@@ -134,10 +158,12 @@ const store = createStore({
      */
     setCodeFontSize(state, codeFontSize) {
       state.editData.config.codeFontSize = codeFontSize
+      this.commit('saveConfig')
     },
 
     setPageThemeSyncCodeTheme(state, pageThemeSyncCodeTheme) {
       state.editData.config.pageThemeSyncCodeTheme = pageThemeSyncCodeTheme
+      this.commit('saveConfig')
     },
 
     setGithubToken(state, githubToken) {
@@ -151,6 +177,21 @@ const store = createStore({
 
     setPreviewDoc(state, previewDoc) {
       state.previewDoc = previewDoc
+    },
+
+    // 保存配置到localStorage
+    saveConfig(state) {
+      try {
+        localStorage.setItem(configSaveKey, JSON.stringify(state.editData.config))
+      } catch (e) {
+        console.error('保存配置失败:', e)
+      }
+    },
+
+    // 添加重置配置的mutation
+    resetToDefaultSettings(state) {
+      state.editData.config = { ...DEFAULT_CONFIG }
+      this.commit('saveConfig')
     }
   },
   actions: {
