@@ -124,6 +124,18 @@ export const newWindowOpenUrl = url => {
 }
 
 /**
+ * @Desc: 新开窗口打开应用
+ */
+export const openAppInNewWindow = () => {
+  const isRelativePath = base === './'
+  const url = isRelativePath 
+    ? window.location.origin 
+    : `${window.location.origin}${base}`
+  
+  window.open(url, '_blank')
+}
+
+/**
  * @Desc: 生成分享url
  */
 export const createShareUrl = (id, queryData) => {

@@ -31,6 +31,7 @@
         <span class="icon iconfont icon-gengduo"></span>
       </div>
       <ul class="toolList" :class="{ show: showMoreList }">
+        <li class="toolItem" @click="openAppInNewWindow">新开窗口</li>
         <li class="toolItem" @click="createNew">新建项目</li>
         <li class="toolItem" @click="showLocalGists">本地项目</li>
         <li class="toolItem" @click="showMyGists">我的Gist</li>
@@ -58,6 +59,7 @@ import { request } from '@/utils/octokit'
 import { localDb } from '@/utils/localDb'
 import saveAs from '@/utils/FileSaver'
 import { writeToClipboard } from '@/utils/clipboard'
+import { openAppInNewWindow } from '@/utils'
 
 const props = defineProps({
   isEdit: Boolean,

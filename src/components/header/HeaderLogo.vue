@@ -1,22 +1,11 @@
 <template>
   <div class="left">
-    <h1 @click="handleClick">CodeFlux</h1>
+    <h1 @click="openAppInNewWindow">CodeFlux</h1>
   </div>
 </template>
 
 <script setup>
-import { base } from '@/config'
-
-const handleClick = () => {
-  // 如果是相对路径('./')，使用当前域名
-  // 如果是绝对路径('/xxx/')，则基于当前域名拼接
-  const isRelativePath = base === './'
-  const url = isRelativePath 
-    ? window.location.origin 
-    : `${window.location.origin}${base}`
-  
-  window.open(url, '_blank')
-}
+import { openAppInNewWindow } from '@/utils'
 </script>
 
 <style scoped lang="less">
