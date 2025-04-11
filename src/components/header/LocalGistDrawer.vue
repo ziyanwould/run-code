@@ -1,7 +1,7 @@
 <template>
   <el-drawer
     v-model="visible"
-    title="本地存储"
+    title="本地项目"
     direction="rtl"
     size="30%"
     @open="onDrawerOpen"

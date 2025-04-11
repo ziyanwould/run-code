@@ -35,11 +35,11 @@
         <span class="icon iconfont icon-gengduo"></span>
       </div>
       <ul class="toolList" :class="{ show: showMoreList }">
-        <li class="toolItem" @click="createNew">创建新项目</li>
-        <li class="toolItem" @click="showMyGists">我的gist</li>
+        <li class="toolItem" @click="createNew">新建项目</li>
         <li class="toolItem" @click="showLocalGists">本地项目</li>
+        <li class="toolItem" @click="showMyGists">我的Gist</li>
         <li class="toolItem" @click="githubToken ? logout() : login()">
-          {{ githubToken ? '退出' : '登录' }}
+          {{ githubToken ? '退出Gist' : '登录Gist' }}
         </li>
       </ul>
     </div>
@@ -266,8 +266,10 @@ const showLocalGists = () => {
       position: absolute;
       right: 0;
       top: 50px;
-      width: 220px;
-      padding: 10px 0;
+      // width: 220px;
+      min-width: 80px;
+      max-width: 220px;
+      padding: 10px 10px;
       white-space: nowrap;
       opacity: 0;
       visibility: hidden;
