@@ -46,7 +46,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeUnmount, getCurrentInstance, defineProps, defineEmits } from 'vue'
+import {
+  ref,
+  computed,
+  onBeforeUnmount,
+  getCurrentInstance,
+  defineProps,
+  defineEmits
+} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -58,11 +65,11 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  'open-setting', 
-  'open-template', 
-  'export-zip', 
-  'login', 
-  'logout', 
+  'open-setting',
+  'open-template',
+  'export-zip',
+  'login',
+  'logout',
   'show-gists',
   'create-share-url',
   'create-embed-url',
@@ -78,18 +85,18 @@ const route = useRoute()
 const showToolsList = ref(false)
 const showMoreList = ref(false)
 
-const toggleToolsList = (value) => {
+const toggleToolsList = value => {
   showToolsList.value = value !== undefined ? value : !showToolsList.value
   hideAllList(showToolsList)
 }
 
-const toggleMoreList = (value) => {
+const toggleMoreList = value => {
   showMoreList.value = value !== undefined ? value : !showMoreList.value
   hideAllList(showMoreList)
 }
 
-const hideAllList = (extra) => {
-  [showToolsList, showMoreList]
+const hideAllList = extra => {
+  ;[showToolsList, showMoreList]
     .filter(item => item !== extra)
     .forEach(item => {
       item.value = false
@@ -121,7 +128,7 @@ const save = async () => {
     emit('login')
     return
   }
-  
+
   try {
     store.commit('setLoading', true)
     let fileData = createData()
@@ -177,40 +184,34 @@ const showMyGists = () => {
   }
   emit('show-gists')
 }
-const createNew = () => {
-  router.replace({
-    name: 'Editor'
-  })
+const createNew = async () => {
+  try {
+    // 等待清空操作的结果
+    const cleared = await new Promise((resolve) => {
+      proxy.$eventEmitter.emit('clear_all_code', resolve)
+    })
+    
+    // 只有在成功清空后才继续执行
+    if (cleared) {
+      router.replace({
+        name: 'Editor',
+        query: {}
+      })
+      toggleMoreList(false)
+    }
+  } catch (error) {
+    console.error('创建新项目失败:', error)
+    ElMessage.error('创建新项目失败')
+  }
 }
 const createShareUrl = () => emit('create-share-url')
 const createEmbedUrl = () => emit('create-embed-url')
 const createEmbedCode = () => emit('create-embed-code')
 
-// 清空所有代码
-const clearAllCode = async () => {
-  try {
-    // 添加确认对话框
-    await ElMessageBox.confirm(
-      '清空代码操作不可恢复，确定要清空所有代码吗？',
-      '警告',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-    
-    await store.dispatch('clearAllCode')
-    // 通过事件总线通知编辑器组件重新加载内容
-    proxy.$eventEmitter.emit('clear_all_code')
-    ElMessage.success('已清空所有代码')
-    toggleToolsList(false)
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error('清空代码失败:', error)
-      ElMessage.error('清空代码失败')
-    }
-  }
+// 普通的清空代码操作不需要等待结果
+const clearAllCode = () => {
+  proxy.$eventEmitter.emit('clear_all_code')
+  toggleToolsList(false)
 }
 </script>
 

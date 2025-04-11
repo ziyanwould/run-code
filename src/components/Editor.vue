@@ -140,7 +140,7 @@ import EditorItem from '@/components/EditorItem.vue'
 import Drag from './Drag.vue'
 import DragItem from './DragItem.vue'
 import { defaultEditorMap, preprocessorListMap } from '@/config/constants'
-import { ElMessage, ElTabs, ElTabPane } from 'element-plus'
+import { ElMessage, ElTabs, ElTabPane, ElMessageBox } from 'element-plus'
 import { codeThemeList } from '@/config/codeThemeList'
 import { base } from '@/config'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
@@ -415,30 +415,65 @@ const useEditorChange = ({
 
   // 清空所有代码
   const clearAllCode = async () => {
-    await store.dispatch('clearAllCode')
-    
-    // 直接更新编辑器列表中的内容为空字符串
-    editorItemList.value.forEach(item => {
-      item.content = ''
-    })
-    
-    // 通知所有编辑器实例更新内容
-    nextTick(() => {
-      // 确保在两种模式下都能获取到编辑器实例
-      if (editorItemRefs.value && editorItemRefs.value.length > 0) {
-        editorItemRefs.value.forEach(editor => {
-          if (editor && editor.updateContent) {
-            editor.updateContent('')
+    // 返回一个Promise，用于通知调用方清空操作的结果
+    return new Promise(async (resolve, reject) => {
+      try {
+        // 检查是否有内容需要清空
+        const hasContent = editorItemList.value.some(item => item.content && item.content.trim() !== '') ||
+          Object.values(store.state.editData.code).some(editor => editor.content && editor.content.trim() !== '')
+
+        // 有内容时显示确认对话框
+        if (hasContent) {
+          try {
+            await ElMessageBox.confirm(
+              '清空代码操作不可恢复，确定要清空所有代码吗？',
+              '警告',
+              {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+              }
+            )
+          } catch (error) {
+            // 用户取消操作
+            resolve(false)
+            return
+          }
+        }
+
+        // 用户确认或无内容需要清空，继续执行清空逻辑
+        // 清空store中的代码
+        await store.dispatch('clearAllCode')
+        
+        // 清空编辑器列表中的内容
+        editorItemList.value.forEach(item => {
+          item.content = ''
+        })
+        
+        // 通知所有编辑器实例更新内容
+        nextTick(() => {
+          if (editorItemRefs.value && editorItemRefs.value.length > 0) {
+            editorItemRefs.value.forEach(editor => {
+              if (editor && editor.updateContent) {
+                editor.updateContent('')
+              }
+            })
           }
         })
-      } else {
-        console.warn('未找到编辑器实例，尝试使用其他方式清空')
-        // 如果无法通过引用获取编辑器实例，则尝试通过事件通知所有编辑器清空内容
-        proxy.$eventEmitter.emit('clear_editor_content')
+        
+        resetCode() // 重置编辑器内容
+        
+        if (hasContent) {
+          ElMessage.success('已清空所有代码')
+        }
+        
+        resolve(true)
+      } catch (error) {
+        console.error('清空代码失败:', error)
+        ElMessage.error('清空代码失败')
+        reject(error)
       }
     })
-    
-    resetCode() // 重置编辑器内容
   }
 
   // 代码修改事件
