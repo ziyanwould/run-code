@@ -441,7 +441,15 @@ const useEditorChange = ({
           }
         }
 
-        // 用户确认或无内容需要清空，继续执行清空逻辑
+        // 先销毁所有编辑器实例
+        if (editorItemRefs.value && editorItemRefs.value.length > 0) {
+          editorItemRefs.value.forEach(editor => {
+            if (editor && editor.disposeEditor) {
+              editor.disposeEditor()
+            }
+          })
+        }
+
         // 清空store中的代码
         await store.dispatch('clearAllCode')
         
@@ -450,19 +458,18 @@ const useEditorChange = ({
           item.content = ''
         })
         
-        // 通知所有编辑器实例更新内容
-        nextTick(() => {
-          if (editorItemRefs.value && editorItemRefs.value.length > 0) {
-            editorItemRefs.value.forEach(editor => {
-              if (editor && editor.updateContent) {
-                editor.updateContent('')
-              }
-            })
-          }
-        })
+        // 等待DOM更新
+        await nextTick()
         
-        resetCode() // 重置编辑器内容
-        
+        // 重新初始化编辑器
+        if (editorItemRefs.value && editorItemRefs.value.length > 0) {
+          editorItemRefs.value.forEach(editor => {
+            if (editor && editor.initEditor) {
+              editor.initEditor()
+            }
+          })
+        }
+
         if (hasContent) {
           ElMessage.success('已清空所有代码')
         }
@@ -592,7 +599,21 @@ onMounted(async () => {
   show.value = true
   runCode()
   
-  proxy.$eventEmitter.on('clear_all_code', clearAllCode)
+  // 修改事件监听，接收回调函数
+  proxy.$eventEmitter.on('clear_all_code', async (callback) => {
+    try {
+      const result = await clearAllCode()
+      // 确保回调函数存在
+      if (typeof callback === 'function') {
+        callback(result)
+      }
+    } catch (error) {
+      console.error('清空代码失败:', error)
+      if (typeof callback === 'function') {
+        callback(false)
+      }
+    }
+  })
   
   // 添加窗口resize事件监听，确保编辑器正确布局
   window.addEventListener('resize', () => {

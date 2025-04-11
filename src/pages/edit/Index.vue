@@ -57,7 +57,9 @@ const useInit = () => {
         if (localData) {
           // 解析本地存储的数据
           const parseData = JSON.parse(localData.files['coderun.json'].content)
+
           store.commit('setEditData', parseData)
+          proxy.$eventEmitter.emit('reset_code')
           nprogress.done()
           return
         }

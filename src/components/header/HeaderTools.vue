@@ -209,28 +209,22 @@ const showMyGists = () => {
 }
 const createNew = async () => {
   try {
-    console.log('等待清空操作的结果')
-
-    // 等待清空操作的结果
+    // 修改事件发送方式，使用回调函数接收结果
     const cleared = await new Promise((resolve) => {
-      proxy.$eventEmitter.emit('clear_all_code', resolve)
+      proxy.$eventEmitter.emit('clear_all_code', (result) => {
+        resolve(result)
+      })
     })
     
-    // 只有在成功清空后才继续执行
+    console.log('清空结果:', cleared) // 添加日志便于调试
+    
     if (cleared) {
-      console.log('清空代码成功，开始创建新项目')
-
       router.replace({
         name: 'Editor',
         query: {}
       })
       toggleMoreList(false)
-
-      console.log('创建新项目成功')
       ElMessage.success('创建新项目成功')
-    } else {
-      console.error('清空代码失败')
-      ElMessage.error('清空代码失败，请重试')
     }
   } catch (error) {
     console.error('创建新项目失败:', error)

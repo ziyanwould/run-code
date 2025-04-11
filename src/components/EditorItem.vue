@@ -565,12 +565,25 @@ const { dropdownList, onDropdownClick } = useDropdown({
   openLocalFile
 })
 
+// 销毁编辑器实例
+const disposeEditor = () => {
+  if (editor) {
+    editor.dispose()
+    editor = null
+  }
+}
+
+// 初始化编辑器
+const initEditor = () => {
+  createEditor()
+}
+
 // 暴露方法给父组件
 defineExpose({
-  relayoutEditor,
-  resize,
+  disposeEditor,
+  initEditor,
   updateContent,
-  title: props.title
+  relayoutEditor
 })
 </script>
 
