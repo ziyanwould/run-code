@@ -53,10 +53,14 @@ const getData = async () => {
     let parseData = null
 
     if (route.params.id) {
-      const localData = await localDb.getGist(Number(route.params.id))
-      if (localData) {
-        parseData = JSON.parse(localData.files['coderun.json'].content)
-        await store.commit('setEditData', parseData)
+      try {
+        const localData = await localDb.getGist(Number(route.params.id))
+        if (localData) {
+          parseData = JSON.parse(localData.files['coderun.json'].content)
+          await store.commit('setEditData', parseData)
+        }
+      } catch (error) {
+        console.error('本地存储数据解析失败:', error)
       }
     }
 
