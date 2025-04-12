@@ -5,9 +5,71 @@ import { defaultViewThemeConfig } from '@/config/constants'
 import { zlibSync, strToU8, strFromU8, unzlibSync } from 'fflate'
 
 /**
+ * @Desc: 解析HTML字符串,提取head和body内容
+ */
+export const parseHtmlContent = (htmlStr) => {
+  const result = {
+    head: '',
+    body: '',
+    isFullHtml: false
+  }
+
+  // 检查是否包含完整的HTML结构
+  if (htmlStr.toLowerCase().includes('<!doctype html>') || 
+      htmlStr.toLowerCase().includes('<html')) {
+    result.isFullHtml = true
+    
+    // 提取head内容
+    const headMatch = htmlStr.match(/<head[^>]*>([\s\S]*?)<\/head>/i)
+    if (headMatch) {
+      result.head = headMatch[1]?.trim() || ''
+    }
+    
+    // 提取body内容  
+    const bodyMatch = htmlStr.match(/<body[^>]*>([\s\S]*?)<\/body>/i)
+    if (bodyMatch) {
+      result.body = bodyMatch[1]?.trim() || ''
+    }
+  } else {
+    // 不是完整HTML结构,直接作为body内容
+    result.body = htmlStr
+  }
+
+  return result
+}
+
+/**
  * @Desc: 拼接html
  */
 export const assembleHtml = (head, body) => {
+  // 解析body内容
+  const parsedBody = parseHtmlContent(body)
+  
+  // 如果body是完整HTML结构
+  if (parsedBody.isFullHtml) {
+    let finalHead = head
+
+    // 如果body已包含title标签,移除head中的title
+    if (body.match(/<title[^>]*>[\s\S]*?<\/title>/i)) {
+      finalHead = finalHead.replace(/<title[^>]*>[\s\S]*?<\/title>/i, '')
+    }
+
+    // 如果body不包含charset设置,则自动补充charset设置
+    if (!body.match(/<meta[^>]*charset[^>]*>/i)) {
+      finalHead = `<meta charset="UTF-8" />
+      ${finalHead}`
+    }
+
+    return body.replace(
+      /<head[^>]*>[\s\S]*?<\/head>/i,
+      `<head>
+        ${parsedBody.head}
+        ${finalHead}
+      </head>`
+    )
+  }
+
+  // 常规拼接
   return `<!DOCTYPE html>
 <html>
 <head>

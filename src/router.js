@@ -25,9 +25,10 @@ const routes = [
     component: Edit
   },
   {
-    path: '/preview',
+    path: '/preview/:id?',  // 添加可选的id参数
     name: 'Preview',
-    component: Preview
+    component: Preview,
+    props: true  // 允许将路由参数作为props传递给组件
   },
   {
     path: '/embed/:id',

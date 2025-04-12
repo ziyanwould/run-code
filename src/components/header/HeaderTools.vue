@@ -32,6 +32,7 @@
       </div>
       <ul class="toolList" :class="{ show: showMoreList }">
         <li class="toolItem" @click="openAppInNewWindow">新开窗口</li>
+        <li class="toolItem" @click="openPreviewInNewWindow">新窗预览</li>
         <li class="toolItem" @click="createNew">新建项目</li>
         <li class="toolItem" @click="showLocalGists">本地项目</li>
         <li class="toolItem" @click="showMyGists">我的Gist</li>
@@ -60,6 +61,7 @@ import { localDb } from '@/utils/localDb'
 import saveAs from '@/utils/FileSaver'
 import { writeToClipboard } from '@/utils/clipboard'
 import { openAppInNewWindow } from '@/utils'
+import { base, routerMode } from '@/config'
 
 const props = defineProps({
   isEdit: Boolean,
@@ -371,6 +373,49 @@ const copyMarkdown = async () => {
   } catch (err) {
     console.error('复制失败:', err)
     ElMessage.error('复制失败')
+  }
+}
+
+// 在新窗口打开预览
+const openPreviewInNewWindow = () => {
+  try {
+    let previewUrl = ''
+    const isRelativePath = base === './'
+    const baseUrl = isRelativePath 
+      ? window.location.origin 
+      : `${window.location.origin}${base}`
+    
+    // 如果路由有id参数(包括Edit和LocalEdit)
+    if (route.params.id) {
+      previewUrl = `${baseUrl}${
+        routerMode === 'hash' 
+          ? '#/preview/' + route.params.id 
+          : 'preview/' + route.params.id
+      }`
+    }
+    // 如果url有data查询参数
+    else if (route.query.data) {
+      // 重新编码data参数，确保与URL中的格式一致
+      const encodedData = encodeURIComponent(route.query.data)
+      previewUrl = `${baseUrl}${
+        routerMode === 'hash' 
+          ? '#/preview/?data=' + encodedData
+          : 'preview/?data=' + encodedData
+      }`
+    }
+    // 其他情况
+    else {
+      ElMessage.info('当前状态无法预览，请先保存或分享')
+      return
+    }
+
+    if (previewUrl) {
+      window.open(previewUrl, '_blank')
+      toggleMoreList(false)
+    }
+  } catch (error) {
+    console.error('打开预览失败:', error)
+    ElMessage.error('打开预览失败')
   }
 }
 </script>

@@ -8,6 +8,8 @@
       ref="iframeRef"
       :srcdoc="srcdoc"
       :style="iframeStyle"
+      :key="iframeKey"
+      :class="{ pointerEvents: disabledEvents }"
     ></iframe>
   </div>
 </template>
@@ -19,7 +21,8 @@ import {
   computed,
   onBeforeUnmount,
   getCurrentInstance,
-  watch
+  watch,
+  defineExpose
 } from 'vue'
 import { useStore } from 'vuex'
 import { assembleHtml, compile, compileVue } from '@/utils'
@@ -166,11 +169,13 @@ const useCreateHtml = () => {
         return `<link href="${item.url}" rel="stylesheet">`
       })
       .join('\n')
+
     let _jsResources = jsResources
       .map(item => {
         return `<script src="${item.url}"><\/script>`
       })
       .join('\n')
+
     let head = `
       <title>预览<\/title>
       <style type="text/css">
@@ -180,6 +185,7 @@ const useCreateHtml = () => {
       <script src="${base}base/index.js"><\/script>
       <script src="${base}console/${dev ? 'index.js' : 'compile.js'}"><\/script>
     `
+
     let jsContent = ''
     let successRunNotify = `
       window.parent.postMessage({
@@ -218,6 +224,7 @@ const useCreateHtml = () => {
         }
       <\/script>`
     }
+
     let body = `
       ${htmlStr}
       ${_jsResources}
@@ -277,17 +284,21 @@ const useRun = ({
   })
   // 运行
   const runStartTime = ref(0)
-  const run = async () => {
+  // 添加一个 key 来强制重新渲染 iframe
+  const iframeKey = ref(0)
+
+  const run = async (syncTitle = false) => {
     try {
       runStartTime.value = Date.now()
       proxy.$eventEmitter.emit('startRun')
       if (!keepPreviousLogs.value) {
         proxy.$eventEmitter.emit('clear_logs')
       }
-      srcdoc.value = ''
+
       let _jsResourcesPlus = []
       let _cssResourcesPlus = []
       let compiledData = null
+      
       // vue单文件
       if (
         layout.value === 'vue' ||
@@ -319,20 +330,18 @@ const useRun = ({
           cssContent.value
         )
       }
+      
       let _cssResources = _cssResourcesPlus.concat(
-        cssResources.value.map(item => {
-          return {
-            ...item
-          }
-        })
+        cssResources.value.map(item => ({
+          ...item
+        }))
       )
       let _jsResources = _jsResourcesPlus.concat(
-        jsResources.value.map(item => {
-          return {
-            ...item
-          }
-        })
+        jsResources.value.map(item => ({
+          ...item
+        }))
       )
+      
       let doc = createHtml(
         compiledData.html,
         compiledData.js.js,
@@ -343,7 +352,17 @@ const useRun = ({
         openAlmightyConsole.value,
         compiledData.js.useImport
       )
+      
       store.commit('setPreviewDoc', doc)
+
+      // 同步更新标题
+      if(syncTitle) {
+        const titleMatch = doc.match(/<title[^>]*>(.*?)<\/title>/i)
+        if(titleMatch && titleMatch[1]) {
+          document.title = titleMatch[1].trim()
+        }
+      }
+
       srcdoc.value = doc
       isNewWindowPreview.value = false
     } catch (error) {
@@ -378,7 +397,8 @@ const useRun = ({
   return {
     srcdoc,
     run,
-    runStartTime
+    runStartTime,
+    iframeKey
   }
 }
 
@@ -486,7 +506,7 @@ const {
 } = useInitData()
 const { log } = useLog({ proxy })
 const { createHtml } = useCreateHtml()
-const { srcdoc, run, runStartTime } = useRun({
+const { srcdoc, run, runStartTime, iframeKey } = useRun({
   store,
   isNewWindowPreview,
   newWindowPreviewData,
@@ -515,6 +535,16 @@ useNewWindowPreview({
 const { disabledEvents } = useDrag({ proxy })
 useDynamicRunJs({ proxy })
 const { iframeStyle } = useScale()
+
+const forceRerender = () => {
+  // 增加 key 值以强制重新创建 iframe
+  iframeKey.value = Date.now()
+}
+
+defineExpose({
+  run,
+  forceRerender
+})
 </script>
 
 <style scoped lang="less">
