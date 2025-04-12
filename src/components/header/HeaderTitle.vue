@@ -34,6 +34,10 @@ const handleChange = (e) => {
   flex-grow: 1;
   height: 100%;
 
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+
   input {
     width: 100%;
     height: 100%;

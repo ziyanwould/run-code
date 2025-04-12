@@ -1,8 +1,10 @@
 import { createStore } from 'vuex'
-import { generateUUID, atou } from '@/utils'
+import { generateUUID, atou, isMobileDevice } from '@/utils'
 import { create, request } from '@/utils/octokit'
 import { ElMessage } from 'element-plus'
 import defaltCode from '@/config/defaltCode'
+
+const isMobile = isMobileDevice()
 
 // 存储github token的本地存储的key
 const githubTokenSaveKey = 'codeRun:githubToken'
@@ -15,11 +17,11 @@ const initialCodeSaveKey = 'codeRun:initialCode'
 const DEFAULT_CONFIG = {
   codeTheme: 'OneDarkPro',
   pageThemeSyncCodeTheme: false,
-  openAlmightyConsole: false,
+  openAlmightyConsole: isMobile ? false : true,
   autoRun: true,
-  layout: 'default',
-  keepPreviousLogs: true,
-  codeFontSize: 16
+  layout: isMobile ? 'tabs2' : 'default',
+  keepPreviousLogs: isMobile ? false : true,
+  codeFontSize: isMobile ? 14 : 16
 }
 
 // 从localStorage获取保存的配置
@@ -185,8 +187,11 @@ const store = createStore({
 
     // 添加重置配置的mutation
     resetToDefaultSettings(state) {
+      // 先删除localStorage中保存的配置
+      localStorage.removeItem(configSaveKey)
+      
+      // 重置为默认配置
       state.editData.config = { ...DEFAULT_CONFIG }
-      this.commit('saveConfig')
     },
 
     setInitialCode(state, { type, content }) {

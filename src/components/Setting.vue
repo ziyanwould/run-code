@@ -47,7 +47,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useStore } from 'vuex'
-import { ElSwitch, ElButton, ElMessageBox } from 'element-plus'
+import { ElSwitch, ElButton, ElMessageBox, ElMessage } from 'element-plus'
 
 // hooks定义部分
 

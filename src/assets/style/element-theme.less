@@ -57,3 +57,27 @@
 
   --el-button-bg-color: #F00;
 }
+
+// 移动端下的弹窗样式
+@media screen and (max-width: 768px) {
+  .el-dialog {
+    .el-dialog__header {
+      padding: 12px;
+      margin-right: 0;
+      
+      .el-dialog__title {
+        font-size: 16px;
+      }
+    }
+    
+    .el-dialog__body {
+      // height: calc(100% - 100px); // 减去header和footer的高度
+      overflow-y: auto;
+      font-size: 13px;
+    }
+    
+    .el-dialog__footer {
+      padding: 10px 15px;
+    }
+  }
+}

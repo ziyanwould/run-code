@@ -18,7 +18,7 @@
       @mousedown="onMousedown"
       @touchstart.prevent="onTouchstart"
       @dblclick="onTouchBarDblClick"
-      @tap="handleTouchDoubleTap"
+      @touchend.prevent="handleTouchDoubleTap"
     >
       <span class="title" v-html="titleStr"></span>
     </div>

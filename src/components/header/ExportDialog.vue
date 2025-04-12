@@ -2,7 +2,7 @@
   <el-dialog
     title="输入导出文件名称"
     v-model="visible"
-    :width="600"
+    :width="isMobile ? '100%' : '600'"
   >
     <el-input v-model="exportName"></el-input>
     <template #footer>
@@ -15,10 +15,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineExpose, defineProps, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 import { ElDialog, ElInput, ElButton, ElMessage } from 'element-plus'
 import exportZip from '@/utils/exportZip'
+import { isMobileDevice } from '@/utils'
+
+const isMobile = isMobileDevice()
 
 const props = defineProps({
   modelValue: Boolean

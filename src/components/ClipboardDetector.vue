@@ -20,7 +20,7 @@
 import { ref, onMounted, onUnmounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import { ElDialog, ElButton, ElMessage } from 'element-plus';
-import { getClipboardText } from '@/utils/clipboard';
+import { getClipboardText, clearClipboard } from '@/utils/clipboard';
 
 const { proxy } = getCurrentInstance();
 const store = useStore();
@@ -254,7 +254,7 @@ const insertCode = async () => {
     });
     
     // 等待DOM更新
-    setTimeout(() => {
+    setTimeout(async () => {
       // 设置新内容
       const codeData = {
         title,
@@ -290,10 +290,16 @@ const insertCode = async () => {
       // 触发重置代码事件，确保编辑器刷新
       proxy.$eventEmitter.emit('reset_code');
       
-      console.log('检测到的代码:', JSON.parse(JSON.stringify(codeData)));
+      // console.log('检测到的代码:', JSON.parse(JSON.stringify(codeData)));
       
       ElMessage.success(`代码"${title}"已成功插入`);
       dialogVisible.value = false;
+
+      // 清空剪贴板
+      const cleared = await clearClipboard();
+      if (cleared) {
+        clipboardTextCache.value = ''; // 同时清空缓存
+      }
     }, 100); // 给予足够的时间让清空操作完成
   } catch (error) {
     console.error('插入代码失败:', error);

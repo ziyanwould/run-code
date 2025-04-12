@@ -10,11 +10,13 @@ class Drag {
     this.startPos = {
       x: 0,
       y: 0
-    }
-    this.downCallback = downCallback || function () { }
-    this.moveCallback = moveCallback || function () { }
-    this.upCallback = upCallback || function () { }
-    this.bind()
+    };
+    this.downCallback = downCallback || function () { };
+    this.moveCallback = moveCallback || function () { };
+    this.upCallback = upCallback || function () { };
+    this.touchDebounceTime = 16; // ~60fps
+    this.lastTouchTime = 0;
+    this.bind();
   }
 
   /**
@@ -86,17 +88,32 @@ class Drag {
    * @Desc: 触摸移动
    */
   onTouchmove(e) {
-    e.preventDefault()
-    if (!this.isMouseDown) {
-      return
+    e.preventDefault();
+    
+    // 添加触摸事件防抖
+    const now = Date.now();
+    if (now - this.lastTouchTime < this.touchDebounceTime) {
+      return;
     }
-    const touch = e.touches[0]
-    let ox = touch.clientX - this.startPos.x
-    let oy = touch.clientY - this.startPos.y
+    this.lastTouchTime = now;
+
+    if (!this.isMouseDown) {
+      return;
+    }
+    
+    const touch = e.touches[0];
+    let ox = touch.clientX - this.startPos.x;
+    let oy = touch.clientY - this.startPos.y;
+    
+    // 添加最小移动距离阈值
+    if (Math.abs(ox) < 5 && Math.abs(oy) < 5) {
+      return;
+    }
+
     this.moveCallback && this.moveCallback(ox, oy, {
       clientX: touch.clientX,
       clientY: touch.clientY
-    })
+    });
   }
 
   /**

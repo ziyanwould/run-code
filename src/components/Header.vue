@@ -131,5 +131,10 @@ const createEmbedCode = () => {
   padding: 0 20px;
   border-bottom: 1px solid var(--touch-bar-background);
   box-shadow: 0px 0 4px var(--touch-bar-background);
+
+  @media screen and (max-width: 768px) {
+    height: 48px;
+    padding: 0 12px;
+  }
 }
 </style>

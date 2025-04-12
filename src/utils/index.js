@@ -207,3 +207,24 @@ export const atou = (base64) => {
   // 兼容没有使用压缩的数据
   return decodeURIComponent(escape(binary))
 }
+
+/**
+ * @Desc: 检测是否为移动设备
+ */
+export const isMobileDevice = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+    || window.innerWidth < 768;
+}
+
+/**
+ * @Desc: 获取设备类型相关配置
+ */
+export const getDeviceConfig = () => {
+  const isMobile = isMobileDevice();
+  return {
+    fontSize: isMobile ? 14 : 16,
+    lineNumbers: !isMobile,
+    minimap: !isMobile,
+    padding: isMobile ? 8 : 16,
+  };
+}

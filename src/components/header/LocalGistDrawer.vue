@@ -3,7 +3,7 @@
     v-model="visible"
     title="本地项目"
     direction="rtl"
-    size="30%"
+    :size="isMobile ? '90%' : '30%'"
     @open="onDrawerOpen"
     @closed="onDrawerClosed"
   >
@@ -66,7 +66,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElDrawer, ElTable, ElTableColumn, ElButton, ElPagination, ElMessage } from 'element-plus'
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { localDb } from '@/utils/localDb'
+import { isMobileDevice } from '@/utils'
 import dayjs from 'dayjs'
+
+const isMobile = isMobileDevice()
 
 const props = defineProps({
   modelValue: Boolean

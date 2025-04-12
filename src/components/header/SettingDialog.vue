@@ -2,11 +2,11 @@
   <el-dialog
     custom-class="settingDialog"
     title="设置"
-    :width="600"
+    :width="isMobile ? '100%' : '600'"
     v-model="visible"
   >
     <div class="settingBox">
-      <el-tabs tab-position="left" v-model="settingType">
+      <el-tabs :tab-position="isMobile ? 'top' : 'left'" v-model="settingType">
         <el-tab-pane label="布局设置" name="layout"></el-tab-pane>
         <el-tab-pane label="主题设置" name="theme"></el-tab-pane>
         <el-tab-pane label="初始代码" name="initial-code"></el-tab-pane>
@@ -28,6 +28,9 @@ import SettingLayout from '../SettingLayout.vue'
 import SettingTheme from '../SettingTheme.vue'
 import SettingAbout from '../SettingAbout.vue'
 import SettingInitialCode from '../SettingInitialCode.vue'
+import { isMobileDevice } from '@/utils'
+
+const isMobile = isMobileDevice()
 
 const props = defineProps({
   modelValue: Boolean
@@ -55,6 +58,32 @@ const componentsMap = shallowRef({
   .el-dialog__body {
     padding: 0px;
   }
+
+  @media screen and (max-width: 768px) {
+    margin: 0 !important;
+    
+    .el-dialog__header {
+      padding: 12px;
+      margin-right: 0;
+    }
+    
+    .el-dialog__title {
+      font-size: 16px;
+    }
+
+    // 移动端下dialog占满全屏
+    .el-dialog {
+      width: 100% !important;
+      height: 100% !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      border-radius: 0;
+      
+      .el-dialog__body {
+        height: calc(100% - 45px); // 减去header高度
+      }
+    }
+  }
 }
 </style>
 
@@ -63,9 +92,50 @@ const componentsMap = shallowRef({
   display: flex;
   padding: 28px 10px;
 
+  @media screen and (max-width: 768px) {
+    padding: 12px 5px;
+    flex-direction: column;
+    height: 100%;
+  }
+
   :deep(.el-tabs) {
     flex-grow: 0;
     flex-shrink: 0;
+    
+    @media screen and (max-width: 768px) {
+      .el-tabs__header {
+        margin-bottom: 12px;
+      }
+      
+      .el-tabs__nav-wrap {
+        padding: 0 8px;
+        
+        &.is-scrollable {
+          padding: 0 20px;
+          
+          .el-tabs__nav-prev,
+          .el-tabs__nav-next {
+            line-height: 32px;
+          }
+        }
+      }
+      
+      .el-tabs__nav {
+        white-space: nowrap;
+        position: relative;
+        transition: transform .3s;
+        float: none;
+        
+        .el-tabs__item {
+          padding: 0 12px;
+          font-size: 13px;
+          height: 32px;
+          line-height: 32px;
+          display: inline-block;
+          float: none;
+        }
+      }
+    }
     
     .el-tabs__item {
       color: var(--dropdown-color);
@@ -90,6 +160,11 @@ const componentsMap = shallowRef({
     overflow: auto;
     padding: 0 15px;
     color: var(--dropdown-color);
+
+    @media screen and (max-width: 768px) {
+      height: calc(100% - 44px); // 减去tabs的高度
+      padding: 0 10px;
+    }
   }
 }
 </style>

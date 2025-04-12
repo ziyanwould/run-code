@@ -2,7 +2,7 @@
   <el-dialog
     title="请输入你的github token"
     v-model="visible"
-    :width="600"
+    :width="isMobile ? '100%' : '600'"
   >
     <el-input v-model="githubTokenValue"></el-input>
     <p class="tip">
@@ -26,6 +26,9 @@ import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { ElDialog, ElInput, ElButton, ElMessage } from 'element-plus'
+import { isMobileDevice } from '@/utils'
+
+const isMobile = isMobileDevice()
 
 const props = defineProps({
   modelValue: Boolean

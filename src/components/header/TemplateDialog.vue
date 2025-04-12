@@ -1,5 +1,9 @@
 <template>
-  <el-dialog title="常用模板" :width="1000" v-model="visible">
+  <el-dialog
+    title="选择模板"
+    v-model="visible"
+    :width="isMobile ? '100%' : '600'"
+  >
     <div class="templateList">
       <div
         class="templateItem"
@@ -22,6 +26,9 @@ import { ref, computed, getCurrentInstance, nextTick, defineProps, defineEmits }
 import { useStore } from 'vuex'
 import templateList from '@/config/templates'
 import { ElDialog } from 'element-plus'
+import { isMobileDevice } from '@/utils'
+
+const isMobile = isMobileDevice()
 
 const props = defineProps({
   modelValue: Boolean
@@ -102,6 +109,30 @@ const selectTemplate = data => {
       font-weight: bold;
       margin-left: 20px;
       font-size: 18px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .templateList {
+    height: 100%;
+
+    .templateItem {
+      width: 160px;
+      height: 48px;
+      margin-right: 5px;
+      margin-bottom: 10px;
+
+      .icon {
+        width: 25px;
+        height: 25px;
+        margin-left: 8px;
+      }
+
+      .name {
+        margin-left: 12px;
+        font-size: 13px;
+      }
     }
   }
 }

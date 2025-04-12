@@ -2,7 +2,7 @@
   <Drag
     :number="3"
     dir="v"
-    :config="[{ min: 0 }, { min: 60 }, { min: 48, default: 48 }]"
+    :config="[{ min: 0 }, { min: 48 }, { min: 48, default: 48 }]"
   >
     <!-- 预览 -->
     <DragItem :index="0" :disabled="true" :showTouchBar="false" title="预览">

@@ -130,6 +130,24 @@ const save = async () => {
   if (githubToken.value === '') {
     // 未登录时保存到本地
     try {
+      // 在移动端下弹出标题确认框
+      if (window.innerWidth <= 768) {
+        const { value: title } = await ElMessageBox.prompt('请输入标题', '保存', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputValue: store.state.editData.title,
+          inputValidator: (value) => {
+            if (!value.trim()) {
+              return '标题不能为空'
+            }
+            return true
+          }
+        })
+        if (title && title.trim()) {
+          store.commit('setCodeTitle', title.trim())
+        }
+      }
+
       store.commit('setLoading', true)
       let fileData = createData()
       if (route.name === 'LocalEdit' && route.params.id) {
@@ -144,6 +162,7 @@ const save = async () => {
       store.commit('setLoading', false)
       ElMessage.success('保存成功')
     } catch (error) {
+      if (error === 'cancel') return // 用户取消操作
       console.log(error)
       store.commit('setLoading', false)
       ElMessage.error('保存失败')
@@ -153,6 +172,24 @@ const save = async () => {
 
   // 已登录时保存到 Gist
   try {
+    // 在移动端下弹出标题确认框
+    if (window.innerWidth <= 768) {
+      const { value: title } = await ElMessageBox.prompt('请输入标题', '保存', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValue: store.state.editData.title,
+        inputValidator: (value) => {
+          if (!value.trim()) {
+            return '标题不能为空'
+          }
+          return true
+        }
+      })
+      if (title && title.trim()) {
+        store.commit('setCodeTitle', title.trim())
+      }
+    }
+
     store.commit('setLoading', true)
     let fileData = createData()
     let id = route.params.id
@@ -173,6 +210,7 @@ const save = async () => {
       }
     })
   } catch (error) {
+    if (error === 'cancel') return // 用户取消操作
     console.log(error)
     store.commit('setLoading', false)
     ElMessage.error('保存失败，请检查此token的权限是否包含创建gist')
@@ -371,6 +409,11 @@ const copyMarkdown = async () => {
       list-style: none;
       z-index: 2;
 
+      @media screen and (max-width: 768px) {
+        padding: 6px 6px;
+        min-width: 70px;
+      }
+
       &.show {
         opacity: 1;
         visibility: visible;
@@ -385,6 +428,13 @@ const copyMarkdown = async () => {
         line-height: 30px;
         color: var(--dropdown-color);
         font-size: 14px;
+
+        @media screen and (max-width: 768px) {
+          height: 28px;
+          line-height: 28px;
+          font-size: 13px;
+          padding: 0 8px;
+        }
 
         &:hover {
           background: var(--dropdown-hover-background);
@@ -416,6 +466,18 @@ const copyMarkdown = async () => {
     user-select: none;
     font-size: 14px;
 
+    @media screen and (max-width: 768px) {
+      min-width: 32px;
+      height: 32px;
+      padding: 0 10px;
+      margin: 0 6px 0 0;
+      font-size: 13px;
+
+      .icon {
+        font-size: 13px;
+      }
+    }
+
     &:hover {
       opacity: 1;
     }
@@ -426,6 +488,10 @@ const copyMarkdown = async () => {
 
     .icon {
       margin-right: 5px;
+      
+      @media screen and (max-width: 768px) {
+        margin-right: 3px;
+      }
     }
   }
 }

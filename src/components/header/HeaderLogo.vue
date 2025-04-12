@@ -12,6 +12,10 @@ import { openAppInNewWindow } from '@/utils'
 .left {
   flex-shrink: 0;
 
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+
   h1 {
     color: var(--header-logo-color);
     cursor: pointer;

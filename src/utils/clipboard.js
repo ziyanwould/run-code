@@ -96,3 +96,11 @@ export const getClipboardText = async () => {
     }
   })
 }
+
+/**
+ * 清空剪贴板内容
+ * @returns {Promise<boolean>} 是否清空成功
+ */
+export const clearClipboard = async () => {
+  return await writeToClipboard('')
+}
