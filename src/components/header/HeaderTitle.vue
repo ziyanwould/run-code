@@ -34,7 +34,7 @@ const handleChange = (e) => {
   flex-grow: 1;
   height: 100%;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 980px) {
     display: none;
   }
 

@@ -113,7 +113,7 @@ const selectTemplate = data => {
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 980px) {
   .templateList {
     height: 100%;
 

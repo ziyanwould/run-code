@@ -12,7 +12,7 @@ import { openAppInNewWindow } from '@/utils'
 .left {
   flex-shrink: 0;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 980px) {
     display: none;
   }
 

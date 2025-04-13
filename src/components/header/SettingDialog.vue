@@ -59,7 +59,7 @@ const componentsMap = shallowRef({
     padding: 0px;
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 980px) {
     margin: 0 !important;
     
     .el-dialog__header {
@@ -92,7 +92,7 @@ const componentsMap = shallowRef({
   display: flex;
   padding: 28px 10px;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 980px) {
     padding: 12px 5px;
     flex-direction: column;
     height: 100%;
@@ -102,7 +102,7 @@ const componentsMap = shallowRef({
     flex-grow: 0;
     flex-shrink: 0;
     
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 980px) {
       .el-tabs__header {
         margin-bottom: 12px;
       }
@@ -161,7 +161,7 @@ const componentsMap = shallowRef({
     padding: 0 15px;
     color: var(--dropdown-color);
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 980px) {
       height: calc(100% - 44px); // 减去tabs的高度
       padding: 0 10px;
     }

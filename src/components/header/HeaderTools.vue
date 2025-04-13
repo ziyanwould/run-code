@@ -133,7 +133,7 @@ const save = async () => {
     // 未登录时保存到本地
     try {
       // 在移动端下弹出标题确认框
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 980) {
         const { value: title } = await ElMessageBox.prompt('请输入标题', '保存', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -175,7 +175,7 @@ const save = async () => {
   // 已登录时保存到 Gist
   try {
     // 在移动端下弹出标题确认框
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 980) {
       const { value: title } = await ElMessageBox.prompt('请输入标题', '保存', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -454,7 +454,7 @@ const openPreviewInNewWindow = () => {
       list-style: none;
       z-index: 2;
 
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 980px) {
         padding: 6px 6px;
         min-width: 70px;
       }
@@ -474,7 +474,7 @@ const openPreviewInNewWindow = () => {
         color: var(--dropdown-color);
         font-size: 14px;
 
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 980px) {
           height: 28px;
           line-height: 28px;
           font-size: 13px;
@@ -511,7 +511,7 @@ const openPreviewInNewWindow = () => {
     user-select: none;
     font-size: 14px;
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 980px) {
       min-width: 32px;
       height: 32px;
       padding: 0 10px;
@@ -534,7 +534,7 @@ const openPreviewInNewWindow = () => {
     .icon {
       margin-right: 5px;
       
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 980px) {
         margin-right: 3px;
       }
     }
