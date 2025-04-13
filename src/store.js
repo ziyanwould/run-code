@@ -16,7 +16,8 @@ const initialCodeSaveKey = 'codeRun:initialCode'
 // 默认配置常量
 const DEFAULT_CONFIG = {
   codeTheme: 'OneDarkPro',
-  pageThemeSyncCodeTheme: false,
+  pageThemeSyncCodeTheme: true,
+  syncLayout: false,  // 新增：是否同步布局配置，默认false
   openAlmightyConsole: isMobile ? true : false,
   autoRun: true,
   layout: isMobile ? 'tabs2' : 'default',
@@ -47,14 +48,37 @@ const getSavedInitialCode = () => {
 }
 
 // 生成默认编辑数据
-const createDefaultData = () => {
+const createDefaultData = (blank = false) => {
   const savedConfig = getSavedConfig()
   const savedInitialCode = getSavedInitialCode()
+
+  let code = savedInitialCode || { ...defaltCode }
   
+  /* 使用空白数据 */
+  if (blank) {
+    code = {
+      JS: {
+        content: '',
+        language: 'javascript',
+        resources: []
+      },
+      HTML: {
+        content: '',
+        language: 'html',
+        resources: []
+      },
+      CSS: {
+        content: '',
+        language: 'css',
+        resources: []
+      }
+    }
+  }
+
   return {
     config: savedConfig || { ...DEFAULT_CONFIG },
     title: '未命名',
-    code: savedInitialCode || { ...defaltCode }  // 使用保存的初始代码或默认代码
+    code
   }
 }
 
@@ -212,13 +236,18 @@ const store = createStore({
       } catch (e) {
         console.error('重置初始代码失败:', e)
       }
+    },
+
+    setSyncLayout(state, syncLayout) {
+      state.editData.config.syncLayout = syncLayout
+      this.commit('saveConfig')
     }
   },
   actions: {
-    getData(ctx, { id, data }) {
+    getData(ctx, { id, data, blank }) {
       return new Promise(async (resolve, reject) => {
         try {
-          let parseData = createDefaultData()
+          let parseData = createDefaultData(blank || false)
           if (id) {
             let { data } = await request(`GET /gists/${id}`, {
               gist_id: id
@@ -227,6 +256,13 @@ const store = createStore({
           } else if (data) {
             parseData = JSON.parse(atou(data))
           }
+          
+          // 如果不同步布局，则保持当前布局不变
+          if (!ctx.state.editData.config.syncLayout) {
+            const currentLayout = ctx.state.editData.config.layout
+            parseData.config.layout = currentLayout
+          }
+          
           ctx.commit('setEditData', parseData)
           resolve()
         } catch (e) {

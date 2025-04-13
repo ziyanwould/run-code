@@ -57,6 +57,12 @@ const useInit = () => {
         if (localData) {
           // 解析本地存储的数据
           const parseData = JSON.parse(localData.files['coderun.json'].content)
+          
+          // 如果不同步布局，则保持当前布局不变
+          if (!store.state.editData.config.syncLayout) {
+            const currentLayout = store.state.editData.config.layout
+            parseData.config.layout = currentLayout
+          }
 
           store.commit('setEditData', parseData)
           proxy.$eventEmitter.emit('reset_code')
@@ -68,7 +74,8 @@ const useInit = () => {
       // 原有的 Gist 和 query 数据处理逻辑
       await store.dispatch('getData', {
         id: route.params.id,
-        data: route.query.data
+        data: route.query.data,
+        blank: route.query.blank || false
       })
       proxy.$eventEmitter.emit('reset_code')
       nprogress.done()

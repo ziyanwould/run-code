@@ -190,9 +190,11 @@ export const newWindowOpenUrl = url => {
  */
 export const openAppInNewWindow = () => {
   const isRelativePath = base === './'
-  const url = isRelativePath 
+  const baseUrl = isRelativePath 
     ? window.location.origin 
     : `${window.location.origin}${base}`
+  
+  const url = `${baseUrl}${routerMode === 'hash' ? '#/' : '/'}?blank=true`
   
   window.open(url, '_blank')
 }

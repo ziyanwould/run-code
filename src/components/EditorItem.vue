@@ -218,7 +218,7 @@ const useCreateEditor = ({ props, emit, updateDoc }) => {
         wordWrap: 'on', // 代码超出换行
         theme: props.codeTheme || 'vs-dark', // 主题
         fontSize: props.codeFontSize || 16,
-        fontFamily: 'MonoLisa, monospace',
+        // fontFamily: 'MonoLisa, monospace', // 目前设置的字体有问题，会导致光标对不上，再不新增字体的情况下，先使用编辑器默认的字体
         contextmenu: false, // 不显示右键菜单
         fixedOverflowWidgets: true, // 让语法提示层能溢出容器
         readOnly: props.readOnly

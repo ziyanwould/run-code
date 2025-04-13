@@ -15,9 +15,11 @@
         <li class="toolItem" @click="exportZipFile">导出zip</li>
         <li class="toolItem" @click="exportMarkdown">导出 Markdown</li>
         <li class="toolItem" @click="copyMarkdown">复制 Markdown</li>
+        <li class="divider"></li>
         <li class="toolItem" @click="createShareUrl" v-if="isEdit">生成分享链接</li>
         <li class="toolItem" @click="createEmbedUrl" v-if="isEdit">生成嵌入链接</li>
         <li class="toolItem" @click="createEmbedCode" v-if="isEdit">生成嵌入代码</li>
+        <li class="divider"></li>
         <li class="toolItem" @click="clearAllCode">清空代码</li>
       </ul>
     </div>
@@ -33,14 +35,16 @@
       </div>
       <ul class="toolList" :class="{ show: showMoreList }">
         <li class="toolItem" @click="openAppInNewWindow">新开窗口</li>
-        <li class="toolItem" @click="openPreviewInNewWindow">新窗预览</li>
         <li class="toolItem" @click="createNew">新建项目</li>
+        <li class="toolItem" @click="openPreviewInNewWindow">新窗预览</li>
+        <li class="divider"></li>
         <li class="toolItem" @click="showLocalGists">本地项目</li>
         <li class="toolItem" @click="showMyGists">我的Gist</li>
         <li class="toolItem" @click="githubToken ? logout() : login()">
           {{ githubToken ? '退出Gist' : '登录Gist' }}
         </li>
         <!-- 在移动端显示设置按钮 -->
+        <li class="divider" v-if="isMobile"></li>
         <li class="toolItem" @click="openSetting" v-if="isMobile">系统设置</li>
       </ul>
     </div>
@@ -54,7 +58,8 @@ import {
   onBeforeUnmount,
   getCurrentInstance,
   defineProps,
-  defineEmits
+  defineEmits,
+  nextTick
 } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
@@ -268,9 +273,13 @@ const createNew = async () => {
     if (cleared) {
       router.replace({
         name: 'Editor',
-        query: {}
+        query: {
+          blank: true
+        }
       })
+
       toggleMoreList(false)
+
       ElMessage.success('创建新项目成功')
     }
   } catch (error) {
@@ -460,7 +469,7 @@ const openPreviewInNewWindow = () => {
       transform-origin: top right;
       transition: all 0.2s ease-in-out;
       list-style: none;
-      z-index: 2;
+      z-index: 12;
 
       @media screen and (max-width: 980px) {
         padding: 6px 6px;
@@ -471,6 +480,14 @@ const openPreviewInNewWindow = () => {
         opacity: 1;
         visibility: visible;
         transform: scale(1);
+      }
+
+      .divider {
+        height: 1px;
+        margin: 2px 0;
+        // background-color: var(--dropdown-box-border-color);
+        background-color: #d8d8d8;
+        opacity: 0.15;
       }
 
       .toolItem {

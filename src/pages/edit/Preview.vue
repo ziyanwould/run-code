@@ -57,6 +57,13 @@ const getData = async () => {
         const localData = await localDb.getGist(Number(route.params.id))
         if (localData) {
           parseData = JSON.parse(localData.files['coderun.json'].content)
+          
+          // 如果不同步布局，则保持当前布局不变
+          if (!store.state.editData.config.syncLayout) {
+            const currentLayout = store.state.editData.config.layout
+            parseData.config.layout = currentLayout
+          }
+          
           await store.commit('setEditData', parseData)
         }
       } catch (error) {
