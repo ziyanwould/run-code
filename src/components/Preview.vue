@@ -295,88 +295,74 @@ const useRun = ({
         proxy.$eventEmitter.emit('clear_logs')
       }
 
-      let _jsResourcesPlus = []
-      let _cssResourcesPlus = []
-      let compiledData = null
-      
-      // vue单文件
-      if (
-        layout.value === 'vue' ||
-        (layout.value === 'newWindowPreview' && vueContent.value)
-      ) {
-        compiledData = await compileVue(
-          vueLanguage.value,
-          vueContent.value,
-          importMap.value.imports || {}
-        )
-        if (compiledData) {
-          // 自动引入vue资源
-          // _jsResourcesPlus = getTemplate(vueLanguage.value).code.JS.resources;
-        } else {
-          compiledData = {
-            html: '',
-            css: '',
-            js: ''
+      // 添加超时Promise
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('运行超时')), 5000)
+      })
+
+      // 使用 Promise.race 竞争
+      await Promise.race([
+        // 原有运行逻辑
+        (async () => {
+          let compiledData = await compile(
+            vueLanguage.value,
+            vueContent.value,
+            htmlLanguage.value, 
+            jsLanguage.value,
+            cssLanguage.value,
+            htmlContent.value,
+            jsContent.value, 
+            cssContent.value
+          )
+          
+          let _cssResources = _cssResourcesPlus.concat(
+            cssResources.value.map(item => ({
+              ...item
+            }))
+          )
+          let _jsResources = _jsResourcesPlus.concat(
+            jsResources.value.map(item => ({
+              ...item
+            }))
+          )
+          
+          let doc = createHtml(
+            compiledData.html,
+            compiledData.js.js,
+            compiledData.css,
+            _cssResources,
+            _jsResources,
+            importMap.value,
+            openAlmightyConsole.value,
+            compiledData.js.useImport
+          )
+          
+          store.commit('setPreviewDoc', doc)
+
+          // 同步更新标题
+          if(syncTitle) {
+            const titleMatch = doc.match(/<title[^>]*>(.*?)<\/title>/i)
+            if(titleMatch && titleMatch[1]) {
+              document.title = titleMatch[1].trim()
+            }
           }
-        }
-      } else {
-        compiledData = await compile(
-          htmlLanguage.value,
-          jsLanguage.value,
-          cssLanguage.value,
-          htmlContent.value,
-          jsContent.value,
-          importMap.value.imports || {},
-          cssContent.value
-        )
-      }
-      
-      let _cssResources = _cssResourcesPlus.concat(
-        cssResources.value.map(item => ({
-          ...item
-        }))
-      )
-      let _jsResources = _jsResourcesPlus.concat(
-        jsResources.value.map(item => ({
-          ...item
-        }))
-      )
-      
-      let doc = createHtml(
-        compiledData.html,
-        compiledData.js.js,
-        compiledData.css,
-        _cssResources,
-        _jsResources,
-        importMap.value,
-        openAlmightyConsole.value,
-        compiledData.js.useImport
-      )
-      
-      store.commit('setPreviewDoc', doc)
 
-      // 同步更新标题
-      if(syncTitle) {
-        const titleMatch = doc.match(/<title[^>]*>(.*?)<\/title>/i)
-        if(titleMatch && titleMatch[1]) {
-          document.title = titleMatch[1].trim()
-        }
-      }
+          srcdoc.value = doc
+          isNewWindowPreview.value = false
+        })(),
+        timeoutPromise
+      ])
 
-      srcdoc.value = doc
-      isNewWindowPreview.value = false
     } catch (error) {
       console.log(error)
       proxy.$eventEmitter.emit('custom_logs', {
         data: {
           type: 'console',
           method: 'error',
-          data: [
-            {
-              content: error.message ? error.message : error,
-              contentType: 'string'
-            }
-          ]
+          data: [{
+            content: error.message || '运行出错',
+            contentType: 'string'
+          }]
         }
       })
       proxy.$eventEmitter.emit('errorRun')

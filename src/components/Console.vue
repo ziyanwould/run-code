@@ -227,29 +227,57 @@ const useJSONFormat = () => {
 const useRunStatus = ({ proxy }) => {
   const showRunLoading = ref(false)
   const runTip = ref('')
+  let runTimeout = null
+  
+  // 获取当前时间字符串 (HH:mm:ss)
+  const getCurrentTime = () => {
+    const now = new Date()
+    const minutes = now.getMinutes().toString().padStart(2, '0')
+    const seconds = now.getSeconds().toString().padStart(2, '0')
+    return `${minutes}:${seconds}`
+  }
+  
   const onStartRun = () => {
     showRunLoading.value = true
-    runTip.value = '运行中...'
+    runTip.value = `[${getCurrentTime()}] 运行中...`
+    
+    // 添加5秒超时处理
+    clearTimeout(runTimeout)
+    runTimeout = setTimeout(() => {
+      if(showRunLoading.value) {
+        showRunLoading.value = false
+        runTip.value = `[${getCurrentTime()}] 运行超时`
+        proxy.$eventEmitter.emit('errorRun')
+      }
+    }, 5000)
   }
+
   let timer = null
   const showRunTip = tip => {
     showRunLoading.value = false
-    runTip.value = tip
+    runTip.value = `[${getCurrentTime()}] ${tip}`
     clearTimeout(timer)
+    clearTimeout(runTimeout) // 清理超时定时器
     timer = setTimeout(() => {
       runTip.value = ''
     }, 3000)
   }
+
   const onSuccessRun = duration => {
-    showRunTip('运行成功，耗时：' + (duration / 1000).toFixed(2) + '秒')
+    showRunTip(`运行成功，耗时：${(duration / 1000).toFixed(2)}秒`)
   }
+
   const onErrorRun = () => {
     showRunTip('运行出错')
   }
+
   proxy.$eventEmitter.on('startRun', onStartRun)
-  proxy.$eventEmitter.on('successRun', onSuccessRun)
+  proxy.$eventEmitter.on('successRun', onSuccessRun) 
   proxy.$eventEmitter.on('errorRun', onErrorRun)
+
   onUnmounted(() => {
+    clearTimeout(timer)
+    clearTimeout(runTimeout)
     proxy.$eventEmitter.off('startRun', onStartRun)
     proxy.$eventEmitter.off('successRun', onSuccessRun)
     proxy.$eventEmitter.off('errorRun', onErrorRun)
