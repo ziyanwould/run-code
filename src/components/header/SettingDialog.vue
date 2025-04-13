@@ -68,7 +68,7 @@ const componentsMap = shallowRef({
     }
     
     .el-dialog__title {
-      font-size: 16px;
+      font-size: 14px;
     }
 
     // 移动端下dialog占满全屏
@@ -81,6 +81,7 @@ const componentsMap = shallowRef({
       
       .el-dialog__body {
         height: calc(100% - 45px); // 减去header高度
+        font-size: 12px;
       }
     }
   }
@@ -128,7 +129,7 @@ const componentsMap = shallowRef({
         
         .el-tabs__item {
           padding: 0 12px;
-          font-size: 13px;
+          font-size: 12px;
           height: 32px;
           line-height: 32px;
           display: inline-block;

@@ -233,6 +233,7 @@ const { onTouchBarDblClick, handleTouchDoubleTap } = useCollapseExpand({ props }
     flex-shrink: 0;
     background-color: var(--touch-bar-background);
     touch-action: none; /* 防止浏览器默认的触摸行为 */
+    z-index: 9;
 
     &.canDrag {
       &.v {

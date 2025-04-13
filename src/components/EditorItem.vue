@@ -123,7 +123,8 @@ import {
   watch,
   nextTick,
   defineEmits,
-  getCurrentInstance
+  getCurrentInstance,
+  defineExpose
 } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import {
@@ -595,6 +596,17 @@ defineExpose({
   overflow: hidden;
   background-color: var(--editor-background);
 
+  :deep(.el-select) {
+    .el-select__wrapper {
+      @media screen and (max-width: 980px) {
+        font-size: 12px;
+        height: 24px;
+        line-height: 24px;
+        min-height: 24px;
+      }
+    }
+  }
+
   .editorContent {
     width: 100%;
     height: 100%;
@@ -617,7 +629,7 @@ defineExpose({
       .title {
         font-weight: bold;
         color: var(--editor-header-title-color);
-        font-size: 18px;
+        font-size: 16px;
         transition: all 0.2s;
 
         &.rotate {
@@ -627,6 +639,14 @@ defineExpose({
 
           &.v {
             transform: rotate(0deg) translateY(-28px);
+          }
+        }
+
+        @media screen and (max-width: 980px) {
+          font-size: 14px;
+
+          &.rotate {
+            font-size: 12px;
           }
         }
       }

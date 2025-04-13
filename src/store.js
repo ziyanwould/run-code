@@ -17,11 +17,11 @@ const initialCodeSaveKey = 'codeRun:initialCode'
 const DEFAULT_CONFIG = {
   codeTheme: 'OneDarkPro',
   pageThemeSyncCodeTheme: false,
-  openAlmightyConsole: isMobile ? false : true,
+  openAlmightyConsole: isMobile ? true : false,
   autoRun: true,
   layout: isMobile ? 'tabs2' : 'default',
   keepPreviousLogs: isMobile ? false : true,
-  codeFontSize: isMobile ? 14 : 16
+  codeFontSize: isMobile ? 12 : 14
 }
 
 // 从localStorage获取保存的配置

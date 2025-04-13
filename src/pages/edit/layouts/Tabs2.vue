@@ -1,8 +1,10 @@
 <template>
   <Drag
-    :number="3"
+    :number="isMobile ? 2 : 3"
     dir="v"
-    :config="[{ min: 0 }, { min: 48 }, { min: 48, default: 48 }]"
+    :config="isMobile 
+      ? [{ min: 0 }, { min: 20 }] 
+      : [{ min: 0 }, { min: 48 }, { min: 48, default: 48 }]"
   >
     <!-- 预览 -->
     <DragItem :index="0" :disabled="true" :showTouchBar="false" title="预览">
@@ -12,8 +14,8 @@
     <DragItem :index="1" :disabled="false">
       <Editor :dir="'tabs'" ref="editorRef"></Editor>
     </DragItem>
-    <!-- 控制台 -->
-    <DragItem :index="2" :disabled="false" title="控制台">
+    <!-- 控制台 - 仅在非移动设备显示 -->
+    <DragItem v-if="!isMobile" :index="2" :disabled="false" title="控制台">
       <Console></Console>
     </DragItem>
   </Drag>
@@ -26,7 +28,9 @@ import Preview from '@/components/Preview.vue'
 import Console from '@/components/Console.vue'
 import Drag from '@/components/Drag.vue'
 import DragItem from '@/components/DragItem.vue'
+import { isMobileDevice } from '@/utils'
 
+const isMobile = isMobileDevice()
 const editorRef = ref(null)
 
 onMounted(() => {

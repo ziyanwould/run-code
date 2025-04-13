@@ -1,6 +1,7 @@
 <template>
   <div class="right">
-    <div class="btn" @click="openSetting">
+    <!-- 在PC端显示设置按钮 -->
+    <div class="btn" @click="openSetting" v-if="!isMobile">
       <span class="icon iconfont icon-shezhitianchong"></span> 设置
     </div>
     <div class="btn" @click="openTemplate">
@@ -39,6 +40,8 @@
         <li class="toolItem" @click="githubToken ? logout() : login()">
           {{ githubToken ? '退出Gist' : '登录Gist' }}
         </li>
+        <!-- 在移动端显示设置按钮 -->
+        <li class="toolItem" @click="openSetting" v-if="isMobile">系统设置</li>
       </ul>
     </div>
   </div>
@@ -62,6 +65,7 @@ import saveAs from '@/utils/FileSaver'
 import { writeToClipboard } from '@/utils/clipboard'
 import { openAppInNewWindow } from '@/utils'
 import { base, routerMode } from '@/config'
+import { isMobileDevice } from '@/utils'
 
 const props = defineProps({
   isEdit: Boolean,
@@ -85,6 +89,9 @@ const { proxy } = getCurrentInstance()
 const store = useStore()
 const router = useRouter()
 const route = useRoute()
+
+// 添加移动端判断
+const isMobile = isMobileDevice()
 
 // 下拉菜单
 const showToolsList = ref(false)
@@ -423,6 +430,7 @@ const openPreviewInNewWindow = () => {
 <style scoped lang="less">
 .right {
   display: flex;
+  justify-content: flex-end;
   flex-shrink: 0;
 
   .dropdownBtn {
@@ -477,7 +485,7 @@ const openPreviewInNewWindow = () => {
         @media screen and (max-width: 980px) {
           height: 28px;
           line-height: 28px;
-          font-size: 13px;
+          font-size: 12px;
           padding: 0 8px;
         }
 
@@ -516,10 +524,10 @@ const openPreviewInNewWindow = () => {
       height: 32px;
       padding: 0 10px;
       margin: 0 6px 0 0;
-      font-size: 13px;
+      font-size: 12px;
 
       .icon {
-        font-size: 13px;
+        font-size: 12px;
       }
     }
 

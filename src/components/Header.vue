@@ -134,7 +134,7 @@ const createEmbedCode = () => {
 
   @media screen and (max-width: 980px) {
     height: 48px;
-    padding: 0 12px;
+    padding: 0 8px;
   }
 }
 </style>

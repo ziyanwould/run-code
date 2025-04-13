@@ -653,10 +653,17 @@ onBeforeUnmount(() => {
       display: flex;
       flex-direction: column;
       
+      @media screen and (max-width: 980px) {
+        font-size: 12px;
+      }
+      
       .el-tabs__header {
-        margin-bottom: 5px; /* 添加与内容区域的间距 */
         background-color: var(--editor-header-background);
         order: 0; /* 确保标签头部在顶部 */
+
+        @media screen and (max-width: 980px) {
+          height: 33px;
+        }
       }
       
       .el-tabs__content {
@@ -673,7 +680,7 @@ onBeforeUnmount(() => {
       .el-tabs__header {
         border-bottom:1px solid var(--editor-header-title-color);
 
-        margin: 0;
+        margin: 0 0 0 1px;
 
         .el-tabs__nav-wrap {
           &::after {
@@ -701,16 +708,23 @@ onBeforeUnmount(() => {
         color: var(--editor-header-color);
         transition: all 0.3s;
         
+        @media screen and (max-width: 980px) {
+          height: 32px;  /* 移动端tab高度 */
+          line-height: 32px;
+          padding: 0 10px !important;  /* 移动端水平内边距 */
+          font-size: 12px;
+        }
+        
         &:hover {
           color: var(--editor-header-title-color);
-          background-color: rgba(255, 255, 255, 0.1); /* 添加hover效果 */
+          background-color: rgba(255, 255, 255, 0.1);
         }
         
         &.is-active {
           color: var(--editor-header-title-color);
-          background-color: var(--editor-header-active-background, rgba(255, 255, 255, 0.2)); /* 高亮当前选中的tab */
+          background-color: var(--editor-header-active-background, rgba(255, 255, 255, 0.2));
           font-weight: bold;
-          border-bottom: 0px solid var(--editor-header-title-color, #409eff); /* 添加底部边框强调 */
+          border-bottom: 0px solid var(--editor-header-title-color, #409eff);
         }
       }
     }
@@ -719,5 +733,10 @@ onBeforeUnmount(() => {
 
 /deep/ .el-dialog__body {
   padding: 20px;
+  
+  @media screen and (max-width: 980px) {
+    padding: 12px;
+    font-size: 12px;
+  }
 }
 </style>

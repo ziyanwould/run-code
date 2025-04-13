@@ -7,9 +7,11 @@
     <!-- 预览&控制台 -->
     <DragItem :index="1" :disabled="false">
       <Drag
-        :number="2"
+        :number="isMobile ? 1 : 2"
         dir="v"
-        :config="[{ min: 0 }, { min: 48, default: 48 }]"
+        :config="isMobile 
+          ? [{ min: 0 }] 
+          : [{ min: 0 }, { min: 48, default: 48 }]"
       >
         <DragItem
           :index="0"
@@ -19,7 +21,7 @@
         >
           <Preview></Preview>
         </DragItem>
-        <DragItem :index="1" :disabled="false" title="控制台">
+        <DragItem v-if="!isMobile" :index="1" :disabled="false" title="控制台">
           <Console></Console>
         </DragItem>
       </Drag>
@@ -33,4 +35,7 @@ import Preview from '@/components/Preview.vue'
 import Console from '@/components/Console.vue'
 import Drag from '@/components/Drag.vue'
 import DragItem from '@/components/DragItem.vue'
+import { isMobileDevice } from '@/utils'
+
+const isMobile = isMobileDevice()
 </script>

@@ -131,7 +131,7 @@ const selectTemplate = data => {
 
       .name {
         margin-left: 12px;
-        font-size: 13px;
+        font-size: 12px;
       }
     }
   }
