@@ -22,7 +22,8 @@ import {
   onBeforeUnmount,
   getCurrentInstance,
   watch,
-  defineExpose
+  defineExpose,
+  nextTick
 } from 'vue'
 import { useStore } from 'vuex'
 import { assembleHtml, compile, compileVue } from '@/utils'
@@ -207,14 +208,19 @@ const useCreateHtml = () => {
       }
       jsContent += `
       <script type="module">
-        ${openAlmightyConsole ? 'eruda.init();' : ''}
-        ${jsStr}
-        ${successRunNotify}
+        try {
+          ${openAlmightyConsole ? 'window.eruda && eruda.init();' : ''}
+          ${jsStr}
+          ${successRunNotify}
+        } catch(err) {
+          console.error(err);
+          ${errorRunNotify}
+        }
       <\/script>`
     } else {
       jsContent = `<script>
-        ${openAlmightyConsole ? 'eruda.init();' : ''}
         try {
+          ${openAlmightyConsole ? 'window.eruda && eruda.init();' : ''}
           ${jsStr}
           ${successRunNotify}
         } catch (err) {
@@ -289,6 +295,12 @@ const useRun = ({
 
   const run = async (syncTitle = false) => {
     try {
+      // 强制重新渲染iframe
+      iframeKey.value = Date.now()
+      
+      // 等待下一个tick确保iframe已经重新创建
+      await nextTick()
+      
       runStartTime.value = Date.now()
       proxy.$eventEmitter.emit('startRun')
       if (!keepPreviousLogs.value) {
@@ -304,17 +316,42 @@ const useRun = ({
       await Promise.race([
         // 原有运行逻辑
         (async () => {
-          let compiledData = await compile(
-            vueLanguage.value,
-            vueContent.value,
-            htmlLanguage.value, 
-            jsLanguage.value,
-            cssLanguage.value,
-            htmlContent.value,
-            jsContent.value, 
-            cssContent.value
-          )
-          
+          let _jsResourcesPlus = []
+          let _cssResourcesPlus = []
+          let compiledData = null
+
+          // vue单文件
+          if (
+            layout.value === 'vue' ||
+            (layout.value === 'newWindowPreview' && vueContent.value)
+          ) {
+            compiledData = await compileVue(
+              vueLanguage.value,
+              vueContent.value,
+              importMap.value.imports || {}
+            )
+            if (compiledData) {
+              // 自动引入vue资源
+              // _jsResourcesPlus = getTemplate(vueLanguage.value).code.JS.resources;
+            } else {
+              compiledData = {
+                html: '',
+                css: '',
+                js: ''
+              }
+            }
+          } else {
+            compiledData = await compile(
+              htmlLanguage.value,
+              jsLanguage.value,
+              cssLanguage.value,
+              htmlContent.value,
+              jsContent.value,
+              importMap.value.imports || {},
+              cssContent.value
+            )
+          }
+
           let _cssResources = _cssResourcesPlus.concat(
             cssResources.value.map(item => ({
               ...item
@@ -325,7 +362,7 @@ const useRun = ({
               ...item
             }))
           )
-          
+
           let doc = createHtml(
             compiledData.html,
             compiledData.js.js,
@@ -336,13 +373,13 @@ const useRun = ({
             openAlmightyConsole.value,
             compiledData.js.useImport
           )
-          
+
           store.commit('setPreviewDoc', doc)
 
           // 同步更新标题
-          if(syncTitle) {
+          if (syncTitle) {
             const titleMatch = doc.match(/<title[^>]*>(.*?)<\/title>/i)
-            if(titleMatch && titleMatch[1]) {
+            if (titleMatch && titleMatch[1]) {
               document.title = titleMatch[1].trim()
             }
           }
@@ -352,17 +389,18 @@ const useRun = ({
         })(),
         timeoutPromise
       ])
-
     } catch (error) {
       console.log(error)
       proxy.$eventEmitter.emit('custom_logs', {
         data: {
           type: 'console',
           method: 'error',
-          data: [{
-            content: error.message || '运行出错',
-            contentType: 'string'
-          }]
+          data: [
+            {
+              content: error.message || '运行出错',
+              contentType: 'string'
+            }
+          ]
         }
       })
       proxy.$eventEmitter.emit('errorRun')

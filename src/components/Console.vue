@@ -59,6 +59,15 @@ import {
   onUnmounted
 } from 'vue'
 
+// 在hooks定义部分的最前面添加公共函数
+const getCurrentTime = () => {
+  const now = new Date()
+  const hours = now.getHours().toString().padStart(2, '0')
+  const minutes = now.getMinutes().toString().padStart(2, '0') 
+  const seconds = now.getSeconds().toString().padStart(2, '0')
+  return `${hours}:${minutes}:${seconds}`
+}
+
 //  hooks定义部分
 
 // 初始化
@@ -89,15 +98,19 @@ const useLog = ({ proxy }) => {
 
   proxy.$eventEmitter.on('clear_logs', clear)
 
-  // 接收打印信息
   const onMessage = ({ data = {} }) => {
     if (data.type === 'console') {
       if (data.method === 'clear') {
         clear()
       } else {
+        // 在日志数据前添加时间
+        const timePrefix = `[${getCurrentTime()}] `
         logList.value.push({
           type: data.method,
-          data: data.data
+          data: [{
+            contentType: 'string',
+            content: timePrefix
+          }, ...data.data]
         })
         nextTick(() => {
           logBoxRef.value.scrollTop = logBoxRef.value.scrollHeight
@@ -229,19 +242,10 @@ const useRunStatus = ({ proxy }) => {
   const runTip = ref('')
   let runTimeout = null
   
-  // 获取当前时间字符串 (HH:mm:ss)
-  const getCurrentTime = () => {
-    const now = new Date()
-    const minutes = now.getMinutes().toString().padStart(2, '0')
-    const seconds = now.getSeconds().toString().padStart(2, '0')
-    return `${minutes}:${seconds}`
-  }
-  
   const onStartRun = () => {
     showRunLoading.value = true
     runTip.value = `[${getCurrentTime()}] 运行中...`
     
-    // 添加5秒超时处理
     clearTimeout(runTimeout)
     runTimeout = setTimeout(() => {
       if(showRunLoading.value) {
@@ -257,7 +261,7 @@ const useRunStatus = ({ proxy }) => {
     showRunLoading.value = false
     runTip.value = `[${getCurrentTime()}] ${tip}`
     clearTimeout(timer)
-    clearTimeout(runTimeout) // 清理超时定时器
+    clearTimeout(runTimeout)
     timer = setTimeout(() => {
       runTip.value = ''
     }, 3000)
