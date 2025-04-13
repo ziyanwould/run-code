@@ -598,6 +598,8 @@ defineExpose({
 
   :deep(.el-select) {
     .el-select__wrapper {
+      min-height: 26px;
+
       @media screen and (max-width: 980px) {
         font-size: 12px;
         height: 24px;

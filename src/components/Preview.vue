@@ -579,6 +579,7 @@ defineExpose({
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  z-index: 9;
 
   &.hide {
     display: none;

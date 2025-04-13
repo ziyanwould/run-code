@@ -97,6 +97,7 @@ const componentsMap = shallowRef({
     padding: 12px 5px;
     flex-direction: column;
     height: 100%;
+    width: 100%;
   }
 
   :deep(.el-tabs) {
@@ -117,6 +118,7 @@ const componentsMap = shallowRef({
           .el-tabs__nav-prev,
           .el-tabs__nav-next {
             line-height: 32px;
+            color: var(--dropdown-color); // 添加箭头颜色
           }
         }
       }
@@ -125,7 +127,6 @@ const componentsMap = shallowRef({
         white-space: nowrap;
         position: relative;
         transition: transform .3s;
-        float: none;
         
         .el-tabs__item {
           padding: 0 12px;
@@ -133,7 +134,6 @@ const componentsMap = shallowRef({
           height: 32px;
           line-height: 32px;
           display: inline-block;
-          float: none;
         }
       }
     }
