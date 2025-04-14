@@ -43,7 +43,7 @@ const showConsole = computed(() => {
 
 // 数据获取逻辑
 const getData = async () => {
-  if (route.name !== 'Preview' || (!route.params.id && !route.query.data)) {
+  if (!(route.name === 'Preview' || route.name === 'Share') || (!route.params.id && !route.query.data)) {
     return
   }
 

@@ -15,10 +15,18 @@
         <li class="toolItem" @click="exportZipFile">导出zip</li>
         <li class="toolItem" @click="exportMarkdown">导出 Markdown</li>
         <li class="toolItem" @click="copyMarkdown">复制 Markdown</li>
-        <li class="divider"></li>
-        <li class="toolItem" @click="createShareUrl" v-if="isEdit">生成分享链接</li>
-        <li class="toolItem" @click="createEmbedUrl" v-if="isEdit">生成嵌入链接</li>
-        <li class="toolItem" @click="createEmbedCode" v-if="isEdit">生成嵌入代码</li>
+        
+        <li class="divider" v-if="isEdit"></li>
+        <li class="toolItem" @click="createShareUrl" v-if="isEdit">
+          生成分享链接
+        </li>
+        <li class="toolItem" @click="createEmbedUrl" v-if="isEdit">
+          生成嵌入链接
+        </li>
+        <li class="toolItem" @click="createEmbedCode" v-if="isEdit">
+          生成嵌入代码
+        </li>
+        
         <li class="divider"></li>
         <li class="toolItem" @click="clearAllCode">清空代码</li>
       </ul>
@@ -59,7 +67,9 @@ import {
   getCurrentInstance,
   defineProps,
   defineEmits,
-  nextTick
+  nextTick,
+  onMounted,
+  onUnmounted
 } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
@@ -97,6 +107,28 @@ const route = useRoute()
 
 // 添加移动端判断
 const isMobile = isMobileDevice()
+
+// 判断是否为 Mac 系统
+const isMac = /macintosh|mac os x/i.test(navigator.userAgent)
+
+// 处理快捷键保存
+const handleKeyDown = (e) => {
+  // Mac: Command + S
+  // Windows: Ctrl + S
+  if ((isMac ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 's') {
+    e.preventDefault() // 阻止浏览器默认保存行为
+    save()
+  }
+}
+
+// 添加和移除事件监听
+onMounted(() => {
+  document.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeyDown)
+})
 
 // 下拉菜单
 const showToolsList = ref(false)
@@ -139,29 +171,42 @@ const run = () => {
   }
 }
 
+const lastSaveTime = ref(0)
+const SAVE_COOLDOWN = 2000
+
 // 保存
 const save = async () => {
-  if (githubToken.value === '') {
+  // 检查是否在冷却时间内
+  const now = Date.now()
+  if (now - lastSaveTime.value < SAVE_COOLDOWN) {
+    ElMessage.warning('保存太频繁，请稍后再试')
+    return
+  }
+  
+  // 更新最后保存时间
+  lastSaveTime.value = now
+
+  // 在移动端下弹出标题确认框
+  if (window.innerWidth <= 980) {
+    const { value: title } = await ElMessageBox.prompt('请输入标题', '保存', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      inputValue: store.state.editData.title,
+      inputValidator: value => {
+        if (!value.trim()) {
+          return '标题不能为空'
+        }
+        return true
+      }
+    })
+    if (title && title.trim()) {
+      store.commit('setCodeTitle', title.trim())
+    }
+  }
+
+  if (!githubToken.value || route.name === 'LocalEdit') {
     // 未登录时保存到本地
     try {
-      // 在移动端下弹出标题确认框
-      if (window.innerWidth <= 980) {
-        const { value: title } = await ElMessageBox.prompt('请输入标题', '保存', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputValue: store.state.editData.title,
-          inputValidator: (value) => {
-            if (!value.trim()) {
-              return '标题不能为空'
-            }
-            return true
-          }
-        })
-        if (title && title.trim()) {
-          store.commit('setCodeTitle', title.trim())
-        }
-      }
-
       store.commit('setLoading', true)
       let fileData = createData()
       if (route.name === 'LocalEdit' && route.params.id) {
@@ -186,24 +231,6 @@ const save = async () => {
 
   // 已登录时保存到 Gist
   try {
-    // 在移动端下弹出标题确认框
-    if (window.innerWidth <= 980) {
-      const { value: title } = await ElMessageBox.prompt('请输入标题', '保存', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputValue: store.state.editData.title,
-        inputValidator: (value) => {
-          if (!value.trim()) {
-            return '标题不能为空'
-          }
-          return true
-        }
-      })
-      if (title && title.trim()) {
-        store.commit('setCodeTitle', title.trim())
-      }
-    }
-
     store.commit('setLoading', true)
     let fileData = createData()
     let id = route.params.id
@@ -262,14 +289,14 @@ const showMyGists = () => {
 const createNew = async () => {
   try {
     // 修改事件发送方式，使用回调函数接收结果
-    const cleared = await new Promise((resolve) => {
-      proxy.$eventEmitter.emit('clear_all_code', (result) => {
+    const cleared = await new Promise(resolve => {
+      proxy.$eventEmitter.emit('clear_all_code', result => {
         resolve(result)
       })
     })
-    
+
     console.log('清空结果:', cleared) // 添加日志便于调试
-    
+
     if (cleared) {
       router.replace({
         name: 'Editor',
@@ -306,64 +333,67 @@ const showLocalGists = () => {
 // 提取生成 Markdown 内容的逻辑到单独的函数
 const generateMarkdown = () => {
   const { title, code } = store.state.editData || {}
-  
+
   // 如果没有数据，返回空字符串
   if (!code) {
     return ''
   }
-  
+
   let markdown = `# ${title || '未命名代码'}\n\n`
-  
+
   // 添加 HTML 代码块
   if (code.HTML?.content) {
     markdown += '## HTML\n\n```html\n'
     markdown += code.HTML.content
     markdown += '\n```\n\n'
   }
-  
+
   // 添加 CSS 代码块
   if (code.CSS?.content) {
     markdown += '## CSS\n\n```css\n'
     markdown += code.CSS.content
     markdown += '\n```\n\n'
   }
-  
+
   // 添加 JavaScript 代码块
   if (code.JS?.content) {
     markdown += '## JavaScript\n\n```javascript\n'
     markdown += code.JS.content
     markdown += '\n```\n\n'
   }
-  
+
   // 如果是 Vue 布局，添加 Vue 代码块
   if (code.VUE?.content) {
     markdown += '## Vue\n\n```vue\n'
     markdown += code.VUE.content
     markdown += '\n```\n\n'
   }
-  
+
   return markdown
 }
 
 // 导出 Markdown 文件
 const exportMarkdown = () => {
   const markdown = generateMarkdown()
-  
+
   // 如果没有任何代码内容，提示错误并返回
-  if (!markdown || markdown === `# ${store.state.editData?.title || '未命名代码'}\n\n`) {
+  if (
+    !markdown ||
+    markdown === `# ${store.state.editData?.title || '未命名代码'}\n\n`
+  ) {
     ElMessage.error('没有可导出的代码内容')
     return
   }
-  
+
   // 创建 Blob 对象
   const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' })
-  
+
   // 下载文件
   saveAs(blob, `${store.state.editData?.title || 'code'}.md`)
-  
+
   // 关闭工具菜单
   toggleToolsList(false)
-  
+
   // 提示成功
   ElMessage.success('Markdown 文件导出成功')
 }
@@ -371,13 +401,16 @@ const exportMarkdown = () => {
 // 复制 Markdown 内容
 const copyMarkdown = async () => {
   const markdown = generateMarkdown()
-  
+
   // 如果没有任何代码内容，提示错误并返回
-  if (!markdown || markdown === `# ${store.state.editData?.title || '未命名代码'}\n\n`) {
+  if (
+    !markdown ||
+    markdown === `# ${store.state.editData?.title || '未命名代码'}\n\n`
+  ) {
     ElMessage.error('没有可复制的代码内容')
     return
   }
-  
+
   try {
     const success = await writeToClipboard(markdown)
     if (success) {
@@ -397,15 +430,15 @@ const openPreviewInNewWindow = () => {
   try {
     let previewUrl = ''
     const isRelativePath = base === './'
-    const baseUrl = isRelativePath 
-      ? window.location.origin 
+    const baseUrl = isRelativePath
+      ? window.location.origin
       : `${window.location.origin}${base}`
-    
+
     // 如果路由有id参数(包括Edit和LocalEdit)
     if (route.params.id) {
       previewUrl = `${baseUrl}${
-        routerMode === 'hash' 
-          ? '#/preview/' + route.params.id 
+        routerMode === 'hash'
+          ? '#/preview/' + route.params.id
           : 'preview/' + route.params.id
       }`
     }
@@ -414,7 +447,7 @@ const openPreviewInNewWindow = () => {
       // 重新编码data参数，确保与URL中的格式一致
       const encodedData = encodeURIComponent(route.query.data)
       previewUrl = `${baseUrl}${
-        routerMode === 'hash' 
+        routerMode === 'hash'
           ? '#/preview/?data=' + encodedData
           : 'preview/?data=' + encodedData
       }`
@@ -558,7 +591,7 @@ const openPreviewInNewWindow = () => {
 
     .icon {
       margin-right: 5px;
-      
+
       @media screen and (max-width: 980px) {
         margin-right: 3px;
       }

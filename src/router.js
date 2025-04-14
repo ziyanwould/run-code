@@ -20,15 +20,17 @@ const routes = [
     component: Edit
   },
   {
-    path: '/share/:id',
+    path: '/share/:id?',
     name: 'Share',
-    component: Edit
+    component: Preview,
+    // component: Edit,
+    props: true
   },
   {
-    path: '/preview/:id?',  // 添加可选的id参数
+    path: '/preview/:id?',
     name: 'Preview',
     component: Preview,
-    props: true  // 允许将路由参数作为props传递给组件
+    props: true
   },
   {
     path: '/embed/:id',

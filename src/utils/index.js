@@ -186,16 +186,21 @@ export const newWindowOpenUrl = url => {
 }
 
 /**
+ * @Desc: 获取基础URL
+ */
+export const getBaseUrl = () => {
+  const isRelativePath = base === './'
+  return isRelativePath 
+    ? window.location.origin 
+    : `${window.location.origin}${base}`
+}
+
+/**
  * @Desc: 新开窗口打开应用
  */
 export const openAppInNewWindow = () => {
-  const isRelativePath = base === './'
-  const baseUrl = isRelativePath 
-    ? window.location.origin 
-    : `${window.location.origin}${base}`
-  
+  const baseUrl = getBaseUrl()
   const url = `${baseUrl}${routerMode === 'hash' ? '#/' : '/'}?blank=true`
-  
   window.open(url, '_blank')
 }
 
@@ -203,28 +208,22 @@ export const openAppInNewWindow = () => {
  * @Desc: 生成分享url
  */
 export const createShareUrl = (id, queryData) => {
+  const baseUrl = getBaseUrl()
   if (queryData) {
-    return `${location.origin}${base}${
-      routerMode === 'hash' ? '#/?data=' + queryData : '/?data=' + queryData
-    }`
+    return `${baseUrl}${routerMode === 'hash' ? '#/share/?data=' : 'share/?data='}${queryData}`
   }
-  return `${location.origin}${base}${
-    routerMode === 'hash' ? '#/share/' + id : 'share/' + id
-  }`
+  return `${baseUrl}${routerMode === 'hash' ? '#/share/' : 'share/'}${id}`
 }
 
 /**
  * @Desc: 生成嵌入url
  */
 export const createEmbedUrl = (id, queryData) => {
+  const baseUrl = getBaseUrl()
   if (queryData) {
-    return `${location.origin}${base}${
-      routerMode === 'hash' ? '#/embed/?data=' + queryData : 'embed/?data=' + queryData
-    }`
+    return `${baseUrl}${routerMode === 'hash' ? '#/embed/?data=' : 'embed/?data='}${queryData}`
   }
-  return `${location.origin}${base}${
-    routerMode === 'hash' ? '#/embed/' + id : 'embed/' + id
-  }`
+  return `${baseUrl}${routerMode === 'hash' ? '#/embed/' : 'embed/'}${id}`
 }
 
 // 获取变量的值

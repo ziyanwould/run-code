@@ -86,6 +86,7 @@ const store = createStore({
   state() {
     return {
       uuid: generateUUID(),
+      loading: false, // 添加 loading state
       editData: createDefaultData(),
       githubToken: '',
       previewDoc: ''
@@ -241,6 +242,10 @@ const store = createStore({
     setSyncLayout(state, syncLayout) {
       state.editData.config.syncLayout = syncLayout
       this.commit('saveConfig')
+    },
+
+    setLoading(state, loading) {
+      state.loading = loading
     }
   },
   actions: {

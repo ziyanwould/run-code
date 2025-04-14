@@ -149,7 +149,12 @@ const useResetSettings = ({ store }) => {
       )
       
       store.commit('resetToDefaultSettings')
-      ElMessage.success('已恢复默认设置')
+      ElMessage.success('已恢复默认设置，即将刷新页面...')
+
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+      
     } catch {
       // 用户取消操作，不做任何处理
     }

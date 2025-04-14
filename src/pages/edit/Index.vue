@@ -108,13 +108,16 @@ const useInit = () => {
 
 // 将数据保存到query里
 const useQueryStore = (store, router) => {
+  const route = useRoute()
+
   watch(() => {
     return store.state.editData
   },() => {
     // 已登录或者是本地编辑模式时不处理
-    if (store.state.githubToken || router.currentRoute.value.name === 'LocalEdit') {
+    if ((store.state.githubToken && route.params.id) || router.currentRoute.value.name === 'LocalEdit') {
       return
     }
+
     let data = utoa(JSON.stringify(store.state.editData))
     router.replace({
       name: 'Editor',

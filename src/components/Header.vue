@@ -52,6 +52,7 @@
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
+import { utoa } from '@/utils'
 
 // 导入拆分的组件
 import HeaderLogo from './header/HeaderLogo.vue'
@@ -89,7 +90,7 @@ const hasQueryData = computed(() => {
 })
 
 const isEdit = computed(() => {
-  return (route.name === 'Edit' && !!route.params.id) || hasQueryData.value
+  return ((route.name === 'Edit' || route.name === 'LocalEdit') && !!route.params.id) || hasQueryData.value
 })
 
 // 方法
@@ -106,15 +107,30 @@ const handleExportZip = () => {
 }
 
 const createShareUrl = () => {
-  ShareComp.value.createShareUrl(hasQueryData.value ? encodeURIComponent(route.query.data) : null)
+  if (route.name === 'LocalEdit') {
+    const data = utoa(JSON.stringify(store.state.editData))
+    ShareComp.value.createShareUrl(encodeURIComponent(data))
+  } else {
+    ShareComp.value.createShareUrl(hasQueryData.value ? encodeURIComponent(route.query.data) : null)
+  }
 }
 
 const createEmbedUrl = () => {
-  ShareComp.value.createEmbedUrl(hasQueryData.value ? encodeURIComponent(route.query.data) : null)
+  if (route.name === 'LocalEdit') {
+    const data = utoa(JSON.stringify(store.state.editData))
+    ShareComp.value.createEmbedUrl(encodeURIComponent(data))
+  } else {
+    ShareComp.value.createEmbedUrl(hasQueryData.value ? encodeURIComponent(route.query.data) : null)
+  }
 }
 
 const createEmbedCode = () => {
-  ShareComp.value.createEmbedCode(hasQueryData.value ? encodeURIComponent(route.query.data) : null)
+  if (route.name === 'LocalEdit') {
+    const data = utoa(JSON.stringify(store.state.editData))
+    ShareComp.value.createEmbedCode(encodeURIComponent(data))
+  } else {
+    ShareComp.value.createEmbedCode(hasQueryData.value ? encodeURIComponent(route.query.data) : null)
+  }
 }
 </script>
 
