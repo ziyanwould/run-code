@@ -91,6 +91,60 @@
 
 备注：后续考虑做成浏览器插件，直接在AI平台上点击运行
 
+# Docker 部署
+
+本项目提供了 Docker 部署支持,有以下两种部署方式:
+
+## 1. 使用 docker-compose (推荐)
+
+```bash
+# 克隆项目
+git clone https://github.com/xxxily/code-flux.git
+cd code-flux
+
+# 启动服务(后台运行)
+docker-compose up -d
+
+# 停止服务
+docker-compose down
+```
+
+服务启动后可通过 `http://localhost:56780` 访问。
+
+## 2. 手动构建和运行
+
+```bash
+# 克隆项目
+git clone https://github.com/xxxily/code-flux.git
+cd code-flux
+
+# 构建镜像
+npm run docker:build
+# 或
+docker build -t code-flux .
+
+# 运行容器
+npm run docker:run
+# 或
+docker run -p 8080:80 code-flux
+```
+
+## 技术说明
+
+- 基础镜像: node:18-alpine (构建阶段), nginx:stable-alpine (生产环境)
+- 构建产物位于 `/usr/share/nginx/html` 目录
+- 容器内暴露 80 端口
+- 使用 nginx 作为静态资源服务器
+
+## 相关命令
+
+项目提供了以下 Docker 相关的 npm 脚本:
+
+- `npm run docker:build`: 构建 Docker 镜像
+- `npm run docker:run`: 运行 Docker 容器
+- `npm run docker:up`: 使用 docker-compose 启动服务
+- `npm run docker:down`: 使用 docker-compose 停止服务
+
 # 本地构建
 
 ```bash
