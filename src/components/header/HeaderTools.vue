@@ -130,7 +130,14 @@ const handleKeyDown = (e) => {
   // Windows: Ctrl + S
   if ((isMac ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 's') {
     e.preventDefault() // 阻止浏览器默认保存行为
-    save()
+    
+    if (route.name === 'LocalEdit' && route.params.id) {
+      saveToLocal()
+    } else if (route.name === 'Edit' && route.params.id) {
+      saveToGist()
+    } else {
+      save()
+    }
   }
 }
 
