@@ -70,6 +70,11 @@
 
 - [x] 支持嵌入模式，方便在文档网站中使用，让文档示例更轻松
 
+# 在线案例
+
+- [CodeFlux介绍页](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6)
+- [非凡人生简历生成器](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5)
+
 # 运行/预览AI生成的前端代码
 
 在任意支持生成前端代码的AI平台上，使用提示词让AI生成你期望的前端网页，然后将生成的内容一键复制到 [CodeFlux](https://code-flux.anzz.top) 平台上，即可对其进行运行/预览。
