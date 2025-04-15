@@ -15,8 +15,8 @@ export const parseHtmlContent = (htmlStr) => {
   }
 
   // 检查是否包含完整的HTML结构
-  if (htmlStr.toLowerCase().includes('<!doctype html>') || 
-      htmlStr.toLowerCase().includes('<html')) {
+  if (htmlStr.toLowerCase().trim().startsWith('<!doctype html>') || 
+      htmlStr.toLowerCase().trim().startsWith('<html')) {
     result.isFullHtml = true
     
     // 提取head内容

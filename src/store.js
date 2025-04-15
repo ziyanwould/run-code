@@ -86,7 +86,7 @@ const store = createStore({
   state() {
     return {
       uuid: generateUUID(),
-      loading: false, // 添加 loading state
+      loading: false,
       editData: createDefaultData(),
       githubToken: '',
       previewDoc: ''

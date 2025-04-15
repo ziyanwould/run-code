@@ -20,11 +20,11 @@ const defaltCode = {
       <div class="links">
         <div class="link-item">
           <span class="link-label">GitHub:</span>
-          <a id="repo-url" href="${packageInfo.repository.url}" target="_blank">${packageInfo.repository.url}</a>
+          <a id="repo-url" href="${packageInfo.repository.url}" target="_blank">${packageInfo.repository.url.replace(/^https?:\/\//, '')}</a>
         </div>
         <div class="link-item">
-          <span class="link-label">官网:</span>
-          <a id="homepage-url" href="${packageInfo.homepage}" target="_blank">${packageInfo.homepage}</a>
+          <span class="link-label">&nbsp;&nbsp;&nbsp;&nbsp;官网:</span>
+          <a id="homepage-url" href="${packageInfo.homepage}" target="_blank">${packageInfo.homepage.replace(/^https?:\/\//, '')}</a>
         </div>
       </div>
 

@@ -15,6 +15,7 @@
         <li class="toolItem" @click="exportZipFile">导出zip</li>
         <li class="toolItem" @click="exportMarkdown">导出 Markdown</li>
         <li class="toolItem" @click="copyMarkdown">复制 Markdown</li>
+        <li class="toolItem" @click="copyPreviewHtml">复制预览HTML</li>
         
         <li class="divider" v-if="isAvailableUrl"></li>
         <li class="toolItem" @click="createShareUrl" v-if="isAvailableUrl">
@@ -526,6 +527,34 @@ const getSaveToGistText = computed(() => {
   }
   return '保存到Gist'
 })
+
+const copyPreviewHtml = async () => {
+  try {
+    // 先执行预览
+    proxy.$eventEmitter.emit('run')
+    
+    // 等待100ms确保预览内容已生成
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    const previewDoc = store.state.previewDoc
+    
+    if (!previewDoc) {
+      ElMessage.error('没有可复制的预览内容')
+      return
+    }
+
+    const success = await writeToClipboard(previewDoc)
+    if (success) {
+      toggleToolsList(false)
+      ElMessage.success('预览HTML已复制到剪贴板')
+    } else {
+      throw new Error('复制失败')
+    }
+  } catch (err) {
+    console.error('复制失败:', err)
+    ElMessage.error('复制失败')
+  }
+}
 </script>
 
 <style scoped lang="less">
