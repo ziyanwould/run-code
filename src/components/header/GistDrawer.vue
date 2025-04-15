@@ -1,9 +1,9 @@
 <template>
   <el-drawer
     v-model="visible"
-    title="我的gists"
+    title="我的Gists"
     direction="rtl"
-    :size="isMobile ? '90%' : '30%'"
+    :size="isMobile ? '90%' : '900px'"
     @open="onDrawerOpen"
     @closed="onDrawerClosed"
   >
@@ -45,7 +45,7 @@
               :icon="Delete"
               circle
               size="small"
-              @click="deleteGist(scope.row.id)"
+              @click="deleteGist(scope.row.id, scope.$index)"
             ></el-button>
           </template>
         </el-table-column>
@@ -124,15 +124,18 @@ const onDrawerClosed = () => {
   gistPageNo.value = 1
 }
 
-const deleteGist = async id => {
+const deleteGist = async (id, index) => {
   try {
     gistloading.value = true
     await request(`DELETE /gists/${id}`, {
       gist_id: id
     })
     gistloading.value = false
+    // 从列表中移除该条数据
+    gistList.value.splice(index, 1)
+
     ElMessage.success(
-      '删除成功，请注意：删除不是一个同步的过程，五分钟内请不要重复删除！'
+      '删除成功，注意：删除不是一个同步的过程，建议一分钟内不要重复删除！'
     )
     if (id === route.params.id) {
       router.replace({

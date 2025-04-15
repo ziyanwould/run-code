@@ -74,6 +74,7 @@
 
 - [CodeFlux介绍页](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6)
 - [非凡人生简历生成器](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5)
+- [奇幻贪吃蛇](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)
 
 # 运行/预览AI生成的前端代码
 

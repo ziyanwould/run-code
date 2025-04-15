@@ -36,9 +36,10 @@ const useShare = () => {
   const shareDialogVisible = ref(false)
   const shareUrl = ref('')
   const showUrl = url => {
-    if (!props.isEdit) {
+    if (!url) {
       return
     }
+
     shareUrl.value = url
     shareDialogVisible.value = true
     nextTick(() => {

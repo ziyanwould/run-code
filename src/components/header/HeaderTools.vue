@@ -16,14 +16,14 @@
         <li class="toolItem" @click="exportMarkdown">导出 Markdown</li>
         <li class="toolItem" @click="copyMarkdown">复制 Markdown</li>
         
-        <li class="divider" v-if="isEdit"></li>
-        <li class="toolItem" @click="createShareUrl" v-if="isEdit">
+        <li class="divider" v-if="isAvailableUrl"></li>
+        <li class="toolItem" @click="createShareUrl" v-if="isAvailableUrl">
           生成分享链接
         </li>
-        <li class="toolItem" @click="createEmbedUrl" v-if="isEdit">
+        <li class="toolItem" @click="createEmbedUrl" v-if="isAvailableUrl">
           生成嵌入链接
         </li>
-        <li class="toolItem" @click="createEmbedCode" v-if="isEdit">
+        <li class="toolItem" @click="createEmbedCode" v-if="isAvailableUrl">
           生成嵌入代码
         </li>
         
@@ -34,7 +34,20 @@
     <div class="btn" @click="run">
       <span class="icon iconfont icon-shuaxin"></span> 运行
     </div>
-    <div class="btn" @click="save" v-loading="loading">
+    <div class="dropdownBtn" @click.stop v-if="githubToken">
+      <div class="btn" @click="toggleSaveList()" v-loading="loading">
+        <span class="icon iconfont icon-w_yunduan"></span> 保存
+      </div>
+      <ul class="toolList" :class="{ show: showSaveList }">
+        <li class="toolItem" @click="saveToLocal">
+          {{ getSaveToLocalText }}
+        </li>
+        <li class="toolItem" @click="saveToGist">
+          {{ getSaveToGistText }}
+        </li>
+      </ul>
+    </div>
+    <div class="btn" @click="saveToLocal" v-loading="loading" v-else>
       <span class="icon iconfont icon-w_yunduan"></span> 保存
     </div>
     <div class="dropdownBtn" @click.stop>
@@ -67,7 +80,6 @@ import {
   getCurrentInstance,
   defineProps,
   defineEmits,
-  nextTick,
   onMounted,
   onUnmounted
 } from 'vue'
@@ -121,6 +133,11 @@ const handleKeyDown = (e) => {
   }
 }
 
+// 是否存在可用的url
+const isAvailableUrl = computed(() => {
+  return props.isEdit || !!route.query.data
+})
+
 // 添加和移除事件监听
 onMounted(() => {
   document.addEventListener('keydown', handleKeyDown)
@@ -133,6 +150,7 @@ onUnmounted(() => {
 // 下拉菜单
 const showToolsList = ref(false)
 const showMoreList = ref(false)
+const showSaveList = ref(false)
 
 const toggleToolsList = value => {
   showToolsList.value = value !== undefined ? value : !showToolsList.value
@@ -144,8 +162,13 @@ const toggleMoreList = value => {
   hideAllList(showMoreList)
 }
 
+const toggleSaveList = value => {
+  showSaveList.value = value !== undefined ? value : !showSaveList.value
+  hideAllList(showSaveList)
+}
+
 const hideAllList = extra => {
-  ;[showToolsList, showMoreList]
+  ;[showToolsList, showMoreList, showSaveList]
     .filter(item => item !== extra)
     .forEach(item => {
       item.value = false
@@ -175,7 +198,16 @@ const lastSaveTime = ref(0)
 const SAVE_COOLDOWN = 2000
 
 // 保存
-const save = async () => {
+const save = () => {
+  if (!githubToken.value) {
+    saveToLocal()
+  } else {
+    toggleSaveList()
+  }
+}
+
+// 保存到本地的函数
+const saveToLocal = async () => {
   // 检查是否在冷却时间内
   const now = Date.now()
   if (now - lastSaveTime.value < SAVE_COOLDOWN) {
@@ -204,43 +236,55 @@ const save = async () => {
     }
   }
 
-  if (!githubToken.value || route.name === 'LocalEdit') {
-    // 未登录时保存到本地
-    try {
-      store.commit('setLoading', true)
-      let fileData = createData()
-      if (route.name === 'LocalEdit' && route.params.id) {
-        await localDb.updateGist(Number(route.params.id), fileData)
-      } else {
-        const id = await localDb.saveGist(fileData)
-        router.replace({
-          name: 'LocalEdit',
-          params: { id }
-        })
-      }
-      store.commit('setLoading', false)
-      ElMessage.success('保存成功')
-    } catch (error) {
-      if (error === 'cancel') return // 用户取消操作
-      console.log(error)
-      store.commit('setLoading', false)
-      ElMessage.error('保存失败')
-    }
-    return
-  }
-
-  // 已登录时保存到 Gist
   try {
     store.commit('setLoading', true)
     let fileData = createData()
-    let id = route.params.id
+    if (route.name === 'LocalEdit' && route.params.id) {
+      await localDb.updateGist(Number(route.params.id), fileData)
+    } else {
+      const id = await localDb.saveGist(fileData)
+      router.replace({
+        name: 'LocalEdit',
+        params: { id }
+      })
+    }
+    store.commit('setLoading', false)
+    ElMessage.success('保存成功')
+    toggleSaveList(false)
+  } catch (error) {
+    if (error === 'cancel') return
+    console.log(error)
+    store.commit('setLoading', false)
+    ElMessage.error('保存失败')
+  }
+}
+
+// 保存到Gist的函数
+const saveToGist = async () => {
+  // 检查是否在冷却时间内
+  const now = Date.now()
+  if (now - lastSaveTime.value < SAVE_COOLDOWN) {
+    ElMessage.warning('保存太频繁，请稍后再试')
+    return
+  }
+  
+  // 更新最后保存时间
+  lastSaveTime.value = now
+
+  try {
+    store.commit('setLoading', true)
+    let fileData = createData()
     let method = 'POST'
     let path = ''
-    if (props.isEdit) {
+    
+    // 只有在Edit路由（非LocalEdit）且有id时才进行更新操作
+    if (props.isEdit && route.name === 'Edit' && route.params.id) {
       method = 'PATCH'
-      path = '/' + id
-      fileData.gist_id = id
+      path = '/' + route.params.id
+      fileData.gist_id = route.params.id
     }
+    // 其他情况（包括LocalEdit）都创建新的Gist
+    
     let { data } = await request(`${method} /gists${path}`, fileData)
     store.commit('setLoading', false)
     ElMessage.success('保存成功，请注意：保存不是一个同步的过程！')
@@ -250,8 +294,9 @@ const save = async () => {
         id: data.id
       }
     })
+    toggleSaveList(false)
   } catch (error) {
-    if (error === 'cancel') return // 用户取消操作
+    if (error === 'cancel') return
     console.log(error)
     store.commit('setLoading', false)
     ElMessage.error('保存失败，请检查此token的权限是否包含创建gist')
@@ -467,6 +512,20 @@ const openPreviewInNewWindow = () => {
     ElMessage.error('打开预览失败')
   }
 }
+
+const getSaveToLocalText = computed(() => {
+  if (route.name === 'Edit' && route.params.id) {
+    return '转存到本地'
+  }
+  return '保存到本地'
+})
+
+const getSaveToGistText = computed(() => {
+  if (route.name === 'LocalEdit' && route.params.id) {
+    return '转存到Gist'
+  }
+  return '保存到Gist'
+})
 </script>
 
 <style scoped lang="less">

@@ -86,11 +86,12 @@ const exportDialog = ref(null)
 
 // 计算属性
 const hasQueryData = computed(() => {
-  return route.name === 'Editor' && !!route.query.data
+  // return route.name === 'Editor' && !!route.query.data
+  return !!route.query.data
 })
 
 const isEdit = computed(() => {
-  return ((route.name === 'Edit' || route.name === 'LocalEdit') && !!route.params.id) || hasQueryData.value
+  return (route.name === 'Edit' || route.name === 'LocalEdit') && !!route.params.id
 })
 
 // 方法
@@ -111,6 +112,8 @@ const createShareUrl = () => {
     const data = utoa(JSON.stringify(store.state.editData))
     ShareComp.value.createShareUrl(encodeURIComponent(data))
   } else {
+
+    // console.log(route.query.data, hasQueryData.value)
     ShareComp.value.createShareUrl(hasQueryData.value ? encodeURIComponent(route.query.data) : null)
   }
 }
