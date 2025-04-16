@@ -11,6 +11,27 @@ const defaltCode = {
 <title>CodeFlux</title>
 </head>
 <body>
+<!-- 渐变背景容器 -->
+<div class="gradient-bg">
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+        <feBlend in="SourceGraphic" in2="goo" />
+      </filter>
+    </defs>
+  </svg>
+  <div class="gradients-container">
+    <div class="g1"></div>
+    <div class="g2"></div>
+    <div class="g3"></div>
+    <div class="g4"></div>
+    <div class="g5"></div>
+    <div class="interactive"></div>
+  </div>
+</div>
+
 <main>
   <section>
     <div class="about-container">
@@ -42,84 +63,220 @@ const defaltCode = {
   },
   CSS: {
     language: 'css',
-    content: `* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
+    content: `:root {
+  --color-bg1: rgb(108, 0, 162);
+  --color-bg2: rgb(0, 17, 82);
+  --color1: 18, 113, 255;
+  --color2: 221, 74, 255;
+  --color3: 100, 220, 255;
+  --color4: 200, 50, 50;
+  --color5: 180, 180, 50;
+  --color-interactive: 140, 100, 255;
+  --circle-size: 80%;
+  --blending: hard-light;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 *::before,
 *::after {
-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
-overscroll-behavior-x: none;
-overscroll-behavior-y: none;
-scroll-behavior: smooth;
--webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: none;
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  margin: 0;
+  padding: 0;
 }
 
 body {
-font-family: "Geist", sans-serif;
-position: relative;
-width: 100%;
-max-width: 100vw;
-min-height: 100vh;
-overflow-x: hidden;
-background: #0f0c29;
-background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29);
-background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
-color: #e0e0e0;
-position: relative;
+  font-family: "Geist", sans-serif;
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: #e0e0e0;
 }
 
-body::before {
-content: '';
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: radial-gradient(circle at 50% 50%, rgba(76, 0, 255, 0.1) 0%, transparent 50%);
-pointer-events: none;
-z-index: 1;
+@keyframes moveInCircle {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes moveVertical {
+  0% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+  50% {
+    transform: translateX(50%) translateY(10%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+}
+
+.gradient-bg {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  overflow: hidden;
+  background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.gradient-bg svg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.gradient-bg .gradients-container {
+  filter: url(#goo) blur(40px);
+  width: 100%;
+  height: 100%;
+}
+
+.gradient-bg .g1 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color1), 0.8) 0, rgba(var(--color1), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: center center;
+  animation: moveVertical 30s ease infinite;
+  opacity: 1;
+}
+
+.gradient-bg .g2 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color2), 0.8) 0, rgba(var(--color2), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% - 400px);
+  animation: moveInCircle 20s reverse infinite;
+  opacity: 1;
+}
+
+.gradient-bg .g3 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color3), 0.8) 0, rgba(var(--color3), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2 + 200px);
+  left: calc(50% - var(--circle-size) / 2 - 500px);
+  transform-origin: calc(50% + 400px);
+  animation: moveInCircle 40s linear infinite;
+  opacity: 1;
+}
+
+.gradient-bg .g4 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color4), 0.8) 0, rgba(var(--color4), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% - 200px);
+  animation: moveHorizontal 40s ease infinite;
+  opacity: 0.7;
+}
+
+.gradient-bg .g5 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color5), 0.8) 0, rgba(var(--color5), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: calc(var(--circle-size) * 2);
+  height: calc(var(--circle-size) * 2);
+  top: calc(50% - var(--circle-size));
+  left: calc(50% - var(--circle-size));
+  transform-origin: calc(50% - 800px) calc(50% + 200px);
+  animation: moveInCircle 20s ease infinite;
+  opacity: 1;
+}
+
+.gradient-bg .interactive {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color-interactive), 0.8) 0, rgba(var(--color-interactive), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: 100%;
+  height: 100%;
+  top: -50%;
+  left: -50%;
+  opacity: 0.7;
 }
 
 main {
-position: relative;
-z-index: 2;
+  position: relative;
+  z-index: 2;
 }
 
 section {
-position: relative;
-width: 100%;
-height: auto;
-min-height: 100vh;
-display: grid;
-place-items: center;
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
 }
 
 h1, h2 {
-text-transform: uppercase;
-margin-bottom: 20px;
-color: #fff;
-text-shadow: 0 0 10px rgba(120, 0, 255, 0.5);
-animation: glow 3s ease-in-out infinite alternate;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(120, 0, 255, 0.5);
+  animation: glow 3s ease-in-out infinite alternate;
 }
 
 @keyframes glow {
-from {
-  text-shadow: 0 0 5px rgba(120, 0, 255, 0.5);
-}
-to {
-  text-shadow: 0 0 20px rgba(120, 0, 255, 0.8), 0 0 30px rgba(120, 0, 255, 0.6);
-}
+  from {
+    text-shadow: 0 0 5px rgba(120, 0, 255, 0.5);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(120, 0, 255, 0.8), 0 0 30px rgba(120, 0, 255, 0.6);
+  }
 }
 
 .about-container {
-  background-color: rgba(20, 20, 40, 0.2);
+  background-color: rgba(20, 20, 40, 0.5);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 20px;
@@ -129,7 +286,7 @@ to {
     0 8px 32px rgba(0, 0, 0, 0.3),
     0 0 15px rgba(120, 0, 255, 0.2),
     inset 0 0 1px rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 0px solid rgba(255, 255, 255, 0.1);
   transform: translateY(30px) perspective(1000px);
   opacity: 0;
   animation: fadeIn 1s ease-out forwards 0.3s;
@@ -169,7 +326,6 @@ to {
   opacity: 0.2;
 }
 
-/* 添加光效移动动画 */
 .about-container::after {
   content: '';
   position: absolute;
@@ -208,7 +364,6 @@ to {
   }
 }
 
-/* 优化内部文字动效 */
 .about-container h2,
 .about-container p,
 .about-container .links,
@@ -221,157 +376,65 @@ to {
   text-shadow: 0 0 15px rgba(120, 0, 255, 0.8);
 }
 
-.about-container:hover p,
-.about-container:hover .links,
-.about-container:hover .version-info {
-  transform: translateY(2px);
-}
-
-.about-container p {
-color: #d0d0d0;
-line-height: 1.6;
-margin-bottom: 15px;
-animation: fadeInText 1s ease-out forwards 0.6s;
-opacity: 0;
-}
-
-@keyframes fadeInText {
-to {
-  opacity: 1;
-}
-}
-
 .links {
-margin: 30px 0;
-opacity: 0;
-animation: fadeInText 1s ease-out forwards 0.9s;
+  margin: 20px 0;
 }
 
 .link-item {
-margin-bottom: 15px;
-display: flex;
-align-items: center;
-justify-content: flex-start;
-transition: transform 0.3s ease;
-}
-
-.link-item:hover {
-transform: translateY(-3px);
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
 }
 
 .link-label {
-font-weight: bold;
-margin-right: 10px;
-color: #a0a0ff;
+  color: #a0a0a0;
+  margin-right: 10px;
 }
 
 a {
-color: #a0a0ff;
-text-decoration: none;
-transition: all 0.3s ease;
-position: relative;
+  color: #fff;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
 }
 
 a:hover {
-text-decoration: none;
-color: #c0c0ff;
+  text-decoration: none;
+  color: #c0c0ff;
 }
 
 a::after {
-content: '';
-position: absolute;
-width: 100%;
-height: 1px;
-bottom: -2px;
-left: 0;
-background-color: #c0c0ff;
-transform: scaleX(0);
-transform-origin: bottom right;
-transition: transform 0.3s ease;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #c0c0ff;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
 }
 
 a:hover::after {
-transform: scaleX(1);
-transform-origin: bottom left;
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .version-info {
-margin-top: 40px;
-font-size: 14px;
-color: rgba(200, 200, 255, 0.7);
-opacity: 0;
-animation: fadeInText 1s ease-out forwards 1.2s;
-}
-
-/* 背景粒子效果 */
-.particle {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: -1;
+  margin-top: 40px;
+  font-size: 14px;
+  color: rgba(200, 200, 255, 0.7);
+  opacity: 1;
+  animation: fadeInText 1s ease-out forwards 1.2s;
 }`,
     resources: []
   },
   JS: {
     language: 'javascript',
-    content: `console.log('Hello, CodeFlux!');
-
-// 粒子效果函数
-function createParticles() {
-    const particleCount = 30;
-    
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        
-        // 随机大小
-        const size = Math.random() * 3 + 1;
-        particle.style.width = \`\${size}px\`;
-        particle.style.height = \`\${size}px\`;
-        
-        // 随机位置
-        particle.style.left = \`\${Math.random() * 100}vw\`;
-        particle.style.top = \`\${Math.random() * 100}vh\`;
-        
-        // 随机透明度
-        particle.style.opacity = Math.random() * 0.5 + 0.1;
-        
-        document.body.appendChild(particle);
-        
-        // 动画
-        animateParticle(particle);
-    }
-}
-
-function animateParticle(particle) {
-    let posX = parseFloat(particle.style.left);
-    let posY = parseFloat(particle.style.top);
-    const speedX = (Math.random() - 0.5) * 0.2;
-    const speedY = (Math.random() - 0.5) * 0.2;
-    
-    function move() {
-        posX += speedX;
-        posY += speedY;
-        
-        // 边界检查
-        if (posX < 0 || posX > 100 || posY < 0 || posY > 100) {
-            posX = Math.random() * 100;
-            posY = Math.random() * 100;
-        }
-        
-        particle.style.left = \`\${posX}vw\`;
-        particle.style.top = \`\${posY}vh\`;
-        
-        requestAnimationFrame(move);
-    }
-    
-    move();
-}
-
-createParticles();`,
+    content: `console.log('Hello, CodeFlux!');`,
     resources: []
   }
 }
 
-export default  defaltCode
+export default defaltCode
