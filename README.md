@@ -2,7 +2,8 @@
 
 > AI生成式前端代码预览/微调辅助工具，前端代码在线运行平台，codepen、jsbin、jsfiddle等的开源替代方案  
 
-在线体验：[https://code-flux.anzz.top](https://code-flux.anzz.top)
+在线体验：[code-flux.anzz.top](https://code-flux.anzz.top)  
+GitHub：[github.com/xxxily/code-flux](https://github.com/xxxily/code-flux)  
 
 # 应用场景
 
