@@ -72,9 +72,26 @@
 
 # 在线案例
 
-- [CodeFlux介绍页](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6)
-- [非凡人生简历生成器](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5)
-- [奇幻贪吃蛇](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)
+#### 利用AI生成产品首页
+
+| Name        | Prompt | Model | Link                                  | Completeness | Notes |
+|-------------|--------|-------|---------------------------------------|-------|------|
+| [CodeFlux介绍页](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6)  | - | DeepSeek-V3-0324 | [链接](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/index.html) | ★★★★☆ | - |
+
+#### 利用AI生成简单小应用
+
+| Name        | Prompt | Model | Link                                  | Completeness | Notes |
+|-------------|--------|-------|---------------------------------------|-------|------|
+| [牛B人生简历生成器](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5)  | - | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5) | ★★★★★ | - |
+| [高尔顿板模拟器](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469)  | [content](https://awesome-ai-hub.anzz.top/web/game/3DGaltonBoardSimulator/gemini_pro_2.5/README.md) | gemini-2.5-pro-exp-03-25 | [链接](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469) | ★★★★☆ | - |
+
+
+#### 利用AI创建小游戏
+
+| Name        | Prompt | Model | Link                                  | Completeness | Notes |
+|-------------|--------|-------|---------------------------------------|-------|------|
+| [奇幻贪吃蛇](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)  | [content](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/README.md) | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★★★★ | - |
+| [重力翻转跑酷](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)  | [content](https://awesome-ai-hub.anzz.top/web/game/GravityFlipParkour_2025.03.28/README.md) | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★☆☆☆ | - |
 
 # 运行/预览AI生成的前端代码
 
