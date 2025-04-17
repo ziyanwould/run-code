@@ -268,7 +268,7 @@ const useRunStatus = ({ proxy }) => {
   }
 
   const onSuccessRun = duration => {
-    showRunTip(`运行成功，耗时：${(duration / 1000).toFixed(2)}秒`)
+    showRunTip(`执行完毕，耗时：${(duration / 1000).toFixed(2)}秒`)
   }
 
   const onErrorRun = () => {

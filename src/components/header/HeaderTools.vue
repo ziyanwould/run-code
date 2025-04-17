@@ -15,7 +15,7 @@
         <li class="toolItem" @click="exportZipFile">导出zip</li>
         <li class="toolItem" @click="exportMarkdown">导出 Markdown</li>
         <li class="toolItem" @click="copyMarkdown">复制 Markdown</li>
-        <li class="toolItem" @click="copyPreviewHtml">复制预览HTML</li>
+        <li class="toolItem" @click="copyPreviewHtml">复制 预览HTML</li>
         
         <li class="divider" v-if="isAvailableUrl"></li>
         <li class="toolItem" @click="createShareUrl" v-if="isAvailableUrl">
@@ -543,12 +543,21 @@ const copyPreviewHtml = async () => {
     // 等待100ms确保预览内容已生成
     await new Promise(resolve => setTimeout(resolve, 100))
     
-    const previewDoc = store.state.previewDoc
+    let previewDoc = store.state.previewDoc
     
     if (!previewDoc) {
       ElMessage.error('没有可复制的预览内容')
       return
     }
+
+    // 移除所有包含 data-assist-code 的脚本标签
+    previewDoc = previewDoc.replace(/<script[^>]*data-assist-code="true"[^>]*>[\s\S]*?<\/script>/g, '')
+    
+    // 移除内容为空的 style 标签
+    previewDoc = previewDoc.replace(/<style[^>]*>\s*<\/style>/g, '')
+    
+    // 移除内容为空的 script 标签
+    previewDoc = previewDoc.replace(/<script[^>]*>\s*<\/script>/g, '')
 
     const success = await writeToClipboard(previewDoc)
     if (success) {

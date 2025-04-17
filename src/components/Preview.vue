@@ -177,27 +177,31 @@ const useCreateHtml = () => {
       })
       .join('\n')
 
+    const erudaCode = `
+      <script data-assist-code="true" src="${base}eruda/eruda.js"><\/script>
+      <script data-assist-code="true">window.eruda && eruda.init();<\/script>
+    `
+
     let head = `
       <title>预览<\/title>
+      ${_cssResources}
       <style type="text/css">
           ${cssStr}
       <\/style>
-      ${_cssResources}
-      <script src="${base}base/index.js"><\/script>
-      <script src="${base}console/${dev ? 'index.js' : 'compile.js'}"><\/script>
+      ${openAlmightyConsole? erudaCode : ''}
+      <script data-assist-code="true" src="${base}base/index.js"><\/script>
+      <script data-assist-code="true" src="${base}console/${dev ? 'index.js' : 'compile.js'}"><\/script>
     `
 
     let jsContent = ''
-    let successRunNotify = `
-      window.parent.postMessage({
-        type: 'successRun'
-      })
-    `
-    let errorRunNotify = `
-      window.parent.postMessage({
-        type: 'errorRun'
-      })
-    `
+    let successRunNotify = `<script data-assist-code="true">window.parent.postMessage({type: 'successRun'})<\/script>`
+
+    // 出错运行通知已经在console/index.js中处理过了，这里不再处理
+    // let errorRunNotify = `window.parent.postMessage({type: 'errorRun'})`
+    
+    // 是否开启eruda
+    // jsContent += openAlmightyConsole ? erudaCode : ''
+
     // 使用ESM
     if (useImport) {
       // 使用了importmap
@@ -209,32 +213,20 @@ const useCreateHtml = () => {
 
       jsContent += `
       <script type="module">
-        ${openAlmightyConsole ? 'window.eruda && eruda.init();' : ''}
         ${jsStr}
-        ${successRunNotify}
       <\/script>`
     } else {
-      jsContent = `<script>
-        try {
-          ${openAlmightyConsole ? 'window.eruda && eruda.init();' : ''}
-          ${jsStr}
-          ${successRunNotify}
-        } catch (err) {
-          console.error('js代码运行出错')
-          console.error(err)
-          ${errorRunNotify}
-        }
+      jsContent += `<script>
+        ${jsStr}
       <\/script>`
     }
+
+    // 运行成功通知
+    jsContent += successRunNotify
 
     let body = `
       ${htmlStr}
       ${_jsResources}
-      ${
-        openAlmightyConsole
-          ? `<script src="${base}eruda/eruda.js"><\/script>`
-          : ''
-      }
       ${jsContent}
     `
     return assembleHtml(head, body)

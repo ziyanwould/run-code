@@ -21,13 +21,12 @@ const suffixMap = {
 
 const handlePreviewDoc = doc => {
   return doc
-    .replace('<script src="/code-run-online/base/index.js"></script>', '')
-    .replace('<script src="/code-run-online/console/index.js"></script>', '')
-    .replace(/".\/lib/gim, '"https://wanglin2.github.io/code-run-online/lib')
-    .replace(
-      /"\/code-run-online\/lib/gim,
-      '"https://wanglin2.github.io/code-run-online/lib'
-    )
+    // 移除所有包含 data-assist-code 的脚本标签
+    .replace(/<script[^>]*data-assist-code="true"[^>]*>[\s\S]*?<\/script>/g, '')
+    // 移除内容为空的 style 标签
+    .replace(/<style[^>]*>\s*<\/style>/g, '')
+    // 移除内容为空的 script 标签
+    .replace(/<script[^>]*>\s*<\/script>/g, '')
 }
 
 const handleNormal = async data => {
