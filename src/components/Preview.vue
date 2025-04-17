@@ -206,16 +206,12 @@ const useCreateHtml = () => {
           ${JSON.stringify(importMap)}
         <\/script>`
       }
+
       jsContent += `
       <script type="module">
-        try {
-          ${openAlmightyConsole ? 'window.eruda && eruda.init();' : ''}
-          ${jsStr}
-          ${successRunNotify}
-        } catch(err) {
-          console.error(err);
-          ${errorRunNotify}
-        }
+        ${openAlmightyConsole ? 'window.eruda && eruda.init();' : ''}
+        ${jsStr}
+        ${successRunNotify}
       <\/script>`
     } else {
       jsContent = `<script>
