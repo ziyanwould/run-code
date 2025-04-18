@@ -1,175 +1,174 @@
+> English  |  **[中文文档](./README-zh.md)**
+
 # CodeFlux
 
-> AI生成式前端代码预览/微调辅助工具，前端代码在线运行/发布平台，codepen、jsbin、jsfiddle等的开源替代方案  
+> A versatile tool for previewing and fine-tuning AI-generated frontend code, an online platform for running and publishing frontend code, and an open-source alternative to codepen, jsbin, jsfiddle, etc.
 
-在线体验：[code-flux.anzz.top](https://code-flux.anzz.top)  
-GitHub：[github.com/xxxily/code-flux](https://github.com/xxxily/code-flux)  
+Live demo: [code-flux.anzz.top](https://code-flux.anzz.top)  
+GitHub: [github.com/xxxily/code-flux](https://github.com/xxxily/code-flux)  
 
-# 应用场景
+# Use Cases
 
-> 项目的主要目标是：结合AI生成前端代码的能力，以实现便捷地预览或微调AI生成的前端页面代码，快速发布能适应多场景的、高质量的、交互动效丰富的网页作品。  
+> The main goal of this project is to leverage AI-generated frontend code capabilities to easily preview or fine-tune AI-generated frontend pages, and quickly publish high-quality, interactive web creations adaptable to multiple scenarios.
 
-#### 1️⃣ AI生成的网页内容即时可视化  
+#### 1️⃣ Instant Visualization of AI-Generated Web Content
 
-- 快速渲染AI生成的信息卡片、数据看板等可视化组件/页面
-- 实时预览个人主页、风格化简历等网页级作品
-- 动态调试SVG矢量图形与Canvas动画参数
+- Quickly render AI-generated info cards, data dashboards, and other visual components/pages
+- Real-time preview of personal homepages, stylized resumes, and other web creations
+- Dynamically debug SVG vector graphics and Canvas animation parameters
 
-#### 2️⃣ 实现交互元素的敏捷开发  
+#### 2️⃣ Agile Development of Interactive Elements
 
-- 所见即所得编辑AI生成的表单组件
-- 即时验证AI生成的网页小游戏的交互逻辑
-- 可视化调整CSS动画关键帧与过渡效果
+- WYSIWYG editing of AI-generated form components
+- Instant validation of interaction logic in AI-generated web mini-games
+- Visual adjustment of CSS animation keyframes and transition effects
 
-#### 3️⃣ 产品原型的快速验证
+#### 3️⃣ Rapid Validation of Product Prototypes
 
-- 基于AI代码生成快速搭建原型页面
-- 快速体验产品设计期望的交互效果
-- 跨设备响应式布局实时调试
+- Quickly build prototype pages based on AI-generated code
+- Instantly experience desired product interaction effects
+- Real-time debugging of cross-device responsive layouts
 
-更多实用场景，静待您的发掘～ 
+Discover more practical applications as you explore!
 
-# 界面截图
+# Interface Screenshots
 
-![界面截图1](./assets/view1.jpg)
+![Interface Screenshot 1](./assets/view1.jpg)
 
-![界面截图2](./assets/view2.jpg)
+![Interface Screenshot 2](./assets/view2.jpg)
 
-![界面截图3](./assets/view3.jpg)
+![Interface Screenshot 3](./assets/view3.jpg)
 
-# 特性
+# Features
 
-- [x] 支持一键运行AI生成的前端代码
+- [x] One-click execution of AI-generated frontend code
 
-- [x] 支持适配移动端
+- [x] Mobile device compatibility
 
-- [x] 支持多种预处理语言
+- [x] Support for various preprocessor languages
 
-- [x] 支持多种布局随意切换
+- [x] Flexible layout switching options
 
-- [x] 支持添加额外的`css`、`js`资源
+- [x] Support for adding external CSS and JS resources
 
-- [x] 内置多种常用模板
+- [x] Built-in collection of common templates
 
-- [x] 支持导出`zip`
+- [x] ZIP export functionality
 
-- [x] 支持代码格式化
+- [x] Code formatting support
 
-- [x] 美观强大的控制台
+- [x] Elegant and powerful console
 
-- [x] 支持`vue`单文件（2.x、3.x）
+- [x] Support for Vue single-file components (2.x, 3.x)
 
-- [x] 支持直接移植`VSCode`主题，并且已经内置了大量优质主题
+- [x] Direct compatibility with VSCode themes, with numerous high-quality themes pre-installed
 
-- [x] 内置支持保存到github gist【[gist API](https://docs.github.com/cn/rest/reference/gists)】，想要保存到自己的存储体系修改也十分简单
+- [x] Built-in support for saving to GitHub Gist ([gist API](https://docs.github.com/en/rest/reference/gists)), with easy customization for your own storage system
 
-- [x] 内置支持在未配置github gist的情况下将变动保存到url中，可方便的将url分享给他人查看
+- [x] Built-in support for saving changes to URL when GitHub Gist is not configured, making it easy to share with others
 
-- [x] 内置支持生成和[carbon](https://carbon.now.sh/)一样漂亮美观的代码图片
+- [x] Built-in support for generating beautiful code images similar to [carbon](https://carbon.now.sh/)
 
-- [x] 内置使用[unpkg](https://unpkg.com/)及[importmap](https://github.com/WICG/import-maps)支持在浏览器上使用ES模块语法
+- [x] Built-in support for using ES modules in the browser via [unpkg](https://unpkg.com/) and [importmap](https://github.com/WICG/import-maps)
 
-- [x] 支持嵌入模式，方便在文档网站中使用，让文档示例更轻松
+- [x] Embed mode support for easy integration with documentation sites, making document examples more accessible
 
-# 在线案例
+# Live Examples
 
-#### 利用AI生成产品首页
+#### AI-Generated Product Landing Pages
 
-| Name        | Prompt | Model | Link                                  | Completeness | Notes |
-|-------------|--------|-------|---------------------------------------|-------|------|
-| [CodeFlux介绍页](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6)  | - | DeepSeek-V3-0324 | [链接](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/index.html) | ★★★★☆ | - |
+| Name | Prompt | Model | Link | Completeness | Notes |
+|------|--------|-------|------|--------------|-------|
+| [CodeFlux Introduction Page](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6) | - | DeepSeek-V3-0324 | [Link](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6) | ★★★★☆ | - |
 
-#### 利用AI生成简单小应用
+#### AI-Generated Simple Applications
 
-| Name        | Prompt | Model | Link                                  | Completeness | Notes |
-|-------------|--------|-------|---------------------------------------|-------|------|
-| [牛B人生简历生成器](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5)  | - | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5) | ★★★★★ | - |
-| [高尔顿板模拟器](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469)  | [content](https://awesome-ai-hub.anzz.top/web/game/3DGaltonBoardSimulator/gemini_pro_2.5/README.md) | gemini-2.5-pro-exp-03-25 | [链接](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469) | ★★★★☆ | - |
+| Name | Prompt | Model | Link | Completeness | Notes |
+|------|--------|-------|------|--------------|-------|
+| [Epic Resume Generator](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5) | - | DeepSeek-V3-0324 | [Link](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5) | ★★★★★ | - |
+| [Galton Board Simulator](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469) | [content](https://awesome-ai-hub.anzz.top/web/game/3DGaltonBoardSimulator/gemini_pro_2.5/README.md) | gemini-2.5-pro-exp-03-25 | [Link](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469) | ★★★★☆ | - |
 
+#### AI-Created Mini Games
 
-#### 利用AI创建小游戏
+| Name | Prompt | Model | Link | Completeness | Notes |
+|------|--------|-------|------|--------------|-------|
+| [Fantasy Snake Game](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | [content](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/README.md) | DeepSeek-V3-0324 | [Link](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★★★★ | - |
+| [Gravity Flip Parkour](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | [content](https://awesome-ai-hub.anzz.top/web/game/GravityFlipParkour_2025.03.28/README.md) | DeepSeek-V3-0324 | [Link](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★☆☆☆ | - |
 
-| Name        | Prompt | Model | Link                                  | Completeness | Notes |
-|-------------|--------|-------|---------------------------------------|-------|------|
-| [奇幻贪吃蛇](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)  | [content](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/README.md) | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★★★★ | - |
-| [重力翻转跑酷](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)  | [content](https://awesome-ai-hub.anzz.top/web/game/GravityFlipParkour_2025.03.28/README.md) | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★☆☆☆ | - |
+# Running/Previewing AI-Generated Frontend Code
 
-# 运行/预览AI生成的前端代码
+On any AI platform that supports frontend code generation, use prompts to have the AI create your desired web page, then copy the generated content with a single click to the [CodeFlux](https://code-flux.anzz.top) platform for execution/preview.
 
-在任意支持生成前端代码的AI平台上，使用提示词让AI生成你期望的前端网页，然后将生成的内容一键复制到 [CodeFlux](https://code-flux.anzz.top) 平台上，即可对其进行运行/预览。
+- Note: There's no need to separately copy HTML, CSS, or JS code. Simply copy the AI-generated content and paste it into the [CodeFlux](https://code-flux.anzz.top) platform. CodeFlux will automatically recognize and break it down into the corresponding frontend code components.
 
-- 注意：无需单独复制`html`、`css`、`js`等代码，直接复制AI生成的内容，然后粘贴到 [CodeFlux](https://code-flux.anzz.top) 平台上， [CodeFlux](https://code-flux.anzz.top) 平台会自动识别并分解成对应的前端代码。
+Using content generated on the DeepSeek website as an example:
 
-以在DeepSeek网站上生成的内容为例：  
+One-click copy:
+![](./assets/course01.jpg)
 
-一键复制： 
-![](./assets/course01.jpg)  
+Paste the copied content directly into the [CodeFlux](https://code-flux.anzz.top) platform:
+![](./assets/course02.jpg)
 
-将复制到的内容直接粘贴到 [CodeFlux](https://code-flux.anzz.top) 平台  
+Click OK to automatically parse the code and run/preview it:
+![](./assets/course03.jpg)
 
-![](./assets/course02.jpg)  
+Note: We're considering developing a browser extension to allow direct execution on AI platforms in the future.
 
-点击确定，即可自动分解代码并进行运行/预览
+# Docker Deployment
 
-![](./assets/course03.jpg)  
+This project provides Docker deployment support with two deployment methods:
 
-备注：后续考虑做成浏览器插件，直接在AI平台上点击运行
-
-# Docker 部署
-
-本项目提供了 Docker 部署支持,有以下两种部署方式:
-
-## 1. 使用 docker-compose (推荐)
+## 1. Using docker-compose (Recommended)
 
 ```bash
-# 克隆项目
+# Clone the project
 git clone https://github.com/xxxily/code-flux.git
 cd code-flux
 
-# 启动服务(后台运行)
+# Start the service (run in background)
 docker-compose up -d
 
-# 停止服务
+# Stop the service
 docker-compose down
 ```
 
-服务启动后可通过 `http://localhost:56780` 访问。
+After starting the service, you can access it at `http://localhost:56780`.
 
-## 2. 手动构建和运行
+## 2. Manual Build and Run
 
 ```bash
-# 克隆项目
+# Clone the project
 git clone https://github.com/xxxily/code-flux.git
 cd code-flux
 
-# 构建镜像
+# Build the image
 npm run docker:build
-# 或
+# Or
 docker build -t code-flux .
 
-# 运行容器
+# Run the container
 npm run docker:run
-# 或
+# Or
 docker run -p 8080:80 code-flux
 ```
 
-## 技术说明
+## Technical Details
 
-- 基础镜像: node:18-alpine (构建阶段), nginx:stable-alpine (生产环境)
-- 构建产物位于 `/usr/share/nginx/html` 目录
-- 容器内暴露 80 端口
-- 使用 nginx 作为静态资源服务器
+- Base images: node:18-alpine (build stage), nginx:stable-alpine (production environment)
+- Build artifacts located in the `/usr/share/nginx/html` directory
+- Container exposes port 80
+- Uses nginx as a static resource server
 
-## 相关命令
+## Related Commands
 
-项目提供了以下 Docker 相关的 npm 脚本:
+The project provides the following Docker-related npm scripts:
 
-- `npm run docker:build`: 构建 Docker 镜像
-- `npm run docker:run`: 运行 Docker 容器
-- `npm run docker:up`: 使用 docker-compose 启动服务
-- `npm run docker:down`: 使用 docker-compose 停止服务
+- `npm run docker:build`: Build Docker image
+- `npm run docker:run`: Run Docker container
+- `npm run docker:up`: Start service using docker-compose
+- `npm run docker:down`: Stop service using docker-compose
 
-# 本地构建
+# Local Build
 
 ```bash
 git clone https://github.com/xxxily/code-flux.git
@@ -181,127 +180,127 @@ npm i
 npm run serve
 ```
 
-# 打包
+# Building for Production
 
-## 修改应用基路径
+## Modifying the Application Base Path
 
-请先确认打包后应用的基路径，项目默认的基路径为`./`，如果你想换一个，可以按如下步骤修改：
+First, confirm the base path for your application after building. The project's default base path is `./`. If you want to change it, follow these steps:
 
-1.修改`vue.config.js`文件里的`publicPath`字段。
+1. Modify the `publicPath` field in the `vue.config.js` file.
 
-2.修改`src/config/index.js`文件的`base`字段。
+2. Modify the `base` field in the `src/config/index.js` file.
 
-## 修改路由模式
+## Changing the Router Mode
 
-默认的路由模式为`hash模式`，如果需要使用`history`模式请修改`src/config/index.js`文件的`routerMode`字段。
+The default router mode is `hash mode`. If you need to use `history` mode, modify the `routerMode` field in the `src/config/index.js` file.
 
-另外history模式下如果存在多级路径，可能需要修改以下文件：
+Additionally, in history mode with multi-level paths, you may need to modify the following file:
 
-1.修改`/public/index.html`文件的`prettier`相关`js`资源的路径；
+1. Update the paths of `prettier`-related `js` resources in the `/public/index.html` file.
 
-## 打包命令
+## Build Command
 
 ```bash
 npm run build
 ```
 
-# 项目主要技术
+# Project Technology Stack
 
-脚手架： `Vue CLI`
+Scaffolding: `Vue CLI`
 
-框架：`Vue 3.X`全家桶，通过`script setup`使用`组合式API`
+Framework: `Vue 3.X` ecosystem, using Composition API via `script setup`
 
-UI库：`element-plus`
+UI Library: `element-plus`
 
-代码编辑器：`Monaco Editor`
+Code Editor: `Monaco Editor`
 
-# 关于使用ESM
+# About Using ESM
 
-目前在`JavaScript`、`TypeScript`、`CoffeeScript`、`Vue3`、`Vue2`等模式下支持使用`ESM`，默认情况下，如果你直接按下列方式导入模块的话：
+Currently, ESM is supported in `JavaScript`, `TypeScript`, `CoffeeScript`, `Vue3`, `Vue2`, and other modes. By default, if you import a module like this:
 
 ```js
 import moment from 'moment'
 ```
 
-最后会转换成：
+It will be transformed to:
 
 ```js
 import moment from 'https://unpkg.com/moment?module'
 ```
 
-也就是使用[unpkg](https://unpkg.com/)，但是有些模块`unpkg`获取不到`ESM`版本，或者直接这样获取到的版本不是我们所期望的，比如导入`vue`时，我们需要的是`https://unpkg.com/vue@3.2.37/dist/vue.esm-browser.js`，但是`https://unpkg.com/vue?module`默认返回的是`https://unpkg.com/vue@3.2.37/dist/vue.runtime.esm-bundler.js?module`，这个版本无法运行在浏览器上，所以这时候就可以通过手动添加[importmap](https://github.com/WICG/import-maps)来设置导入模块的来源。
+This uses [unpkg](https://unpkg.com/), but some modules don't have ESM versions available on unpkg, or the version obtained this way isn't what we expect. For example, when importing `vue`, we need `https://unpkg.com/vue@3.2.37/dist/vue.esm-browser.js`, but `https://unpkg.com/vue?module` defaults to `https://unpkg.com/vue@3.2.37/dist/vue.runtime.esm-bundler.js?module`, which can't run in the browser. In such cases, you can manually add an [importmap](https://github.com/WICG/import-maps) to set the source for imported modules.
 
-# 主题新增教程
+# Adding New Themes
 
-本教程针对迁移`VSCode`主题。
+This tutorial is for migrating VSCode themes.
 
-1.确定要新增的主题，先在本地`VSCode`上安装并切换到该主题，然后按`F1`或`Command/Control + Shift + P`或鼠标右键点击`Command Palette/命令面板`，接着找到并点击`Developer:Generate Color Theme From Current Setting/开发人员:使用当前设置生成颜色主题`，然后`VSCode`就会生成一份`json`数据，保存到项目的`/scripts/vscodeThemes/`目录下。
+1. Determine the theme you want to add, install and switch to it in your local VSCode, then press `F1` or `Command/Control + Shift + P` or right-click to open the `Command Palette`. Find and click `Developer: Generate Color Theme From Current Setting`. VSCode will generate a JSON file, which you should save to the project's `/scripts/vscodeThemes/` directory.
 
-2.然后命令行执行命令`npm run convertTheme`，转换后的主题会被输出到项目的`/public/themes`目录下，接下来再执行命令`npm run createThemeList`即可生成主题配置，接下来即可在`设置->主题设置里看到所有主题，并可以切换使用`。
+2. Run the command `npm run convertTheme` in the terminal. The converted theme will be output to the project's `/public/themes` directory. Then run the command `npm run createThemeList` to generate the theme configuration. You can now see all themes in `Settings -> Theme Settings` and switch between them.
 
-# 相关命令介绍
+# Related Command Descriptions
 
-- `npm run buildConsole`：编译项目的`/public/console/index.js`文件为`ES5`语法，输出到同目录下的`compile.js`，该文件会在页面预览的`iframe`里进行加载，请勿直接修改`compile.js`文件。
+- `npm run buildConsole`: Compiles the project's `/public/console/index.js` file to ES5 syntax, outputting to `compile.js` in the same directory. This file is loaded in the preview iframe; do not modify `compile.js` directly.
 
-- `npm run buildMonacoWorker`：打包`Monaco Editor`编辑器的`worker`文件，如果使用的`Monaco Editor`编辑器版本变化了需要重新打包。
+- `npm run buildMonacoWorker`: Packages the Monaco Editor's worker files. If the Monaco Editor version changes, you'll need to repackage these.
 
-- `npm run convertTheme`：将`VSCode`主题文件转换成`Monaco Editor`主题文件。
+- `npm run convertTheme`: Converts VSCode theme files to Monaco Editor theme files.
 
-- `npm run createThemeList`：根据主题文件列表自动生成配置文件。
+- `npm run createThemeList`: Automatically generates a configuration file based on the theme file list.
 
-- `npm run buildVueSFCCompiler`：打包`@vue/compiler-sfc`文件，针对`Vue3`。
+- `npm run buildVueSFCCompiler`: Packages the `@vue/compiler-sfc` file for Vue3.
 
-# 编译器更新指南
+# Compiler Update Guide
 
-因为本项目是纯前端项目，所以在使用`less`、`sass`、`typescript`等预处理语言或扩展语言时需要在线进行编译，这个工作是由各个语言的编译器处理的，这些编译器你可以在`/public/parses/`目录下找到，随着时间的推移，肯定会落后于它们的新版本，所以你需要定期更新它们，获取它们的浏览器使用版本并不是一件易事，所以在这里将有些仅有的经验分享给大家。
+Since this is a pure frontend project, preprocessor languages like `less`, `sass`, `typescript`, etc., need to be compiled online. This work is handled by each language's compiler, which you can find in the `/public/parses/` directory. Over time, these will fall behind their newer versions, so you'll need to update them periodically. Obtaining browser-compatible versions isn't easy, so here are some tips:
 
 - `less`
 
-首先`npm i less`，然后在`node_modules`找到`less/dist/`目录，该目录下的两个文件都是`umd`格式的，可以直接使用。
+First, run `npm i less`, then find the `less/dist/` directory in `node_modules`. Both files in this directory are in UMD format and can be used directly.
 
 - `sass`
 
-`sass`目前使用的是这个项目[sass.js](https://github.com/medialize/sass.js)，但是这个项目已经三年没有更新了。
+Currently using [sass.js](https://github.com/medialize/sass.js), but this project hasn't been updated in three years.
 
 - `babel`
 
-`babel`提供了浏览器使用版本，具体可以参考官方文档[@babel/standalone](https://babeljs.io/docs/en/babel-standalone)。
+Babel provides a browser version; see the official documentation [@babel/standalone](https://babeljs.io/docs/en/babel-standalone).
 
 - `typescript`
 
-`typescript`直接`npm i typescript`，然后找到`node_modules/typescript/lib/typescript.js`文件，它也是支持直接在浏览器上使用的。
+Run `npm i typescript` and find the `node_modules/typescript/lib/typescript.js` file, which also supports direct browser use.
 
 - `coffeescript`
 
-`coffeescript`也是直接`npm i coffeescript`，然后找到`node_modules/coffeescript/coffeescript-browser-compiler-legacy/coffeescript.js`文件，支持直接在浏览器上使用。
+Run `npm i coffeescript` and find the `node_modules/coffeescript/coffeescript-browser-compiler-legacy/coffeescript.js` file, which supports direct browser use.
 
 - `livescript`
 
-`livescript`的浏览器使用版本可以直接去其官方仓库下载[browser](https://github.com/gkz/LiveScript/blob/master/browser/)，不过也两年没有更新了。
+Browser versions can be downloaded directly from its official repository [browser](https://github.com/gkz/LiveScript/blob/master/browser/), though it hasn't been updated in two years.
 
 - `postcss`
 
-可以使用`Browserify` 或 `webpack`把它打包到一个文件中。
+Use `Browserify` or `webpack` to bundle it into a single file.
 
-- 其他
+- Others
 
-`stylus`暂时没有找到浏览器使用版本或编译成功，知道的朋友欢迎提个`issue`。
+No browser version or successful compilation has been found for `stylus` yet. If you know how, please open an issue.
 
-# 新增代码模板
+# Adding Code Templates
 
-项目内置了几个常用的代码模板，可以根据需要进行增减，模板配置文件在`src/config/templates.js`。
+The project includes several common code templates that can be added or removed as needed. The template configuration file is in `src/config/templates.js`.
 
-# 新增页面布局模板
+# Adding Page Layout Templates
 
-## 教程
+## Tutorial
 
-项目内置了几个常用的页面布局模板，如果不满足你的需求也可以新增布局，一个布局就是一个`vue单文件`，可以在`src/pages/edit/layouts/`目录下找到所有布局，每个布局其实就是确定如何显示`编辑器`、`控制台`、`预览`三部分，`编辑器`包含`js`、`css`、`html`、`vue`四个编辑器，可配置显示哪几个、顺序、是否允许拖动等，需要新增的布局也需要放到该目录下。
+The project includes several common page layout templates. If these don't meet your needs, you can add new layouts. A layout is a Vue single-file component found in the `src/pages/edit/layouts/` directory. Each layout determines how to display the `editor`, `console`, and `preview` sections. The `editor` includes `js`, `css`, `html`, and `vue` editors, and you can configure which ones to show, their order, whether they can be dragged, etc. New layouts should be added to this directory.
 
-接下来以新增一个`vue单文件的布局`为例来看，首先确定布局细节，我们想左侧显示一个`vue`编辑器，右侧显示`预览`和`控制台`，`预览`模块默认展开，`控制台`默认最小化：
+Let's look at an example of adding a Vue single-file layout. First, determine the layout details: we want a `vue` editor on the left, with `preview` and `console` on the right. The `preview` module should be expanded by default, and the `console` minimized:
 
-1.首先我们在`layouts`目录下创建一个`VueSFC.vue`。
+1. First, create a `VueSFC.vue` file in the `layouts` directory.
 
-2.修改`src/config/constants.js`文件，引入该组件，并在`layoutList`和`layoutMap`两个配置上新增该布局：
+2. Modify the `src/config/constants.js` file to import this component and add the new layout to the `layoutList` and `layoutMap` configurations:
 
 ```js
 import VueSFC from '../pages/edit/layouts/VueSFC.vue'
@@ -309,7 +308,7 @@ import VueSFC from '../pages/edit/layouts/VueSFC.vue'
 export const layoutList = [
 	// ...
 	{
-		name: 'Vue单文件',
+		name: 'Vue Single File',
 		value: 'vue',
 	}
 ]
@@ -320,34 +319,34 @@ export const layoutMap = {
 }
 ```
 
-可以添加一张该布局的预览图片，放置到`src/assets/layoutImgs/`目录下，然后在`constants.js`文件里引入，最后在`previewImgMap`配置上添加即可。
+You can add a preview image of this layout in the `src/assets/layoutImgs/` directory, import it in the `constants.js` file, and add it to the `previewImgMap` configuration.
 
-这样修改完后即可在页面的`设置`功能里的`布局设置`的下拉列表里看到新增的`Vue单文件`选项。接下来完善`VueSFC.vue`的内容。
+After these changes, you'll see the new "Vue Single File" option in the layout settings dropdown in the page settings. Now, let's complete the content of `VueSFC.vue`.
 
-3.可参考其他布局结构的内容，复制过来修改，最终的内容应该是这样的：
+3. You can reference the structure of other layouts, copy and modify them. The final content should look like this:
 
 ```vue
 <template>
-  <!-- 该容器的直接DragItem直接数量为2，方向水平排列，第一个DragItem直接允许缩小到0，第二个DragItem组件最小允许缩小到20px -->
+  <!-- This container has 2 direct DragItems arranged horizontally. The first DragItem can be shrunk to 0, the second DragItem can be shrunk to a minimum of 20px -->
   <Drag :number="2" dir="h" :config="[{ min: 0 }, { min: 20 }]">
-    <!-- 编辑器块，索引为0，禁止缩放该块，隐藏拖动条 -->
+    <!-- Editor block, index 0, scaling disabled, touch bar hidden -->
     <DragItem :index="0" :disabled="true" :showTouchBar="false">
-      <!-- 编辑器增加，内部编辑器排列方向为垂直，配置了要显示的编辑器 -->
+      <!-- Editor added, internal editors arranged vertically, configured with editors to display -->
       <Editor dir="v" :showList="showList"></Editor>
     </DragItem>
-    <!-- 预览&控制台，索引为1，允许拖动进行缩放 -->
+    <!-- Preview & Console, index 1, can be dragged to scale -->
     <DragItem :index="1" :disabled="false">
-      <!-- DragItem又嵌套了一个容器组件，该容器的直接DragItem直接数量为2，方向垂直排列，第一个DragItem直接允许缩小到0，第二个DragItem组件默认显示的高度为48px，且最小允许缩小到48px -->
+      <!-- DragItem nests another container component. This container has 2 direct DragItems arranged vertically. The first DragItem can be shrunk to 0, the second DragItem has a default height of 48px and can be shrunk to a minimum of 48px -->
       <Drag :number="2" dir="v" :config="[{ min: 0 }, { min: 48, default: 48 }]">
         <DragItem
           :index="0"
           :disabled="true"
           :showTouchBar="false"
-          title="预览"
+          title="Preview"
         >
           <Preview></Preview>
         </DragItem>
-        <DragItem :index="1" :disabled="false" title="控制台">
+        <DragItem :index="1" :disabled="false" title="Console">
           <Console></Console>
         </DragItem>
       </Drag>
@@ -363,91 +362,91 @@ import Drag from '@/components/Drag.vue'
 import DragItem from '@/components/DragItem.vue'
 import { reactive } from 'vue'
 
-// 配置只显示vue编辑器
+// Configure to show only the vue editor
 const showList = reactive([
     {
-        title: 'VUE',// 编辑器名称
-        disableDrag: true,// 禁止拖动进行缩放
-        showTouchBar: false// 隐藏推动条
+        title: 'VUE',// Editor name
+        disableDrag: true,// Disable dragging for scaling
+        showTouchBar: false// Hide the touch bar
     }
 ])
 </script>
 ```
 
-注释已经解释的很详细，详情可参考接下来的组件文档。
+The comments explain the details. Please refer to the component documentation below for more information.
 
-## 布局相关组件文档
+## Layout-Related Component Documentation
 
-### Drag组件
+### Drag Component
 
-该组件相当于是一个容器，每个容器会实例化一个`Resize`尺寸拖动调整类，内部需要放置`DragItem`组件。
+This component acts as a container, instantiating a `Resize` size drag adjustment class. It needs to contain `DragItem` components.
 
-组件`props`：
+Component props:
 
-|   名称   |   介绍   |   类型   |   默认值   |
+|   Name   |   Description   |   Type   |   Default   |
 | ---- | ---- | ---- | ---- |
-|   dir   |   容器内部的`DragItem`组件排列方式，可选项：h（水平排列）、v（垂直排列）   |   String   |   h   |
-|   number   |   内部的`DragItem`组件数量   |   Number   |   0   |
-|   config   |   配置内部的`DragItem`组件的信息，数组类型，每一项都是一个对象，具体的属性请看表1   |   Array   |   []   |
+|   dir   |   Arrangement of `DragItem` components inside the container. Options: h (horizontal), v (vertical)   |   String   |   h   |
+|   number   |   Number of `DragItem` components inside   |   Number   |   0   |
+|   config   |   Configuration for internal `DragItem` components. Array type, each item is an object with properties described in Table 1   |   Array   |   []   |
 
-#### 表1
+#### Table 1
 
-`config`数组每一项的对象的属性：
+Properties of each object in the `config` array:
 
-|   名称   |   介绍   |   类型   |   默认值   |
+|   Name   |   Description   |   Type   |   Default   |
 | ---- | ---- | ---- | ---- |
-|   default   |   对应索引的`DragItem`组件默认显示的尺寸，`dir`为`h`时指宽度，为`v`时指高度   |   Number   |   默认容器内的所有`DragItem`组件平分空间   |
-|   min   |   对应索引的`DragItem`组件允许显示的最小尺寸，当发生拖动时，如果该组件空间被挤压，默认允许被压缩到0，即完全不显示，如果配置了该属性，则缩小到配置的大小后不再变化   |   Number   |   0   |
-|   max   |   对应索引的`DragItem`组件允许显示的最大尺寸，当发生拖动时，如果该组件空间被增加，默认会增加到允许的最大尺寸，如果配置了该属性，则增加到配置的大小后不再变化   |   Number   |   0   |
+|   default   |   Default displayed size of the corresponding indexed `DragItem` component. Width when `dir` is `h`, height when `dir` is `v`   |   Number   |   All `DragItem` components in the container share space equally   |
+|   min   |   Minimum displayed size allowed for the corresponding indexed `DragItem` component. When dragging occurs and this component's space is compressed, it defaults to being compressed to 0 (completely hidden). If this property is configured, it won't shrink beyond the configured size   |   Number   |   0   |
+|   max   |   Maximum displayed size allowed for the corresponding indexed `DragItem` component. When dragging occurs and this component's space is increased, it defaults to increasing to the maximum allowed size. If this property is configured, it won't expand beyond the configured size   |   Number   |   0   |
 
-### DragItem组件
+### DragItem Component
 
-该组件代表一个可拖动的块，需要放置在`Drag`组件下，通过`slot`来传入需要实际显示的内容。`DragItem`组件内可再嵌套`Drag`容器。
+This component represents a draggable block that must be placed under a `Drag` component. It uses `slot` to pass in the content to be displayed. A `DragItem` component can nest another `Drag` container.
 
-组件`props`：
+Component props:
 
-|   名称   |   介绍   |   类型   |   默认值   |
+|   Name   |   Description   |   Type   |   Default   |
 | ---- | ---- | ---- | ---- |
-|   disabled   |   是否禁止拖动   |   Boolean   |   false   |
-|   touchBarSize   |   拖动条的尺寸，`dir`为`h`时指宽度，为`v`时指高度   |   Number   |   20   |
-|   index   |   该组件在容器内的同级`DragItem`组件列表中的索引，从0开始   |   Number   |   0   |
-|   showTouchBar   |   是否显示拖动条   |   Boolean   |   true   |
-|   title   |   标题   |   String   |      |
-|   hide   |   是否隐藏该组件   |   Boolean   |   false   |
+|   disabled   |   Whether dragging is disabled   |   Boolean   |   false   |
+|   touchBarSize   |   Size of the drag bar. Width when `dir` is `h`, height when `dir` is `v`   |   Number   |   20   |
+|   index   |   Index of this component in the container's sibling `DragItem` component list, starting from 0   |   Number   |   0   |
+|   showTouchBar   |   Whether to show the drag bar   |   Boolean   |   true   |
+|   title   |   Title   |   String   |      |
+|   hide   |   Whether to hide this component   |   Boolean   |   false   |
 
-### Editor组件
+### Editor Component
 
-该组件目前包含`js`、`css`、`html`、`vue`四个编辑器，可以控制具体显示哪几个，以及它们的排列方式。
+This component currently includes `js`, `css`, `html`, and `vue` editors. You can control which ones to display and how they're arranged.
 
-组件`props`：
+Component props:
 
-|   名称   |   介绍   |   类型   |   默认值   |
+|   Name   |   Description   |   Type   |   Default   |
 | ---- | ---- | ---- | ---- |
-|   hide   |   是否隐藏编辑器   |   Boolean   |   false   |
-|   dir   |   排布方向，v（垂直）、h（水平）   |   String   |   h   |
-|   showList   |   要显示的编辑器列表，数组类型，每一项可以是数字也可以是一个对象，见表2   |   Array   |   ['HTML', 'CSS', 'JS']   |
+|   hide   |   Whether to hide the editor   |   Boolean   |   false   |
+|   dir   |   Layout direction, v (vertical), h (horizontal)   |   String   |   h   |
+|   showList   |   List of editors to display. Array type, each item can be a number or an object (see Table 2)   |   Array   |   ['HTML', 'CSS', 'JS']   |
 
-#### 表2
+#### Table 2
 
-`showList`数组的每一项可以是一个字符串，可选值为：`HTML`、 `CSS`、 `JS`、`VUE`，代表四种编辑器，配置了哪几个就显示哪几个。
+Each item in the `showList` array can be a string with possible values: `HTML`, `CSS`, `JS`, `VUE`, representing the four types of editors. Configure which ones to display.
 
-如果需要再配置一些属性，比如是否允许该编辑器拖动等等，可配置的属性如下：
+If you need to configure additional properties, such as whether to allow dragging of that editor, the configurable properties are as follows:
 
-|   名称   |   介绍   |   类型   |   默认值   |
+|   Name   |   Description   |   Type   |   Default   |
 | ---- | ---- | ---- | ---- |
-|   title   |   编辑器名称，可选项：`HTML`、 `CSS`、 `JS`、`VUE`   |   String   |      |
-|   disableDrag   |   是否禁止拖动缩放该编辑器   |   Boolean   |      |
-|   showTouchBar   |   是否显示该编辑器的推动条   |   Boolean   |      |
+|   title   |   Editor name. Options: `HTML`, `CSS`, `JS`, `VUE`   |   String   |      |
+|   disableDrag   |   Whether to disable dragging to scale this editor   |   Boolean   |      |
+|   showTouchBar   |   Whether to show this editor's touch bar   |   Boolean   |      |
 
-# 暂未解决的问题
+# Unresolved Issues
 
-1.生成代码图片功能偶尔生成的图片高度超出了代码实际的高度，目前暂未找到原因及根本解决方法。可选方法之一为生成图片后再提供一个图片裁剪的功能。
+1. The code image generation feature occasionally produces images with heights exceeding the actual code height. The root cause and definitive solution have not yet been found. One potential approach is to provide an image cropping feature after generation.
 
-2.极少数情况下会出现主题不生效的问题。
+2. In rare cases, themes may not apply correctly.
 
-# 致谢
+# Acknowledgements
 
-本项目基于：[code-run](https://github.com/wanglin2/code-run)
+This project is based on: [code-run](https://github.com/wanglin2/code-run)
 
 # License
 
