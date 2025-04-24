@@ -2,7 +2,7 @@
   <el-dialog
     title="选择模板"
     v-model="visible"
-    :width="isMobile ? '100%' : '600'"
+    :width="isMobile ? '100%' : '760'"
   >
     <div class="templateList">
       <div

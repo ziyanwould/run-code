@@ -12,17 +12,35 @@ const githubTokenSaveKey = 'codeRun:githubToken'
 const configSaveKey = 'codeRun:config'
 // 存储初始代码配置的key
 const initialCodeSaveKey = 'codeRun:initialCode'
+// 私有配置存储key
+const privateConfigKey = 'codeRun:privateConfig'
 
 // 默认配置常量
 const DEFAULT_CONFIG = {
   codeTheme: 'OneDarkPro',
   pageThemeSyncCodeTheme: true,
-  syncLayout: false,  // 新增：是否同步布局配置，默认false
+  syncLayout: false,
   openAlmightyConsole: isMobile ? true : false,
   autoRun: true,
   layout: isMobile ? 'tabs2' : 'default',
   keepPreviousLogs: isMobile ? false : true,
   codeFontSize: isMobile ? 12 : 14
+}
+
+// 默认私有配置
+const DEFAULT_PRIVATE_CONFIG = {
+  saveCallback: '' // 保存回调脚本
+}
+
+// 获取保存的私有配置
+const getSavedPrivateConfig = () => {
+  try {
+    const saved = localStorage.getItem(privateConfigKey)
+    return saved ? JSON.parse(saved) : null
+  } catch (e) {
+    console.error('读取私有配置失败:', e)
+    return null
+  }
 }
 
 // 从localStorage获取保存的配置
@@ -89,7 +107,8 @@ const store = createStore({
       loading: false,
       editData: createDefaultData(),
       githubToken: '',
-      previewDoc: ''
+      previewDoc: '',
+      privateConfig: getSavedPrivateConfig() || { ...DEFAULT_PRIVATE_CONFIG }
     }
   },
   mutations: {
@@ -246,6 +265,20 @@ const store = createStore({
 
     setLoading(state, loading) {
       state.loading = loading
+    },
+
+    setSaveCallback(state, script) {
+      state.privateConfig.saveCallback = script
+      this.commit('savePrivateConfig')
+    },
+
+    // 保存私有配置
+    savePrivateConfig(state) {
+      try {
+        localStorage.setItem(privateConfigKey, JSON.stringify(state.privateConfig))
+      } catch (e) {
+        console.error('保存私有配置失败:', e)
+      }
     }
   },
   actions: {
@@ -267,6 +300,10 @@ const store = createStore({
             const currentLayout = ctx.state.editData.config.layout
             parseData.config.layout = currentLayout
           }
+          
+          // 保留当前的 saveCallback
+          const currentCallback = ctx.state.editData.config.saveCallback
+          parseData.config.saveCallback = currentCallback
           
           ctx.commit('setEditData', parseData)
           resolve()

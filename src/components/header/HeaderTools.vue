@@ -247,10 +247,12 @@ const saveToLocal = async () => {
   try {
     store.commit('setLoading', true)
     let fileData = createData()
+    let id
     if (route.name === 'LocalEdit' && route.params.id) {
       await localDb.updateGist(Number(route.params.id), fileData)
+      id = route.params.id
     } else {
-      const id = await localDb.saveGist(fileData)
+      id = await localDb.saveGist(fileData)
       router.replace({
         name: 'LocalEdit',
         params: { id }
@@ -259,6 +261,15 @@ const saveToLocal = async () => {
     store.commit('setLoading', false)
     ElMessage.success('保存成功')
     toggleSaveList(false)
+
+    // 触发保存成功事件
+    proxy.$eventEmitter.emit('save_success', {
+      type: 'local',
+      id: id,
+      data: fileData,
+      mode: route.name === 'LocalEdit' ? 'update' : 'create',
+      routeName: 'LocalEdit'
+    })
   } catch (error) {
     if (error === 'cancel') return
     console.log(error)
@@ -291,7 +302,6 @@ const saveToGist = async () => {
       path = '/' + route.params.id
       fileData.gist_id = route.params.id
     }
-    // 其他情况（包括LocalEdit）都创建新的Gist
     
     let { data } = await request(`${method} /gists${path}`, fileData)
     store.commit('setLoading', false)
@@ -303,6 +313,15 @@ const saveToGist = async () => {
       }
     })
     toggleSaveList(false)
+
+    // 触发保存成功事件,传递必要的数据
+    proxy.$eventEmitter.emit('save_success', {
+      type: 'gist',
+      id: data.id,
+      data: fileData,
+      mode: method === 'POST' ? 'create' : 'update',
+      routeName: 'Edit'
+    })
   } catch (error) {
     if (error === 'cancel') return
     console.log(error)
@@ -571,6 +590,35 @@ const copyPreviewHtml = async () => {
     ElMessage.error('复制失败')
   }
 }
+
+const executeSaveCallback = (saveInfo) => {
+  const callback = store.state.privateConfig.saveCallback
+  if (!callback?.trim()) return
+
+  try {
+    const fn = new Function('saveInfo', 'console', 'alert', `
+      try {
+        ${callback}
+        
+        if (typeof onSaveSuccess === 'function') {
+          onSaveSuccess(saveInfo);
+        }
+      } catch (error) {
+        console.error('回调执行错误:', error);
+        throw error;
+      }
+    `)
+
+    fn(saveInfo, console, alert)
+  } catch (error) {
+    console.error('执行保存回调失败:', error)
+    ElMessage.error('执行保存回调失败: ' + error.message)
+  }
+}
+
+proxy.$eventEmitter.on('save_success', (saveInfo) => {
+  executeSaveCallback(saveInfo)
+})
 </script>
 
 <style scoped lang="less">

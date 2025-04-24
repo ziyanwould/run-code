@@ -10,6 +10,7 @@
         <el-tab-pane label="布局设置" name="layout"></el-tab-pane>
         <el-tab-pane label="主题设置" name="theme"></el-tab-pane>
         <el-tab-pane label="初始代码" name="initial-code"></el-tab-pane>
+        <el-tab-pane label="保存回调" name="callback"></el-tab-pane>
         <el-tab-pane label="其他设置" name="setting"></el-tab-pane>
         <el-tab-pane label="关于" name="about"></el-tab-pane>
       </el-tabs>
@@ -28,6 +29,7 @@ import SettingLayout from '../SettingLayout.vue'
 import SettingTheme from '../SettingTheme.vue'
 import SettingAbout from '../SettingAbout.vue'
 import SettingInitialCode from '../SettingInitialCode.vue'
+import SettingCallback from '../SettingCallback.vue'
 import { isMobileDevice } from '@/utils'
 
 const isMobile = isMobileDevice()
@@ -48,6 +50,7 @@ const componentsMap = shallowRef({
   theme: SettingTheme,
   layout: SettingLayout,
   'initial-code': SettingInitialCode,
+  callback: SettingCallback,
   setting: Setting,
   about: SettingAbout
 })
