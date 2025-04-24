@@ -1,5 +1,10 @@
 <template>
-  <div class="editorBox" :class="{ hide: hide }">
+  <div 
+    class="editorBox" 
+    :class="{ hide: hide }"
+    @dragover="handleDragOver"
+    @drop="handleDrop"
+  >
     <!-- 标签页模式 -->
     <div v-if="show && isTabsMode" class="tabs-mode">
       <el-tabs v-model="activeTab" type="card" @tab-click="handleTabClick">
@@ -630,6 +635,32 @@ onBeforeUnmount(() => {
   proxy.$eventEmitter.off('clear_all_code', clearAllCode)
   // window.removeEventListener('resize', handleResize)
 })
+
+const handleDragOver = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+}
+
+const handleDrop = async (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+
+  const files = Array.from(e.dataTransfer.files)
+  
+  for (const file of files) {
+    try {
+      await store.dispatch('handleFileDrop', file)
+    } catch (error) {
+      console.error('处理文件失败:', error)
+    }
+  }
+
+  proxy.$eventEmitter.emit('reset_code')
+
+  setTimeout(() => {
+    runCode()
+  }, 200)
+}
 </script>
 
 <style lang="less" scoped>

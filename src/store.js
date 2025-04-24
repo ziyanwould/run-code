@@ -1,8 +1,9 @@
 import { createStore } from 'vuex'
 import { generateUUID, atou, isMobileDevice } from '@/utils'
 import { create, request } from '@/utils/octokit'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import defaltCode from '@/config/defaltCode'
+import { useCodeBlockDetection } from '@/utils/codeBlockDetection'
 
 const isMobile = isMobileDevice()
 
@@ -279,6 +280,62 @@ const store = createStore({
       } catch (e) {
         console.error('保存私有配置失败:', e)
       }
+    },
+
+    /**
+     * @Desc: 处理拖拽文件内容
+     */
+    handleDroppedFile(state, { type, content }) {
+      if (!state.editData.code[type]) {
+        ElMessage.error(`不支持的文件类型: ${type}`)
+        return
+      }
+
+      // 更新对应类型的内容和语言
+      const languageMap = {
+        'HTML': 'html',
+        'CSS': 'css',
+        'JS': 'javascript'
+      }
+      
+      // 使用 Vue.set 或直接替换整个对象以确保响应性
+      state.editData.code[type] = {
+        ...state.editData.code[type],
+        content: content,
+        language: languageMap[type] || state.editData.code[type].language
+      }
+    },
+
+    setDetectedCode(state, detectedCode) {
+      const title = '未命名' // 可以从 Markdown 文件名或内容中提取
+      
+      // 更新编辑器数据
+      state.editData = {
+        title,
+        config: { ...state.editData.config },
+        code: {
+          HTML: {
+            language: 'html',
+            content: detectedCode.HTML.content || '',
+            resources: []
+          },
+          CSS: {
+            language: 'css',
+            content: detectedCode.CSS.content || '',
+            resources: []
+          },
+          JS: {
+            language: 'javascript',
+            content: detectedCode.JS.content || '',
+            resources: []
+          },
+          VUE: {
+            language: 'vue2',
+            content: '',
+            resources: []
+          }
+        }
+      }
     }
   },
   actions: {
@@ -339,6 +396,86 @@ const store = createStore({
       ctx.commit('setEditData', currentData)
       
       return Promise.resolve()
+    },
+
+    /**
+     * @Desc: 处理文件拖拽
+     */
+    handleFileDrop({ commit }, file) {
+      return new Promise((resolve, reject) => {
+        const extension = file.name.split('.').pop().toLowerCase()
+        const typeMap = {
+          'html': 'HTML',
+          'htm': 'HTML',
+          'css': 'CSS',
+          'js': 'JS',
+          'javascript': 'JS',
+          'md': 'MD',
+          'markdown': 'MD'
+        }
+
+        const type = typeMap[extension]
+        
+        if (!type) {
+          ElMessage.error('不支持的文件类型')
+          reject(new Error('Unsupported file type'))
+          return
+        }
+
+        const reader = new FileReader()
+        
+        reader.onload = async (e) => {
+          const content = e.target.result
+          
+          // 如果是 Markdown 文件,检查是否包含代码块
+          if (type === 'MD') {
+            const { htmlRegex, extractCodeBlocks } = useCodeBlockDetection()
+            
+            // 检测是否包含HTML代码块
+            const hasHtmlCode = htmlRegex.test(content)
+            if (!hasHtmlCode) {
+              ElMessage.warning('未检测到可用的代码块')
+              resolve()
+              return
+            }
+
+            // 提取代码块
+            const detectedCode = extractCodeBlocks(content)
+            
+            // 显示确认对话框
+            try {
+              await ElMessageBox.confirm(
+                '检测到可用的代码块,是否导入?',
+                '提示',
+                {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'info'
+                }
+              )
+              
+              // 用户确认后,更新代码
+              commit('setDetectedCode', detectedCode)
+              ElMessage.success(`${file.name} 代码导入成功`)
+            } catch {
+              // 用户取消操作
+              ElMessage.info('已取消导入')
+            }
+          } else {
+            // 其他文件类型按原有逻辑处理
+            commit('handleDroppedFile', { type, content })
+            ElMessage.success(`${file.name} 导入成功`)
+          }
+          resolve()
+        }
+
+        reader.onerror = (e) => {
+          ElMessage.error('读取文件失败')
+          reject(e)
+        }
+
+        reader.readAsText(file)
+      })
     }
   }
 })
