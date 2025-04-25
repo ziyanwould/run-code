@@ -7,14 +7,32 @@
     @open="onDrawerOpen"
     @closed="onDrawerClosed"
   >
+    <template #header>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: space-between">
+        <span>我的Gists</span>
+        <el-button 
+          v-if="selectedGists.length"
+          type="danger" 
+          size="small" 
+          @click="batchDeleteGists"
+        >
+          批量删除({{ selectedGists.length }})
+        </el-button>
+      </div>
+    </template>
+    
     <div class="gistBox">
       <el-table
+        ref="tableRef"
         :data="gistList"
         style="width: 100%"
         empty-text="好像没有更多了~"
         v-loading="gistloading"
         height="100%"
+        @selection-change="handleSelectionChange"
+        @row-click="handleRowClick"
       >
+        <el-table-column type="selection" width="28" />
         <el-table-column label="名称" prop="description" />
         <el-table-column label="是否公开" prop="public" width="80" align="center">
           <template #default="scope">
@@ -38,15 +56,15 @@
               :icon="Edit"
               circle
               size="small"
-              @click="updateGist(scope.row.id)"
-            ></el-button>
+              @click.stop="updateGist(scope.row.id)"
+            />
             <el-button
               type="danger"
               :icon="Delete"
               circle
               size="small"
-              @click="deleteGist(scope.row.id, scope.$index)"
-            ></el-button>
+              @click.stop="deleteGist(scope.row.id, scope.$index)"
+            />
           </template>
         </el-table-column>
       </el-table>
@@ -67,7 +85,7 @@
 <script setup>
 import { ref, computed, defineProps, defineEmits } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { ElDrawer, ElTable, ElTableColumn, ElButton, ElPagination, ElMessage } from 'element-plus'
+import { ElDrawer, ElTable, ElTableColumn, ElButton, ElPagination, ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { request } from '@/utils/octokit'
 import { isMobileDevice } from '@/utils'
@@ -92,6 +110,8 @@ const gistList = ref([])
 const gistloading = ref(false)
 const gistPageNo = ref(1)
 const gistPageCount = ref(1)
+const selectedGists = ref([])
+const tableRef = ref()
 
 const onDrawerOpen = async () => {
   try {
@@ -122,6 +142,7 @@ const gistCurrentChange = pageNo => {
 const onDrawerClosed = () => {
   gistList.value = []
   gistPageNo.value = 1
+  selectedGists.value = []
 }
 
 const deleteGist = async (id, index) => {
@@ -158,6 +179,66 @@ const updateGist = id => {
     }
   })
 }
+
+// 处理表格选择变化
+const handleSelectionChange = (selection) => {
+  selectedGists.value = selection
+}
+
+// 处理行点击
+const handleRowClick = (row) => {
+  // 获取表格实例并切换当前行的选中状态
+  const table = tableRef.value
+  if (table) {
+    table.toggleRowSelection(row)
+  }
+}
+
+// 批量删除方法
+const batchDeleteGists = async () => {
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除选中的 ${selectedGists.value.length} 个项目吗？`,
+      '警告',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    )
+
+    gistloading.value = true
+    const deletePromises = selectedGists.value.map(gist => 
+      request(`DELETE /gists/${gist.id}`, {
+        gist_id: gist.id
+      })
+    )
+
+    await Promise.all(deletePromises)
+    
+    // 从列表中移除已删除的项目
+    const deletedIds = selectedGists.value.map(g => g.id)
+    gistList.value = gistList.value.filter(g => !deletedIds.includes(g.id))
+    
+    // 清空选中项
+    selectedGists.value = []
+    
+    ElMessage.success('批量删除成功，注意：删除不是一个同步的过程！')
+    
+    // 如果当前正在查看的 gist 被删除，则跳转到编辑器
+    if (deletedIds.includes(route.params.id)) {
+      router.replace({
+        name: 'Editor'
+      })
+    }
+  } catch (error) {
+    if (error === 'cancel') return
+    console.error(error)
+    ElMessage.error('批量删除失败')
+  } finally {
+    gistloading.value = false
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -177,5 +258,10 @@ const updateGist = id => {
       justify-content: center;
     }
   }
+}
+
+/* 添加表格行的鼠标样式 */
+:deep(.el-table__row) {
+  cursor: pointer;
 }
 </style>

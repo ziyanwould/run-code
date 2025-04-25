@@ -3,18 +3,36 @@
     v-model="visible"
     title="本地项目"
     direction="rtl"
-    :size="isMobile ? '90%' : '30%'"
+    :size="isMobile ? '90%' : '900px'"
     @open="onDrawerOpen"
     @closed="onDrawerClosed"
   >
+    <template #header>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: space-between">
+        <span>本地项目</span>
+        <el-button 
+          v-if="selectedGists.length"
+          type="danger" 
+          size="small" 
+          @click="batchDeleteGists"
+        >
+          批量删除({{ selectedGists.length }})
+        </el-button>
+      </div>
+    </template>
+
     <div class="gistBox">
       <el-table
+        ref="tableRef"
         :data="gistList"
         style="width: 100%"
         empty-text="还没有保存过代码~"
         v-loading="loading"
         height="100%"
+        @selection-change="handleSelectionChange"
+        @row-click="handleRowClick"
       >
+        <el-table-column type="selection" width="28" />
         <el-table-column label="名称" prop="description" />
         <el-table-column label="创建时间" prop="created_at" width="110" align="center">
           <template #default="scope">
@@ -33,14 +51,14 @@
               :icon="Edit"
               circle
               size="small"
-              @click="updateGist(scope.row.id)"
+              @click.stop="updateGist(scope.row.id)"
             />
             <el-button
               type="danger"
               :icon="Delete"
               circle
               size="small"
-              @click="deleteGist(scope.row.id)"
+              @click.stop="deleteGist(scope.row.id)"
             />
           </template>
         </el-table-column>
@@ -63,7 +81,7 @@
 <script setup>
 import { ref, computed, defineProps, defineEmits } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { ElDrawer, ElTable, ElTableColumn, ElButton, ElPagination, ElMessage } from 'element-plus'
+import { ElDrawer, ElTable, ElTableColumn, ElButton, ElPagination, ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { localDb } from '@/utils/localDb'
 import { isMobileDevice } from '@/utils'
@@ -89,6 +107,8 @@ const loading = ref(false)
 const pageNo = ref(1)
 const pageSize = ref(20)
 const total = ref(0)
+const selectedGists = ref([])
+const tableRef = ref()
 
 const onDrawerOpen = async () => {
   try {
@@ -117,6 +137,7 @@ const onDrawerClosed = () => {
   gistList.value = []
   pageNo.value = 1
   total.value = 0
+  selectedGists.value = []
 }
 
 const deleteGist = async (id) => {
@@ -157,6 +178,59 @@ const updateGist = async (id) => {
     ElMessage.error('加载数据失败')
   }
 }
+
+const handleSelectionChange = (selection) => {
+  selectedGists.value = selection
+}
+
+const handleRowClick = (row) => {
+  // 获取表格实例并切换当前行的选中状态
+  const table = tableRef.value
+  if (table) {
+    table.toggleRowSelection(row)
+  }
+}
+
+const batchDeleteGists = async () => {
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除选中的 ${selectedGists.value.length} 个项目吗？`,
+      '警告',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    )
+
+    loading.value = true
+    const deletePromises = selectedGists.value.map(gist => 
+      localDb.deleteGist(gist.id)
+    )
+
+    await Promise.all(deletePromises)
+    
+    ElMessage.success('批量删除成功')
+    
+    // 如果当前正在查看的本地项目被删除，则跳转到编辑器
+    const deletedIds = selectedGists.value.map(g => g.id)
+    if (route.name === 'LocalEdit' && deletedIds.includes(Number(route.params.id))) {
+      router.replace({
+        name: 'Editor'
+      })
+    }
+    
+    // 清空选中项并重新加载列表
+    selectedGists.value = []
+    await onDrawerOpen()
+  } catch (error) {
+    if (error === 'cancel') return
+    console.error(error)
+    ElMessage.error('批量删除失败')
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -176,5 +250,10 @@ const updateGist = async (id) => {
       justify-content: center;
     }
   }
+}
+
+/* 添加表格行的鼠标样式 */
+:deep(.el-table__row) {
+  cursor: pointer;
 }
 </style>
