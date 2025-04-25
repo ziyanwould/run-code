@@ -36,22 +36,36 @@
       <span class="icon iconfont icon-shuaxin"></span> 运行
     </div>
     <div class="dropdownBtn" @click.stop v-if="githubToken">
-      <div class="btn" @click="toggleSaveList()" v-loading="loading">
+      <div class="btn" 
+           @click="toggleSaveList()" 
+           v-loading="loading"
+           :title="`保存 (${isMac ? '⌘' : 'Ctrl'} + S)`">
         <span class="icon iconfont icon-w_yunduan"></span> 保存
       </div>
       <ul class="toolList" :class="{ show: showSaveList }">
-        <li class="toolItem" @click="saveToLocal">
+        <li class="toolItem" 
+            @click="saveToLocal"
+            :title="getSaveToLocalText">
           {{ getSaveToLocalText }}
         </li>
-        <li class="toolItem" @click="saveToGist">
+        <li class="toolItem" 
+            @click="saveToGist"
+            :title="getSaveToGistText">
           {{ getSaveToGistText }}
         </li>
-        <li class="toolItem" @click="saveAsNew" v-if="hasCurrentId">
+        <li class="toolItem" 
+            @click="saveAsNew" 
+            v-if="hasCurrentId"
+            :title="`另存为副本 (${isMac ? '⌘' : 'Ctrl'} + ⇧ + S)`">
           另存为副本
         </li>
       </ul>
     </div>
-    <div class="btn" @click="saveToLocal" v-loading="loading" v-else>
+    <div class="btn" 
+         @click="saveToLocal" 
+         v-loading="loading" 
+         v-else
+         :title="`保存到本地 (${isMac ? '⌘' : 'Ctrl'} + S)`">
       <span class="icon iconfont icon-w_yunduan"></span> 保存
     </div>
     <div class="dropdownBtn" @click.stop>
@@ -133,6 +147,12 @@ const handleKeyDown = (e) => {
   // Windows: Ctrl + S
   if ((isMac ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 's') {
     e.preventDefault() // 阻止浏览器默认保存行为
+    
+    // 添加 Shift 键检测
+    if (e.shiftKey && hasCurrentId.value) {
+      saveAsNew()
+      return
+    }
     
     if (route.name === 'LocalEdit' && route.params.id) {
       saveToLocal()
