@@ -15,6 +15,7 @@
           type="danger" 
           size="small" 
           @click="batchDeleteGists"
+          style="margin-right: 10px;"
         >
           批量删除({{ selectedGists.length }})
         </el-button>

@@ -46,6 +46,9 @@
         <li class="toolItem" @click="saveToGist">
           {{ getSaveToGistText }}
         </li>
+        <li class="toolItem" @click="saveAsNew" v-if="hasCurrentId">
+          另存为副本
+        </li>
       </ul>
     </div>
     <div class="btn" @click="saveToLocal" v-loading="loading" v-else>
@@ -619,6 +622,92 @@ const executeSaveCallback = (saveInfo) => {
 proxy.$eventEmitter.on('save_success', (saveInfo) => {
   executeSaveCallback(saveInfo)
 })
+
+const hasCurrentId = computed(() => {
+  return (route.name === 'LocalEdit' || route.name === 'Edit') && route.params.id
+})
+
+const saveAsNew = async () => {
+  try {
+    // 获取当前标题
+    const currentTitle = store.state.editData.title || '未命名'
+    const defaultTitle = `${currentTitle}的副本`
+    
+    // 弹出标题确认框
+    const { value: title } = await ElMessageBox.prompt('请输入新副本标题', '另存为', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      inputValue: defaultTitle,
+      inputValidator: value => {
+        if (!value.trim()) {
+          return '标题不能为空'
+        }
+        return true
+      }
+    })
+
+    if (title && title.trim()) {
+      // 更新标题
+      store.commit('setCodeTitle', title.trim())
+      
+      // 根据当前路由名称和githubToken决定保存到本地还是Gist
+      if (route.name === 'LocalEdit' || !githubToken.value) {
+        // 保存到本地，强制创建新记录
+        store.commit('setLoading', true)
+        const fileData = createData()
+        const newId = await localDb.saveGist(fileData)
+        
+        // 切换到新的编辑页面
+        router.replace({
+          name: 'LocalEdit',
+          params: { id: newId }
+        })
+        
+        store.commit('setLoading', false)
+        ElMessage.success('另存成功')
+        
+        // 触发保存成功事件
+        proxy.$eventEmitter.emit('save_success', {
+          type: 'local',
+          id: newId,
+          data: fileData,
+          mode: 'create',
+          routeName: 'LocalEdit'
+        })
+      } else {
+        // 保存到Gist，创建新的gist
+        store.commit('setLoading', true)
+        const fileData = createData()
+        const { data } = await request('POST /gists', fileData)
+        
+        // 切换到新的编辑页面
+        router.replace({
+          name: 'Edit',
+          params: { id: data.id }
+        })
+        
+        store.commit('setLoading', false)
+        ElMessage.success('另存成功')
+        
+        // 触发保存成功事件
+        proxy.$eventEmitter.emit('save_success', {
+          type: 'gist',
+          id: data.id,
+          data: fileData,
+          mode: 'create',
+          routeName: 'Edit'
+        })
+      }
+      
+      toggleSaveList(false)
+    }
+  } catch (error) {
+    if (error === 'cancel') return
+    console.error(error)
+    store.commit('setLoading', false)
+    ElMessage.error('另存失败')
+  }
+}
 </script>
 
 <style scoped lang="less">
