@@ -2,7 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import EventEmitter from 'eventemitter3'
+import { eventBus } from './utils/eventBus'
+import { createShortcutHandler } from './config/shortcuts'
 import './assets/style/monolisa.css'
 import 'element-plus/dist/index.css'
 import './assets/style/element-theme.less'
@@ -12,7 +13,13 @@ import './assets/iconfont/iconfont.css'
 
 const create = () => {
   const app = createApp(App)
-  app.config.globalProperties.$eventEmitter = new EventEmitter()
+  
+  // 将 eventBus 挂载到 app.config.globalProperties
+  app.config.globalProperties.$eventEmitter = eventBus
+  
+  // 使用 eventBus 注册全局快捷键处理器
+  document.addEventListener('keydown', createShortcutHandler(eventBus))
+
   app.use(router)
   app.use(store)
   app.directive('loading', ElLoadingDirective)

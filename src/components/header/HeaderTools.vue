@@ -29,6 +29,8 @@
         </li>
         
         <li class="divider"></li>
+        <li class="toolItem" @click="showShortcuts">常用快捷键</li>
+        <li class="divider"></li>
         <li class="toolItem" @click="clearAllCode">清空代码</li>
       </ul>
     </div>
@@ -39,24 +41,24 @@
       <div class="btn" 
            @click="toggleSaveList()" 
            v-loading="loading"
-           :title="`保存 (${isMac ? '⌘' : 'Ctrl'} + S)`">
+           :title="shortcuts.find(s => s.id === 'save')?.description">
         <span class="icon iconfont icon-w_yunduan"></span> 保存
       </div>
       <ul class="toolList" :class="{ show: showSaveList }">
         <li class="toolItem" 
             @click="saveToLocal"
-            :title="getSaveToLocalText">
+            :title="shortcuts.find(s => s.id === 'save')?.description">
           {{ getSaveToLocalText }}
         </li>
         <li class="toolItem" 
             @click="saveToGist"
-            :title="getSaveToGistText">
+            :title="shortcuts.find(s => s.id === 'save')?.description">
           {{ getSaveToGistText }}
         </li>
         <li class="toolItem" 
             @click="saveAsNew" 
             v-if="hasCurrentId"
-            :title="`另存为副本 (${isMac ? '⌘' : 'Ctrl'} + ⇧ + S)`">
+            :title="shortcuts.find(s => s.id === 'saveAsNew')?.description">
           另存为副本
         </li>
       </ul>
@@ -65,7 +67,7 @@
          @click="saveToLocal" 
          v-loading="loading" 
          v-else
-         :title="`保存到本地 (${isMac ? '⌘' : 'Ctrl'} + S)`">
+         :title="shortcuts.find(s => s.id === 'save')?.description">
       <span class="icon iconfont icon-w_yunduan"></span> 保存
     </div>
     <div class="dropdownBtn" @click.stop>
@@ -73,9 +75,21 @@
         <span class="icon iconfont icon-gengduo"></span>
       </div>
       <ul class="toolList" :class="{ show: showMoreList }">
-        <li class="toolItem" @click="openAppInNewWindow">新开窗口</li>
-        <li class="toolItem" @click="createNew">新建项目</li>
-        <li class="toolItem" @click="openPreviewInNewWindow">新窗预览</li>
+        <li class="toolItem" 
+            @click="openAppInNewWindow"
+            :title="shortcuts.find(s => s.id === 'newWindow')?.description">
+          新开窗口
+        </li>
+        <li class="toolItem" 
+            @click="createNew"
+            :title="shortcuts.find(s => s.id === 'newProject')?.description">
+          新建项目
+        </li>
+        <li class="toolItem" 
+            @click="openPreviewInNewWindow"
+            :title="shortcuts.find(s => s.id === 'previewInNewWindow')?.description">
+          新窗预览
+        </li>
         <li class="divider"></li>
         <li class="toolItem" @click="showLocalGists">本地项目</li>
         <li class="toolItem" @click="showMyGists">我的Gist</li>
@@ -88,6 +102,9 @@
       </ul>
     </div>
   </div>
+
+  <!-- 快捷键弹窗 -->
+  <ShortcutsDialog v-model="shortcutsDialogVisible" />
 </template>
 
 <script setup>
@@ -111,6 +128,8 @@ import { writeToClipboard } from '@/utils/clipboard'
 import { openAppInNewWindow } from '@/utils'
 import { base, routerMode } from '@/config'
 import { isMobileDevice } from '@/utils'
+import ShortcutsDialog from './ShortcutsDialog.vue'
+import { shortcuts } from '@/config/shortcuts'
 
 const props = defineProps({
   isEdit: Boolean,
@@ -141,41 +160,9 @@ const isMobile = isMobileDevice()
 // 判断是否为 Mac 系统
 const isMac = /macintosh|mac os x/i.test(navigator.userAgent)
 
-// 处理快捷键保存
-const handleKeyDown = (e) => {
-  // Mac: Command + S
-  // Windows: Ctrl + S
-  if ((isMac ? e.metaKey : e.ctrlKey) && e.key.toLowerCase() === 's') {
-    e.preventDefault() // 阻止浏览器默认保存行为
-    
-    // 添加 Shift 键检测
-    if (e.shiftKey && hasCurrentId.value) {
-      saveAsNew()
-      return
-    }
-    
-    if (route.name === 'LocalEdit' && route.params.id) {
-      saveToLocal()
-    } else if (route.name === 'Edit' && route.params.id) {
-      saveToGist()
-    } else {
-      save()
-    }
-  }
-}
-
 // 是否存在可用的url
 const isAvailableUrl = computed(() => {
   return props.isEdit || !!route.query.data
-})
-
-// 添加和移除事件监听
-onMounted(() => {
-  document.addEventListener('keydown', handleKeyDown)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('keydown', handleKeyDown)
 })
 
 // 下拉菜单
@@ -728,6 +715,54 @@ const saveAsNew = async () => {
     ElMessage.error('另存失败')
   }
 }
+
+// 添加和移除事件监听
+const handleShortcutSave = () => {
+  if (route.name === 'LocalEdit' && route.params.id) {
+    saveToLocal()
+  } else if (route.name === 'Edit' && route.params.id) {
+    saveToGist()
+  } else {
+    save()
+  }
+}
+
+onMounted(() => {
+  // 监听快捷键事件
+  proxy.$eventEmitter.on('shortcut_save', handleShortcutSave)
+  proxy.$eventEmitter.on('shortcut_save_as_new', () => {
+    if (hasCurrentId.value) {
+      saveAsNew()
+    }
+  })
+  proxy.$eventEmitter.on('shortcut_new_project', createNew)
+  proxy.$eventEmitter.on('shortcut_new_window', openAppInNewWindow)
+  proxy.$eventEmitter.on('shortcut_preview_window', openPreviewInNewWindow)
+})
+
+onUnmounted(() => {
+  // 移除事件监听
+  proxy.$eventEmitter.off('shortcut_save', handleShortcutSave)
+  proxy.$eventEmitter.off('shortcut_save_as_new')
+  proxy.$eventEmitter.off('shortcut_new_project')
+  proxy.$eventEmitter.off('shortcut_new_window')
+  proxy.$eventEmitter.off('shortcut_preview_window')
+})
+
+// 快捷键弹窗相关
+const shortcutsDialogVisible = ref(false)
+const showShortcuts = () => {
+  shortcutsDialogVisible.value = true
+  toggleToolsList(false)
+}
+
+// 创建一个计算属性来获取快捷键描述
+const shortcutDescriptions = computed(() => {
+  return shortcuts.reduce((acc, shortcut) => {
+    acc[shortcut.id] = shortcut.description.split('(')[1].replace(')', '')
+    return acc
+  }, {})
+})
 </script>
 
 <style scoped lang="less">
