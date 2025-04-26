@@ -4,6 +4,7 @@
       <div class="setting-header">
         <h3>保存回调设置</h3>
         <div class="setting-actions">
+          <el-button size="small" @click="handleUseExample">使用示例代码</el-button>
           <el-button size="small" @click="handleClear">清空脚本</el-button>
           <el-button size="small" type="primary" @click="handleTest">测试运行</el-button>
         </div>
@@ -29,6 +30,7 @@
           <li>- data: 完整的保存数据</li>
           <li>- mode: 保存模式 ('create'/'update')</li>
           <li>- routeName: 路由名称</li>
+          <li>- previewDoc: 预览文档</li>
         </ul>
       </div>
     </div>
@@ -119,6 +121,26 @@ const handleTest = () => {
     ElMessage.error(`测试运行失败: ${error.message}`)
   }
 }
+
+const handleUseExample = () => {
+  if (callbackScript.value.trim()) {
+    ElMessageBox.confirm('这将覆盖当前的回调脚本，是否继续？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      callbackScript.value = placeholder.trim()
+      store.commit('setSaveCallback', placeholder.trim())
+      ElMessage.success('已加载示例代码')
+    }).catch(() => {
+      // 用户取消操作
+    })
+  } else {
+    callbackScript.value = placeholder.trim()
+    store.commit('setSaveCallback', placeholder.trim())
+    ElMessage.success('已加载示例代码')
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -137,6 +159,11 @@ const handleTest = () => {
       margin: 0;
       color: var(--header-logo-color);
     }
+  }
+
+  .setting-actions {
+    display: flex;
+    gap: 0px;
   }
 
   .callback-editor {

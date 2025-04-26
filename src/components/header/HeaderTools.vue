@@ -606,12 +606,22 @@ const executeSaveCallback = (saveInfo) => {
   if (!callback?.trim()) return
 
   try {
+    // 获取并处理预览文档
+    let previewDoc = store.state.previewDoc
+    if (previewDoc) {
+      // 移除辅助代码
+      previewDoc = previewDoc
+        .replace(/<script[^>]*data-assist-code="true"[^>]*>[\s\S]*?<\/script>/g, '')
+        .replace(/<style[^>]*>\s*<\/style>/g, '')
+        .replace(/<script[^>]*>\s*<\/script>/g, '')
+    }
+
     const fn = new Function('saveInfo', 'console', 'alert', `
       try {
         ${callback}
         
         if (typeof onSaveSuccess === 'function') {
-          onSaveSuccess(saveInfo);
+          onSaveSuccess({...saveInfo, previewDoc});
         }
       } catch (error) {
         console.error('回调执行错误:', error);
@@ -619,7 +629,7 @@ const executeSaveCallback = (saveInfo) => {
       }
     `)
 
-    fn(saveInfo, console, alert)
+    fn({...saveInfo, previewDoc}, console, alert)
   } catch (error) {
     console.error('执行保存回调失败:', error)
     ElMessage.error('执行保存回调失败: ' + error.message)
@@ -755,14 +765,6 @@ const showShortcuts = () => {
   shortcutsDialogVisible.value = true
   toggleToolsList(false)
 }
-
-// 创建一个计算属性来获取快捷键描述
-const shortcutDescriptions = computed(() => {
-  return shortcuts.reduce((acc, shortcut) => {
-    acc[shortcut.id] = shortcut.description.split('(')[1].replace(')', '')
-    return acc
-  }, {})
-})
 </script>
 
 <style scoped lang="less">
