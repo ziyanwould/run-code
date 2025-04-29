@@ -2,7 +2,7 @@
   <el-dialog
     title="常用快捷键"
     v-model="visible"
-    width="400px"
+    :width="isMobile ? '100%' : '400px'"
     :close-on-click-modal="true"
     :close-on-press-escape="true"
   >
@@ -19,6 +19,9 @@
 import { shortcuts } from '@/config/shortcuts'
 import { defineProps, defineEmits, computed } from 'vue'
 import { ElDialog } from 'element-plus'
+import { isMobileDevice } from '@/utils'
+
+const isMobile = isMobileDevice()
 
 const props = defineProps({
   modelValue: {

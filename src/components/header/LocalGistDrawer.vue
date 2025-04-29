@@ -3,7 +3,7 @@
     v-model="visible"
     title="本地项目"
     direction="rtl"
-    :size="isMobile ? '90%' : '900px'"
+    :size="isMobile ? '100%' : '900px'"
     @open="onDrawerOpen"
     @closed="onDrawerClosed"
   >
@@ -45,7 +45,7 @@
             {{ dayjs(scope.row.updated_at).format('YYYY/MM/DD HH:mm') }}
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="120" align="center">
+        <el-table-column fixed="right" label="操作" :width="isMobile ? '86' : '120'" align="center">
           <template #default="scope">
             <el-button
               type="primary"
