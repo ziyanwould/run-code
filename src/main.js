@@ -24,6 +24,23 @@ const create = () => {
   app.use(store)
   app.directive('loading', ElLoadingDirective)
   app.mount('#app')
+  
+  // 隐藏加载动画
+  const appLoading = document.getElementById('app-loading')
+  if (appLoading) {
+    // 将进度条设置为100%（如果已经显示了复杂UI）
+    if (window.completeLoading) {
+      window.completeLoading();
+    }
+    
+    // 延迟一小段时间后淡出loading
+    setTimeout(() => {
+      appLoading.style.opacity = '0'
+      setTimeout(() => {
+        appLoading.style.display = 'none'
+      }, 300)
+    }, 500) // 给用户500ms时间看到100%的加载完成状态
+  }
 }
 
 const init = () => {

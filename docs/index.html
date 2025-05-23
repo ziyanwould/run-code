@@ -1,4 +1,273 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link href="./favicon.png" rel="shortcut icon"><title>CodeFlux - AI生成式前端代码预览/微调辅助工具，前端代码在线运行/发布平台，codepen、jsbin、jsfiddle等的开源替代方案</title><link href="js/chunk-0b65ffb6.86943b22.js" rel="prefetch"><link href="js/chunk-2d0b2762.5030985e.js" rel="prefetch"><link href="js/chunk-2d0bb267.ca59b870.js" rel="prefetch"><link href="js/chunk-2d0bff92.ac763d79.js" rel="prefetch"><link href="js/chunk-2d20ff23.5874d416.js" rel="prefetch"><link href="js/chunk-2d21b84a.236988cd.js" rel="prefetch"><link href="js/chunk-2d21f327.5aeb4b52.js" rel="prefetch"><link href="js/chunk-2d22502a.5c435060.js" rel="prefetch"><link href="js/chunk-2d22ca58.a89e30a1.js" rel="prefetch"><link href="js/chunk-30597b4a.d7d99df7.js" rel="prefetch"><link href="js/chunk-7532b3ea.446096d0.js" rel="prefetch"><link href="css/app.05edcf97.css" rel="preload" as="style"><link href="css/chunk-vendors.5bd973b1.css" rel="preload" as="style"><link href="js/app.2b12ae19.js" rel="preload" as="script"><link href="js/chunk-vendors.852a13c6.js" rel="preload" as="script"><link href="css/chunk-vendors.5bd973b1.css" rel="stylesheet"><link href="css/app.05edcf97.css" rel="stylesheet"></head><body><div id="app"></div><script defer src="./prettier/standalone.js"></script><script defer src="./prettier/parser-html.js"></script><script defer src="./prettier/parser-postcss.js"></script><script defer src="./prettier/parser-babel.js"></script><script defer src="./prettier/parser-typescript.js"></script><script>if ('serviceWorker' in navigator) {
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link href="./favicon.png" rel="shortcut icon"><title>CodeFlux - AI生成式前端代码预览/微调辅助工具，前端代码在线运行/发布平台，codepen、jsbin、jsfiddle等的开源替代方案</title><style>/* 页面加载动画样式 */
+    #app-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #f5f7fa;
+      z-index: 9999;
+      transition: opacity 0.3s ease-out;
+    }
+    
+    /* 简单的初始loading效果 */
+    .simple-loading {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: #409eff;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    .simple-text {
+      font-size: 14px;
+      color: #606266;
+      margin-top: 10px;
+      font-family: Arial, sans-serif;
+    }
+    
+    /* 代码编辑器风格的loading动画 */
+    .code-editor-loading {
+      width: 280px;
+      height: 160px;
+      background: #1e1e1e;
+      border-radius: 6px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      padding: 12px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    
+    .code-editor-loading.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .editor-header {
+      height: 12px;
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .editor-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    
+    .dot-red { background-color: #ff5f56; }
+    .dot-yellow { background-color: #ffbd2e; }
+    .dot-green { background-color: #27c93f; }
+    
+    .editor-code {
+      font-family: monospace;
+      font-size: 12px;
+      color: #dcdcdc;
+      line-height: 1.5;
+    }
+    
+    .code-line {
+      display: flex;
+      margin-bottom: 6px;
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    
+    .line-number {
+      color: #858585;
+      margin-right: 12px;
+      user-select: none;
+    }
+    
+    .keyword { color: #569cd6; }
+    .function { color: #dcdcaa; }
+    .string { color: #ce9178; }
+    .comment { color: #6a9955; }
+    .variable { color: #9cdcfe; }
+    
+    /* 打字机效果的光标 */
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background-color: #fff;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+    
+    /* 加载进度文本 */
+    .loading-text {
+      font-size: 16px;
+      color: #606266;
+      font-family: Arial, sans-serif;
+      margin-top: 10px;
+      position: relative;
+    }
+    
+    .loading-percentage {
+      font-weight: bold;
+      color: #409eff;
+    }
+    
+    /* 有趣的加载提示 */
+    .loading-tips {
+      font-size: 14px;
+      color: #909399;
+      margin-top: 10px;
+      text-align: center;
+      max-width: 280px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease 1s forwards;
+    }
+    
+    /* 动画定义 */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes slideFadeIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    
+    /* 为代码行添加动画的类 */
+    .animate-line {
+      animation: slideFadeIn 0.5s ease forwards;
+    }
+    
+    /* 为每行代码设置不同的延迟 */
+    .code-line:nth-child(1).animate-line { animation-delay: 0.2s; }
+    .code-line:nth-child(2).animate-line { animation-delay: 0.4s; }
+    .code-line:nth-child(3).animate-line { animation-delay: 0.6s; }
+    .code-line:nth-child(4).animate-line { animation-delay: 0.8s; }
+    .code-line:nth-child(5).animate-line { animation-delay: 1.0s; }
+    .code-line:nth-child(6).animate-line { animation-delay: 1.2s; }</style><link href="js/chunk-0b65ffb6.86943b22.js" rel="prefetch"><link href="js/chunk-2d0b2762.5030985e.js" rel="prefetch"><link href="js/chunk-2d0bb267.ca59b870.js" rel="prefetch"><link href="js/chunk-2d0bff92.ac763d79.js" rel="prefetch"><link href="js/chunk-2d20ff23.5874d416.js" rel="prefetch"><link href="js/chunk-2d21b84a.236988cd.js" rel="prefetch"><link href="js/chunk-2d21f327.5aeb4b52.js" rel="prefetch"><link href="js/chunk-2d22502a.5c435060.js" rel="prefetch"><link href="js/chunk-2d22ca58.a89e30a1.js" rel="prefetch"><link href="js/chunk-30597b4a.d7d99df7.js" rel="prefetch"><link href="js/chunk-7532b3ea.446096d0.js" rel="prefetch"><link href="css/app.05edcf97.css" rel="preload" as="style"><link href="css/chunk-vendors.5bd973b1.css" rel="preload" as="style"><link href="js/app.6a287901.js" rel="preload" as="script"><link href="js/chunk-vendors.852a13c6.js" rel="preload" as="script"><link href="css/chunk-vendors.5bd973b1.css" rel="stylesheet"><link href="css/app.05edcf97.css" rel="stylesheet"></head><body><div id="app-loading"><div class="simple-loading" id="simple-loading"></div><div class="simple-text" id="simple-text">加载中...</div><div class="code-editor-loading" id="code-editor-loading"><div class="editor-header"><div class="editor-dot dot-red"></div><div class="editor-dot dot-yellow"></div><div class="editor-dot dot-green"></div></div><div class="editor-code"><div class="code-line"><span class="line-number">1</span> <span><span class="keyword">import</span> { <span class="variable">createApp</span> } <span class="keyword">from</span> <span class="string">'vue'</span></span></div><div class="code-line"><span class="line-number">2</span> <span><span class="keyword">import</span> <span class="variable">App</span> <span class="keyword">from</span> <span class="string">'./App.vue'</span></span></div><div class="code-line"><span class="line-number">3</span> <span><span class="keyword">const</span> <span class="variable">app</span> = <span class="function">createApp</span>(App)</span></div><div class="code-line"><span class="line-number">4</span> <span><span class="variable">app</span>.<span class="function">mount</span>(<span class="string">'#app'</span>)</span></div><div class="code-line"><span class="line-number">5</span> <span><span class="comment">// 正在加载 CodeFlux...</span></span></div><div class="code-line"><span class="line-number">6</span> <span><span class="function">console</span>.<span class="function">log</span>(<span class="string">'初始化中'</span>)<span class="cursor"></span></span></div></div></div><div class="loading-text" id="loading-text">加载中... <span class="loading-percentage" id="loading-percentage">0%</span></div><div class="loading-tips" id="loading-tips">CodeFlux 完全开源，欢迎贡献代码</div></div><div id="app"></div><script defer src="./prettier/standalone.js"></script><script defer src="./prettier/parser-html.js"></script><script defer src="./prettier/parser-postcss.js"></script><script defer src="./prettier/parser-babel.js"></script><script defer src="./prettier/parser-typescript.js"></script><script>// 加载进度模拟
+    (function() {
+      const tips = [
+        "CodeFlux 完全开源，欢迎贡献代码",
+        "CodeFlux 支持多种前端框架和预处理器",
+        "使用快捷键 Ctrl+S 可以保存当前代码",
+        "使用 CodeFlux 快速分享你的代码创意",
+        "尝试不同的主题来找到最适合你的编码环境"
+      ];
+      
+      let progress = 0;
+      const percentageEl = document.getElementById('loading-percentage');
+      const tipsEl = document.getElementById('loading-tips');
+      const codeEditorLoading = document.getElementById('code-editor-loading');
+      const simpleLoading = document.getElementById('simple-loading');
+      const simpleText = document.getElementById('simple-text');
+      const loadingText = document.getElementById('loading-text');
+      
+      // 初始隐藏进度文本
+      loadingText.style.opacity = '0';
+      
+      let currentTip = 0;
+      let showedComplexUI = false;
+      let progressInterval;
+      let tipsInterval; // 新增：专门用于控制tips轮换的定时器
+      let loadingStartTime = Date.now();
+      
+      // 2秒后显示复杂UI并开始计算进度
+      const complexLoadingTimeout = setTimeout(() => {
+        // 检查是否已经隐藏了loading
+        if (document.getElementById('app-loading').style.opacity !== '0') {
+          showedComplexUI = true;
+          simpleLoading.style.display = 'none';
+          simpleText.style.display = 'none';
+          codeEditorLoading.classList.add('show');
+          loadingText.style.opacity = '1';
+          tipsEl.style.opacity = '1';
+          
+          // 在显示code-editor-loading后，为代码行添加动画类
+          setTimeout(() => {
+            const codeLines = document.querySelectorAll('.code-line');
+            codeLines.forEach(line => {
+              line.classList.add('animate-line');
+            });
+          }, 100); // 短暂延迟确保过渡效果完成
+          
+          // 开始计算进度（在2秒后才开始）
+          progressInterval = setInterval(() => {
+            // 进度增加速度随进度增加而减慢
+            let increment;
+            
+            if (progress < 60) {
+              // 前60%加载较快
+              increment = Math.floor(Math.random() * 3) + 1;
+            } else if (progress < 80) {
+              // 60%-80%加载变慢
+              increment = Math.floor(Math.random() * 2) + 1;
+            } else if (progress < 95) {
+              // 80%-95%加载更慢
+              increment = Math.floor(Math.random() * 1);
+              if (increment === 0) increment = 1;
+            } else if (progress < 99) {
+              // 95%-99%加载非常慢
+              increment = Math.random() < 0.5 ? 1 : 0;
+            } else {
+              // 99%时停止增加
+              increment = 0;
+            }
+            
+            progress += increment;
+            if (progress >= 99) {
+              progress = 99; // 停在99%
+              clearInterval(progressInterval);
+            }
+            
+            percentageEl.textContent = progress + '%';
+          }, 200);
+          
+          tipsInterval = setInterval(() => {
+            currentTip = (currentTip + 1) % tips.length;
+            tipsEl.style.opacity = '0';
+            setTimeout(() => {
+              tipsEl.textContent = tips[currentTip];
+              tipsEl.style.opacity = '1';
+            }, 500);
+          }, 3000);
+        }
+      }, 2000);
+      
+      // 导出进度控制函数，供main.js调用
+      window.completeLoading = function() {
+        clearTimeout(complexLoadingTimeout);
+        
+        if (progressInterval) {
+          clearInterval(progressInterval);
+        }
+        
+        if (tipsInterval) {
+          clearInterval(tipsInterval);
+        }
+        
+        if (showedComplexUI) {
+          percentageEl.textContent = '100%';
+        }
+      };
+    })();
+    
+    if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
           .then(registration => {
@@ -8,4 +277,4 @@
             console.log('SW registration failed:', error);
           });
       });
-    }</script><script src="js/chunk-vendors.852a13c6.js"></script><script src="js/app.2b12ae19.js"></script></body></html>
+    }</script><script src="js/chunk-vendors.852a13c6.js"></script><script src="js/app.6a287901.js"></script></body></html>
