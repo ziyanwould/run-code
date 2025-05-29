@@ -2,7 +2,7 @@
   <div class="header">
     <!-- logo -->
     <div class="left">
-      <h1>CodeFlux</h1>
+      <h1>RunCode</h1>
     </div>
     <!-- 标题输入栏 -->
     <div class="center">

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "CodeFlux",
+  "name": "RunCode",
   "version": "0.3.0",
   "description": "AI生成式前端代码预览/微调辅助工具",
   "icons": {
@@ -14,7 +14,7 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "CodeFlux"
+    "default_title": "RunCode"
   },
   "background": {
     "service_worker": "background.js"

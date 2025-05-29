@@ -8,7 +8,7 @@ const defaltCode = {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CodeFlux</title>
+<title>RunCode</title>
 </head>
 <body>
 <!-- 渐变背景容器 -->
@@ -35,7 +35,7 @@ const defaltCode = {
 <main>
   <section>
     <div class="about-container">
-      <h2>CodeFlux</h2>
+      <h2>RunCode</h2>
       <p id="description">${packageInfo.description}</p>
 
       <div class="links">
@@ -432,7 +432,7 @@ a:hover::after {
   },
   JS: {
     language: 'javascript',
-    content: `console.log('Hello, CodeFlux!');`,
+    content: `console.log('Hello, RunCode!');`,
     resources: []
   }
 }

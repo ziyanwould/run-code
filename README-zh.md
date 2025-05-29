@@ -1,11 +1,11 @@
 **[English](./README.md)**  |  中文文档
 
-# CodeFlux
+# RunCode
 
 > AI生成式前端代码预览/微调辅助工具，前端代码在线运行/发布平台，codepen、jsbin、jsfiddle等的开源替代方案  
 
-在线体验：[code-flux.anzz.top](https://code-flux.anzz.top)  
-GitHub：[github.com/xxxily/code-flux](https://github.com/xxxily/code-flux)  
+在线体验：[runcode.liujiarong.top](https://runcode.liujiarong.top)  
+GitHub：[git.liujiarong.top/project/run-code](https://git.liujiarong.top/project/run-code)  
 
 # 应用场景
 
@@ -79,35 +79,35 @@ GitHub：[github.com/xxxily/code-flux](https://github.com/xxxily/code-flux)
 
 | Name        | Prompt | Model | Link                                  | Completeness | Notes |
 |-------------|--------|-------|---------------------------------------|-------|------|
-| [CodeFlux介绍页](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6)  | - | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6) | ★★★★☆ | - |
+| [RunCode介绍页](https://runcode.liujiarong.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6)  | - | DeepSeek-V3-0324 | [链接](https://runcode.liujiarong.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6) | ★★★★☆ | - |
 
 #### 利用AI生成简单小应用
 
 | Name        | Prompt | Model | Link                                  | Completeness | Notes |
 |-------------|--------|-------|---------------------------------------|-------|------|
-| [牛B人生简历生成器](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5)  | - | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5) | ★★★★★ | - |
-| [高尔顿板模拟器](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469)  | [content](https://awesome-ai-hub.anzz.top/web/game/3DGaltonBoardSimulator/gemini_pro_2.5/README.md) | gemini-2.5-pro-exp-03-25 | [链接](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469) | ★★★★☆ | - |
+| [牛B人生简历生成器](https://runcode.liujiarong.top/#/share/6b868dd75420f96a64939356c932cee5)  | - | DeepSeek-V3-0324 | [链接](https://runcode.liujiarong.top/#/share/6b868dd75420f96a64939356c932cee5) | ★★★★★ | - |
+| [高尔顿板模拟器](https://runcode.liujiarong.top/#/share/0318660a5d1a906cbea97780203d6469)  | [content](https://awesome-ai-hub.anzz.top/web/game/3DGaltonBoardSimulator/gemini_pro_2.5/README.md) | gemini-2.5-pro-exp-03-25 | [链接](https://runcode.liujiarong.top/#/share/0318660a5d1a906cbea97780203d6469) | ★★★★☆ | - |
 
 
 #### 利用AI创建小游戏
 
 | Name        | Prompt | Model | Link                                  | Completeness | Notes |
 |-------------|--------|-------|---------------------------------------|-------|------|
-| [奇幻贪吃蛇](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)  | [content](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/README.md) | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★★★★ | - |
-| [重力翻转跑酷](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)  | [content](https://awesome-ai-hub.anzz.top/web/game/GravityFlipParkour_2025.03.28/README.md) | DeepSeek-V3-0324 | [链接](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★☆☆☆ | - |
+| [奇幻贪吃蛇](https://runcode.liujiarong.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)  | [content](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/README.md) | DeepSeek-V3-0324 | [链接](https://runcode.liujiarong.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★★★★ | - |
+| [重力翻转跑酷](https://runcode.liujiarong.top/#/share/08ddfdffc6a8a1cc9491d5423418673d)  | [content](https://awesome-ai-hub.anzz.top/web/game/GravityFlipParkour_2025.03.28/README.md) | DeepSeek-V3-0324 | [链接](https://runcode.liujiarong.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★☆☆☆ | - |
 
 # 运行/预览AI生成的前端代码
 
-在任意支持生成前端代码的AI平台上，使用提示词让AI生成你期望的前端网页，然后将生成的内容一键复制到 [CodeFlux](https://code-flux.anzz.top) 平台上，即可对其进行运行/预览。
+在任意支持生成前端代码的AI平台上，使用提示词让AI生成你期望的前端网页，然后将生成的内容一键复制到 [RunCode](https://runcode.liujiarong.top) 平台上，即可对其进行运行/预览。
 
-- 注意：无需单独复制`html`、`css`、`js`等代码，直接复制AI生成的内容，然后粘贴到 [CodeFlux](https://code-flux.anzz.top) 平台上， [CodeFlux](https://code-flux.anzz.top) 平台会自动识别并分解成对应的前端代码。
+- 注意：无需单独复制`html`、`css`、`js`等代码，直接复制AI生成的内容，然后粘贴到 [RunCode](https://runcode.liujiarong.top) 平台上， [RunCode](https://runcode.liujiarong.top) 平台会自动识别并分解成对应的前端代码。
 
 以在DeepSeek网站上生成的内容为例：  
 
 一键复制： 
 ![](./assets/course01.jpg)  
 
-将复制到的内容直接粘贴到 [CodeFlux](https://code-flux.anzz.top) 平台  
+将复制到的内容直接粘贴到 [RunCode](https://runcode.liujiarong.top) 平台  
 
 ![](./assets/course02.jpg)  
 
@@ -125,8 +125,8 @@ GitHub：[github.com/xxxily/code-flux](https://github.com/xxxily/code-flux)
 
 ```bash
 # 克隆项目
-git clone https://github.com/xxxily/code-flux.git
-cd code-flux
+git clone https://git.liujiarong.top/project/run-code.git
+cd run-code
 
 # 启动服务(后台运行)
 docker-compose up -d
@@ -141,18 +141,18 @@ docker-compose down
 
 ```bash
 # 克隆项目
-git clone https://github.com/xxxily/code-flux.git
-cd code-flux
+git clone https://git.liujiarong.top/project/run-code.git
+cd run-code
 
 # 构建镜像
 npm run docker:build
 # 或
-docker build -t code-flux .
+docker build -t run-code .
 
 # 运行容器
 npm run docker:run
 # 或
-docker run -p 8080:80 code-flux
+docker run -p 8080:80 run-code
 ```
 
 ## 技术说明
@@ -174,9 +174,9 @@ docker run -p 8080:80 code-flux
 # 本地构建
 
 ```bash
-git clone https://github.com/xxxily/code-flux.git
+git clone https://git.liujiarong.top/project/run-code.git
 
-cd code-flux
+cd run-code
 
 npm i
 

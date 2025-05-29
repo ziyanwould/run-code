@@ -1,6 +1,6 @@
 <template>
   <div class="left">
-    <h1 @click="openAppInNewWindow" class="logo-text">CodeFlux</h1>
+    <h1 @click="openAppInNewWindow" class="logo-text">RunCode</h1>
   </div>
 </template>
 

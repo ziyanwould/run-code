@@ -1,11 +1,11 @@
 English  |  **[中文文档](./README-zh.md)**
 
-# CodeFlux
+# RunCode
 
 > A versatile tool for previewing and fine-tuning AI-generated frontend code, an online platform for running and publishing frontend code, and an open-source alternative to codepen, jsbin, jsfiddle, etc.
 
-Live demo: [code-flux.anzz.top](https://code-flux.anzz.top)  
-GitHub: [github.com/xxxily/code-flux](https://github.com/xxxily/code-flux)  
+Live demo: [runcode.liujiarong.top](https://runcode.liujiarong.top)  
+GitHub: [git.liujiarong.top/project/run-code](https://git.liujiarong.top/project/run-code)  
 
 # Use Cases
 
@@ -79,34 +79,34 @@ Discover more practical applications as you explore!
 
 | Name | Prompt | Model | Link | Completeness | Notes |
 |------|--------|-------|------|--------------|-------|
-| [CodeFlux Introduction Page](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6) | - | DeepSeek-V3-0324 | [Link](https://code-flux.anzz.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6) | ★★★★☆ | - |
+| [RunCode Introduction Page](https://runcode.liujiarong.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6) | - | DeepSeek-V3-0324 | [Link](https://runcode.liujiarong.top/#/share/5e4c89d6dd6cb58891d4e23ca85257e6) | ★★★★☆ | - |
 
 #### AI-Generated Simple Applications
 
 | Name | Prompt | Model | Link | Completeness | Notes |
 |------|--------|-------|------|--------------|-------|
-| [Epic Resume Generator](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5) | - | DeepSeek-V3-0324 | [Link](https://code-flux.anzz.top/#/share/6b868dd75420f96a64939356c932cee5) | ★★★★★ | - |
-| [Galton Board Simulator](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469) | [content](https://awesome-ai-hub.anzz.top/web/game/3DGaltonBoardSimulator/gemini_pro_2.5/README.md) | gemini-2.5-pro-exp-03-25 | [Link](https://code-flux.anzz.top/#/share/0318660a5d1a906cbea97780203d6469) | ★★★★☆ | - |
+| [Epic Resume Generator](https://runcode.liujiarong.top/#/share/6b868dd75420f96a64939356c932cee5) | - | DeepSeek-V3-0324 | [Link](https://runcode.liujiarong.top/#/share/6b868dd75420f96a64939356c932cee5) | ★★★★★ | - |
+| [Galton Board Simulator](https://runcode.liujiarong.top/#/share/0318660a5d1a906cbea97780203d6469) | [content](https://awesome-ai-hub.anzz.top/web/game/3DGaltonBoardSimulator/gemini_pro_2.5/README.md) | gemini-2.5-pro-exp-03-25 | [Link](https://runcode.liujiarong.top/#/share/0318660a5d1a906cbea97780203d6469) | ★★★★☆ | - |
 
 #### AI-Created Mini Games
 
 | Name | Prompt | Model | Link | Completeness | Notes |
 |------|--------|-------|------|--------------|-------|
-| [Fantasy Snake Game](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | [content](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/README.md) | DeepSeek-V3-0324 | [Link](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★★★★ | - |
-| [Gravity Flip Parkour](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | [content](https://awesome-ai-hub.anzz.top/web/game/GravityFlipParkour_2025.03.28/README.md) | DeepSeek-V3-0324 | [Link](https://code-flux.anzz.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★☆☆☆ | - |
+| [Fantasy Snake Game](https://runcode.liujiarong.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | [content](https://awesome-ai-hub.anzz.top/web/game/snake_2025.03.28/README.md) | DeepSeek-V3-0324 | [Link](https://runcode.liujiarong.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★★★★ | - |
+| [Gravity Flip Parkour](https://runcode.liujiarong.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | [content](https://awesome-ai-hub.anzz.top/web/game/GravityFlipParkour_2025.03.28/README.md) | DeepSeek-V3-0324 | [Link](https://runcode.liujiarong.top/#/share/08ddfdffc6a8a1cc9491d5423418673d) | ★★☆☆☆ | - |
 
 # Running/Previewing AI-Generated Frontend Code
 
-On any AI platform that supports frontend code generation, use prompts to have the AI create your desired web page, then copy the generated content with a single click to the [CodeFlux](https://code-flux.anzz.top) platform for execution/preview.
+On any AI platform that supports frontend code generation, use prompts to have the AI create your desired web page, then copy the generated content with a single click to the [RunCode](https://runcode.liujiarong.top) platform for execution/preview.
 
-- Note: There's no need to separately copy HTML, CSS, or JS code. Simply copy the AI-generated content and paste it into the [CodeFlux](https://code-flux.anzz.top) platform. CodeFlux will automatically recognize and break it down into the corresponding frontend code components.
+- Note: There's no need to separately copy HTML, CSS, or JS code. Simply copy the AI-generated content and paste it into the [RunCode](https://runcode.liujiarong.top) platform. RunCode will automatically recognize and break it down into the corresponding frontend code components.
 
 Using content generated on the DeepSeek website as an example:
 
 One-click copy:
 ![](./assets/course01.jpg)
 
-Paste the copied content directly into the [CodeFlux](https://code-flux.anzz.top) platform:
+Paste the copied content directly into the [RunCode](https://runcode.liujiarong.top) platform:
 ![](./assets/course02.jpg)
 
 Click OK to automatically parse the code and run/preview it:
@@ -122,8 +122,8 @@ This project provides Docker deployment support with two deployment methods:
 
 ```bash
 # Clone the project
-git clone https://github.com/xxxily/code-flux.git
-cd code-flux
+git clone https://git.liujiarong.top/project/run-code.git
+cd run-code
 
 # Start the service (run in background)
 docker-compose up -d
@@ -138,18 +138,18 @@ After starting the service, you can access it at `http://localhost:56780`.
 
 ```bash
 # Clone the project
-git clone https://github.com/xxxily/code-flux.git
-cd code-flux
+git clone https://git.liujiarong.top/project/run-code.git
+cd run-code
 
 # Build the image
 npm run docker:build
 # Or
-docker build -t code-flux .
+docker build -t run-code .
 
 # Run the container
 npm run docker:run
 # Or
-docker run -p 8080:80 code-flux
+docker run -p 8080:80 run-code
 ```
 
 ## Technical Details
@@ -171,9 +171,9 @@ The project provides the following Docker-related npm scripts:
 # Local Build
 
 ```bash
-git clone https://github.com/xxxily/code-flux.git
+git clone https://git.liujiarong.top/project/run-code.git
 
-cd code-flux
+cd run-code
 
 npm i
 

@@ -1,5 +1,5 @@
 {
-  "name": "code-flux",
+  "name": "run-code",
   "description": "AI生成式前端代码预览/微调辅助工具，前端代码在线运行/发布平台，codepen、jsbin、jsfiddle等的开源替代方案",
   "version": "1.2.1",
   "authors": [
@@ -18,9 +18,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xxxily/code-flux"
+    "url": "https://git.liujiarong.top/project/run-code"
   },
-  "homepage": "https://code-flux.anzz.top",
+  "homepage": "https://run-code.liujiarong.top",
   "keywords": [
     "javascript",
     "code",
@@ -37,8 +37,8 @@
     "buildLiveScript": "node ./scripts/buildLiveScript.js",
     "buildVueSFCCompiler": "node ./scripts/buildVueCompilerSfc.js",
     "format": "prettier --write src/**",
-    "docker:build": "docker build -t code-flux .",
-    "docker:run": "docker run -p 8080:80 code-flux",
+    "docker:build": "docker build -t run-code .",
+    "docker:run": "docker run -p 8080:80 run-code",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "build:extension": "npm run build && cp extension/manifest.json extension/background.js extension/dist/ && cp -r extension/icons extension/dist/"

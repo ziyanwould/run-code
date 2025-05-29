@@ -1,6 +1,6 @@
 <template>
   <div class="about-container">
-    <h2>CodeFlux</h2>
+    <h2>RunCode</h2>
     <p>{{ packageInfo.description }}</p>
 
     <div class="links">

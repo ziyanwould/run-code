@@ -10,13 +10,13 @@ import leafletIcon from '../assets/templateIcons/leaflet.png'
 import konvaIcon from '../assets/templateIcons/konva.png'
 import es6Icon from '../assets/templateIcons/es6.webp'
 import mindMapIcon from '../assets/templateIcons/mindMap.png'
-import codeFluxIcon from '../assets/templateIcons/vue.png' // 暂时使用Vue图标，你可以替换为CodeFlux的图标
+import RunCodeIcon from '../assets/templateIcons/vue.png' // 暂时使用Vue图标，你可以替换为RunCode的图标
 import defaltCode from './defaltCode'
 
 // 默认模板
 const defaltTemplate = {
   name: '默认模版',
-  icon: codeFluxIcon,
+  icon: RunCodeIcon,
   code: defaltCode
 }
 

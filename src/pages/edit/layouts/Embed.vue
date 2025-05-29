@@ -12,7 +12,7 @@
         ></SwitchBtn>
       </div>
       <div class="right" @click="toCodeRun">
-        <div>CodeFlux</div>
+        <div>RunCode</div>
         <div>内打开</div>
       </div>
     </div>
