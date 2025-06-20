@@ -21,8 +21,9 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, ElButton, ElInput } from 'element-plus';
 
-// 预设的授权码 (后续可以考虑更安全的存储方式)
-const PRESET_AUTH_CODE = 'JCR_AUTHORIZATION_CODE'; // 您可以更改这个授权码
+// const PRESET_AUTH_CODE = 'JCR_AUTHORIZATION_CODE'; // 您可以更改这个授权码
+// const PRESET_AUTH_CODE = import.meta.env.VITE_AUTH_CODE; // 通过环境变量获取授权码（Vite）
+const PRESET_AUTH_CODE = process.env.VUE_APP_AUTH_CODE || 'Zgt@2025'; // 通过环境变量获取授权码（Vue CLI）
 
 const inputCode = ref('');
 const router = useRouter();
