@@ -31,8 +31,8 @@ const routes = [
     path: '/share/:id?',
     name: 'Share',
     component: Preview,
-    props: true,
-    meta: { requiresAuth: true } // 标记此路由需要授权 (根据需求，分享页面是否也需要授权)
+    props: true
+    // meta: { requiresAuth: true } // 标记此路由需要授权 (根据需求，分享页面是否也需要授权)
   },
   {
     path: '/preview/:id?',

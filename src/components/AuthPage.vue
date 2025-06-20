@@ -71,16 +71,17 @@ const handleLogin = () => {
 
 /* Ensure input and button styles are adapted for the dark, transparent box */
 .auth-box :deep(.el-input .el-input__wrapper) {
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  background-color: rgba(0, 0, 0, 0.2) !important; /* Darker, transparent background for input */
-  box-shadow: none !important; /* Remove default shadow which may not look good */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Border for definition on transparent bg */
+  background-color: rgba(0, 0, 0, 0.2); /* Darker, transparent background for input */
+  box-shadow: none; /* Remove default shadow which may not look good on transparent bg */
 }
 
 .auth-box :deep(.el-input .el-input__inner) {
-  color: #fff !important; /* White text for input */
-  -webkit-text-fill-color: #fff !important;
+  color: #fff; /* White text for input */
+  -webkit-text-fill-color: #fff; /* Ensure text color is applied (Safari) */
 }
 
+/* Styles for placeholder and password icon can remain as they are specific to the theme */
 .auth-box :deep(.el-input .el-input__inner::placeholder) {
   color: #ccc !important; /* Lighter placeholder text */
   opacity: 1; /* Ensure placeholder is visible */
