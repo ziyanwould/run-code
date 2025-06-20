@@ -19,8 +19,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage }
-from 'element-plus';
+import { ElMessage, ElButton, ElInput } from 'element-plus';
 
 // 预设的授权码 (后续可以考虑更安全的存储方式)
 const PRESET_AUTH_CODE = 'JCR_AUTHORIZATION_CODE'; // 您可以更改这个授权码
